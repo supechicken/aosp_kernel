@@ -796,12 +796,12 @@ int f2fs_inline_data_fiemap(struct inode *inode,
 	__u32 flags = FIEMAP_EXTENT_DATA_INLINE | FIEMAP_EXTENT_NOT_ALIGNED |
 		FIEMAP_EXTENT_LAST;
 	struct node_info ni;
-	struct page *ipage;
+	struct folio *ifolio;
 	int err = 0;
 
-	ipage = f2fs_get_inode_page(F2FS_I_SB(inode), inode->i_ino);
-	if (IS_ERR(ipage))
-		return PTR_ERR(ipage);
+	ifolio = f2fs_get_inode_folio(F2FS_I_SB(inode), inode->i_ino);
+	if (IS_ERR(ifolio))
+		return PTR_ERR(ifolio);
 
 	if ((S_ISREG(inode->i_mode) || S_ISLNK(inode->i_mode)) &&
 				!f2fs_has_inline_data(inode)) {
@@ -827,8 +827,8 @@ int f2fs_inline_data_fiemap(struct inode *inode,
 
 	if (__is_valid_data_blkaddr(ni.blk_addr)) {
 		byteaddr = (__u64)ni.blk_addr << inode->i_sb->s_blocksize_bits;
-		byteaddr += (char *)inline_data_addr(inode, ipage) -
-						(char *)F2FS_INODE(ipage);
+		byteaddr += (char *)inline_data_addr(inode, &ifolio->page) -
+						(char *)F2FS_INODE(&ifolio->page);
 	} else {
 		f2fs_bug_on(F2FS_I_SB(inode), ni.blk_addr != NEW_ADDR);
 		flags |= FIEMAP_EXTENT_DELALLOC | FIEMAP_EXTENT_UNKNOWN;
@@ -836,6 +836,6 @@ int f2fs_inline_data_fiemap(struct inode *inode,
 	err = fiemap_fill_next_extent(fieinfo, start, byteaddr, ilen, flags);
 	trace_f2fs_fiemap(inode, start, byteaddr, ilen, flags, err);
 out:
-	f2fs_put_page(ipage, 1);
+	f2fs_folio_put(ifolio, true);
 	return err;
 }
