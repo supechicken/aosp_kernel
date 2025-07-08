@@ -371,7 +371,7 @@ static void f2fs_write_end_bio(struct bio *bio)
 
 #ifdef CONFIG_F2FS_FS_COMPRESSION
 		if (f2fs_is_compressed_page(&folio->page)) {
-			f2fs_compress_write_end_io(bio, &folio->page);
+			f2fs_compress_write_end_io(bio, folio);
 			continue;
 		}
 #endif
