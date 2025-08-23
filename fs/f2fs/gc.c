@@ -1090,7 +1090,7 @@ next_step:
 		}
 
 		/* phase == 2 */
-		node_folio = f2fs_get_node_folio(sbi, nid);
+		node_folio = f2fs_get_node_folio(sbi, nid, NODE_TYPE_REGULAR);
 		if (IS_ERR(node_folio))
 			continue;
 
@@ -1167,7 +1167,7 @@ static bool is_alive(struct f2fs_sb_info *sbi, struct f2fs_summary *sum,
 	nid = le32_to_cpu(sum->nid);
 	ofs_in_node = le16_to_cpu(sum->ofs_in_node);
 
-	node_folio = f2fs_get_node_folio(sbi, nid);
+	node_folio = f2fs_get_node_folio(sbi, nid, NODE_TYPE_REGULAR);
 	if (IS_ERR(node_folio))
 		return false;
 
