@@ -712,7 +712,7 @@ unlock_out:
 
 static void __submit_merged_write_cond(struct f2fs_sb_info *sbi,
 				struct inode *inode, struct folio *folio,
-				nid_t ino, enum page_type type)
+				nid_t ino, enum page_type type, bool writeback)
 {
 	enum temp_type temp;
 	bool ret = true;
@@ -728,8 +728,16 @@ static void __submit_merged_write_cond(struct f2fs_sb_info *sbi,
 			ret = __has_merged_page(io->bio, inode, folio, ino);
 			f2fs_up_read_trace(&io->io_rwsem, &lc);
 		}
-		if (ret)
+		if (ret) {
 			__f2fs_submit_merged_write(sbi, type, temp);
+			/*
+			 * For waitting writebck case, if the bio owned by the
+			 * folio is already submitted, we do not need to submit
+			 * other types of bios.
+			 */
+			if (writeback)
+				break;
+		}
 
 		/* TODO: use HOT temp only for meta pages now. */
 		if (type >= META)
@@ -739,14 +747,20 @@ static void __submit_merged_write_cond(struct f2fs_sb_info *sbi,
 
 void f2fs_submit_merged_write(struct f2fs_sb_info *sbi, enum page_type type)
 {
-	__submit_merged_write_cond(sbi, NULL, NULL, 0, type);
+	__submit_merged_write_cond(sbi, NULL, NULL, 0, type, false);
 }
 
 void f2fs_submit_merged_write_cond(struct f2fs_sb_info *sbi,
 				struct inode *inode, struct folio *folio,
 				nid_t ino, enum page_type type)
 {
-	__submit_merged_write_cond(sbi, inode, folio, ino, type);
+	__submit_merged_write_cond(sbi, inode, folio, ino, type, false);
+}
+
+void f2fs_submit_merged_write_folio(struct f2fs_sb_info *sbi,
+				struct folio *folio, enum page_type type)
+{
+	__submit_merged_write_cond(sbi, NULL, folio, 0, type, true);
 }
 
 void f2fs_flush_merged_writes(struct f2fs_sb_info *sbi)
