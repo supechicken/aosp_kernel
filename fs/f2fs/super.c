@@ -3910,20 +3910,6 @@ static int sanity_check_raw_super(struct f2fs_sb_info *sbi,
 	if (sanity_check_area_boundary(sbi, folio, index))
 		return -EFSCORRUPTED;
 
-	/*
-	 * Check for legacy summary layout on 16KB+ block devices.
-	 * Modern f2fs-tools packs multiple 4KB summary areas into one block,
-	 * whereas legacy versions used one block per summary, leading
-	 * to a much larger SSA.
-	 */
-	if (SUMS_PER_BLOCK > 1 &&
-		    !(__F2FS_HAS_FEATURE(raw_super, F2FS_FEATURE_PACKED_SSA))) {
-		f2fs_info(sbi, "Error: Device formatted with a legacy version. "
-			"Please reformat with a tool supporting the packed ssa "
-			"feature for block sizes larger than 4kb.");
-		return -EOPNOTSUPP;
-	}
-
 	return 0;
 }
 
@@ -4135,6 +4121,18 @@ static void init_sb_info(struct f2fs_sb_info *sbi)
 	sbi->adjust_lock_priority = 0;
 	sbi->lock_duration_priority = F2FS_DEFAULT_TASK_PRIORITY;
 	sbi->critical_task_priority = F2FS_CRITICAL_TASK_PRIORITY;
+
+	sbi->sum_blocksize = f2fs_sb_has_packed_ssa(sbi) ?
+		4096 : sbi->blocksize;
+	sbi->sums_per_block = sbi->blocksize / sbi->sum_blocksize;
+	sbi->entries_in_sum = sbi->sum_blocksize / 8;
+	sbi->sum_entry_size = SUMMARY_SIZE * sbi->entries_in_sum;
+	sbi->sum_journal_size = sbi->sum_blocksize - SUM_FOOTER_SIZE -
+		sbi->sum_entry_size;
+	sbi->nat_journal_entries = (sbi->sum_journal_size - 2) /
+		sizeof(struct nat_journal_entry);
+	sbi->sit_journal_entries = (sbi->sum_journal_size - 2) /
+		sizeof(struct sit_journal_entry);
 
 	sbi->dir_level = DEF_DIR_LEVEL;
 	sbi->interval_time[CP_TIME] = DEF_CP_INTERVAL;
