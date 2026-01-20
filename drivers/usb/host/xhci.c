@@ -23,6 +23,8 @@
 #include <linux/usb/xhci-sideband.h>
 #include <linux/bitfield.h>
 
+#include <trace/hooks/dwc3.h>
+
 #include "xhci.h"
 #include "xhci-trace.h"
 #include "xhci-debugfs.h"
@@ -198,10 +200,16 @@ int xhci_reset(struct xhci_hcd *xhci, u64 timeout_us)
 		return 0;
 	}
 
+	trace_android_vh_dwc3_xhci_soft_reset(xhci_to_hcd(xhci),
+					      PRE_SOFT_RESET);
+
 	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "// Reset the HC");
 	command = readl(&xhci->op_regs->command);
 	command |= CMD_RESET;
 	writel(command, &xhci->op_regs->command);
+
+	trace_android_vh_dwc3_xhci_soft_reset(xhci_to_hcd(xhci),
+					      SOFT_RESET_INITIATED);
 
 	/* Existing Intel xHCI controllers require a delay of 1 mS,
 	 * after setting the CMD_RESET bit, and before accessing any
@@ -214,6 +222,9 @@ int xhci_reset(struct xhci_hcd *xhci, u64 timeout_us)
 		udelay(1000);
 
 	ret = xhci_handshake(&xhci->op_regs->command, CMD_RESET, 0, timeout_us);
+
+	trace_android_vh_dwc3_xhci_soft_reset(xhci_to_hcd(xhci),
+					      POST_SOFT_RESET);
 	if (ret)
 		return ret;
 
