@@ -239,7 +239,7 @@ static int iommu_pasid_setup_fl(struct pasid_setup_fl_data *data)
 	struct device_domain_info info = { 0 };
 	struct pkvm_device dev = { .info = &info };
 	struct dmar_domain *domain;
-	int flags = 0, level, ret;
+	int level, ret;
 	void *pgd;
 
 	if (!iommu)
@@ -293,22 +293,25 @@ static int iommu_pasid_setup_fl(struct pasid_setup_fl_data *data)
 		goto put_domain;
 	}
 
-	if (domain->domain.type == IOMMU_DOMAIN_NESTED) {
-		pkvm_err("%s: PASID setup for nested domain(%p) not implemented yet\n",
-			 __func__, domain->pgd);
-		goto put_domain;
-	}
-
 	pkvm_dbg("%s: dev[%x:%x], pasid: %x, fsptptr_gpa: %llx, did: %d\n", __func__,
 		 data->bus, data->devfn, data->pasid, data->fsptptr_gpa, data->did);
 
-	if (data->force_snoop)
-		flags |= PASID_FLAG_PAGE_SNOOP;
-	if (level == 5)
-		flags |= PASID_FLAG_FL5LP;
-	ret = intel_pasid_setup_first_level(iommu, domain, &dev,
-					    __pkvm_pa(pgd),
-					    data->pasid, data->did, flags);
+	if (domain->domain.type == IOMMU_DOMAIN_NESTED) {
+		ret = intel_pasid_setup_nested(iommu, &dev, data->pasid,
+					       data->did, domain,
+					       data->force_snoop);
+	} else {
+		int flags = 0;
+
+		if (data->force_snoop)
+			flags |= PASID_FLAG_PAGE_SNOOP;
+		if (level == 5)
+			flags |= PASID_FLAG_FL5LP;
+		ret = intel_pasid_setup_first_level(iommu, domain, &dev,
+						    __pkvm_pa(pgd),
+						    data->pasid, data->did,
+						    flags);
+	}
 
 put_domain:
 	if (ret)
