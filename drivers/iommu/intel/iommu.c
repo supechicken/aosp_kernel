@@ -1439,7 +1439,10 @@ static void iommu_disable_pci_pri(struct device_domain_info *info)
 
 static void intel_flush_iotlb_all(struct iommu_domain *domain)
 {
-	cache_tag_flush_all(to_dmar_domain(domain));
+	if (!pkvm_enabled())
+		cache_tag_flush_all(to_dmar_domain(domain));
+	else if (domain_pkvm_nested(to_dmar_domain(domain)))
+		pkvm_domain_flush(to_dmar_domain(domain), 0, ULONG_MAX, 0);
 }
 
 static void iommu_disable_protect_mem_regions(struct intel_iommu *iommu)
@@ -1837,9 +1840,21 @@ static void switch_to_super_page(struct dmar_domain *domain,
 		start_pfn += lvl_pages;
 	}
 
-	if (flush)
+	if (flush) {
+#ifndef __PKVM_HYP__
+		if (!pkvm_enabled())
+			cache_tag_flush_range(domain, orig_start_pfn << VTD_PAGE_SHIFT,
+					      end_pfn << VTD_PAGE_SHIFT, 0);
+		else if (domain_pkvm_nested(domain))
+			pkvm_domain_flush(domain, orig_start_pfn << VTD_PAGE_SHIFT,
+					  end_pfn << VTD_PAGE_SHIFT, 0);
+		else
+			BUG();
+#else
 		cache_tag_flush_range(domain, orig_start_pfn << VTD_PAGE_SHIFT,
 				      end_pfn << VTD_PAGE_SHIFT, 0);
+#endif
+	}
 }
 
 int domain_map(struct dmar_domain *domain, unsigned long iov_pfn,
@@ -3739,6 +3754,10 @@ static struct dmar_domain *paging_domain_alloc(struct device *dev, bool first_st
 
 	domain->nid = dev_to_node(dev);
 	domain->use_first_level = first_stage;
+#ifdef CONFIG_PKVM_INTEL
+	if (pkvm_enabled() && pkvm_nested_enabled(iommu) && first_stage)
+		domain->pkvm_nested = true;
+#endif
 
 	domain->domain.type = IOMMU_DOMAIN_UNMANAGED;
 
@@ -3788,9 +3807,10 @@ static struct dmar_domain *paging_domain_alloc(struct device *dev, bool first_st
 			kfree(domain);
 			return ERR_PTR(ret);
 		}
-	} else {
-		domain_flush_cache(domain, domain->pgd, PAGE_SIZE);
 	}
+
+	if (!pkvm_enabled() || domain_pkvm_nested(domain))
+		domain_flush_cache(domain, domain->pgd, PAGE_SIZE);
 
 	return domain;
 }
@@ -4067,7 +4087,7 @@ static int intel_iommu_map(struct iommu_domain *domain,
 	   the low bits of hpa would take us onto the next page */
 	size = aligned_nrpages(hpa, size);
 
-	if (pkvm_enabled())
+	if (pkvm_enabled() && !domain_pkvm_nested(dmar_domain))
 		return pkvm_domain_map(dmar_domain, iova >> VTD_PAGE_SHIFT,
 				       hpa >> VTD_PAGE_SHIFT, size, prot, gfp);
 
@@ -4119,7 +4139,7 @@ static size_t intel_iommu_unmap(struct iommu_domain *domain,
 	start_pfn = iova >> VTD_PAGE_SHIFT;
 	last_pfn = (iova + size - 1) >> VTD_PAGE_SHIFT;
 
-	if (pkvm_enabled()) {
+	if (pkvm_enabled() && !domain_pkvm_nested(dmar_domain)) {
 		int ret = pkvm_domain_unmap(dmar_domain, start_pfn, last_pfn);
 
 		if (ret)
@@ -4168,6 +4188,9 @@ static void intel_iommu_tlb_sync(struct iommu_domain *domain,
 		cache_tag_flush_range(to_dmar_domain(domain), gather->start,
 				      gather->end,
 				      iommu_pages_list_empty(&gather->freelist));
+	else if (domain_pkvm_nested(to_dmar_domain(domain)))
+		pkvm_domain_flush(to_dmar_domain(domain), gather->start, gather->end,
+				  iommu_pages_list_empty(&gather->freelist));
 	iommu_put_pages_list(&gather->freelist);
 }
 
@@ -4551,6 +4574,12 @@ static int intel_iommu_iotlb_sync_map(struct iommu_domain *domain,
 				      unsigned long iova, size_t size)
 {
 	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
+
+	/*
+	 * Host controls first level page table in pKVM's nested mode, but since pKVM
+	 * assumes !rwbf_required(), iotlb_sync on map is not required and not supported.
+	 */
+	BUG_ON(domain_pkvm_nested(dmar_domain) && dmar_domain->iotlb_sync_map);
 
 	/* pKVM performs iotlb flush after map if required */
 	if (!pkvm_enabled() && dmar_domain->iotlb_sync_map)
