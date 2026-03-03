@@ -302,18 +302,20 @@ static int iommu_pasid_setup_fl(struct pasid_setup_fl_data *data)
 	pkvm_dbg("%s: dev[%x:%x], pasid: %x, fsptptr_gpa: %llx, did: %d\n", __func__,
 		 data->bus, data->devfn, data->pasid, data->fsptptr_gpa, data->did);
 
-	if (data->force_snoop)
-		flags |= PASID_FLAG_PAGE_SNOOP;
-	if (level == 5)
-		flags |= PASID_FLAG_FL5LP;
 	if (domain->domain.type == IOMMU_DOMAIN_NESTED) {
-		pkvm_err("%s: nested domain(%p) cannot be used in non-nested config!\n",
-			 __func__, domain->pgd);
-		goto put_domain;
+		ret = intel_pasid_setup_nested(iommu, &dev, data->pasid,
+					       data->did, domain,
+					       data->force_snoop);
+	} else {
+		if (data->force_snoop)
+			flags |= PASID_FLAG_PAGE_SNOOP;
+		if (level == 5)
+			flags |= PASID_FLAG_FL5LP;
+		ret = intel_pasid_setup_first_level(iommu, domain, &dev,
+						    __pkvm_pa(pgd),
+						    data->pasid, data->did,
+						    flags);
 	}
-	ret = intel_pasid_setup_first_level(iommu, domain, &dev,
-					    __pkvm_pa(pgd),
-					    data->pasid, data->did, flags);
 
 put_domain:
 	if (ret)
