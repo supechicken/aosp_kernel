@@ -359,3 +359,34 @@ int pkvm_iommu_domain_unmap(u64 pgd_gpa, u64 start_pfn, u64 last_pfn)
 
 	return 0;
 }
+
+/* Flush IOMMU caches for the domain identified by the given pgd_gpa. */
+int pkvm_iommu_domain_flush(u64 pgd_gpa, u64 start, u64 last, bool ih)
+{
+	struct dmar_domain *domain;
+
+	domain = __pkvm_get_iommu_domain(pkvm_host_gpa_to_virt(pgd_gpa));
+	if (!domain) {
+		pkvm_err("%s, failed to get the domain [pgd:%llx]\n",
+			 __func__, pgd_gpa);
+		return -EINVAL;
+	}
+
+	if (start > last) {
+		pkvm_err("%s: invalid flush range [%llx, %llx] for domain [pgd:%llx]\n",
+			 __func__, start, last, pgd_gpa);
+		pkvm_put_iommu_domain(domain);
+		return -EINVAL;
+	}
+
+	if (last > domain->max_addr) {
+		start = 0;
+		last = ULONG_MAX;
+		ih = false;
+	}
+
+	cache_tag_flush_range(domain, start, last, ih);
+	pkvm_put_iommu_domain(domain);
+
+	return 0;
+}
