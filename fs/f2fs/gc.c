@@ -1241,7 +1241,7 @@ static int ra_data_block(struct inode *inode, pgoff_t index)
 		.encrypted_page = NULL,
 		.in_list = 0,
 	};
-	int err;
+	int err = 0;
 	bool bypass = false;
 
 	trace_android_rvh_f2fs_ra_data_block_bypass(inode, index, &err, &bypass);
@@ -1311,6 +1311,9 @@ got_it:
 	}
 
 	fio.encrypted_page = &efolio->page;
+
+	if (folio_test_uptodate(efolio))
+		goto put_encrypted_page;
 
 	err = f2fs_submit_page_bio(&fio);
 	if (err)
