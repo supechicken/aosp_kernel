@@ -1419,6 +1419,7 @@ int futex_init_proxy_task_ext(struct task_struct *tsk)
 		return -ENOMEM;
 
 	raw_spin_lock_init(&ext->pi_futex_lock);
+	INIT_LIST_HEAD(&ext->ping_state_list);
 
 	tsk->proxy_futex_task_ext = ext;
 	return 0;
