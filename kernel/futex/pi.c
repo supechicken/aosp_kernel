@@ -182,6 +182,11 @@ void put_pi_state(struct futex_pi_state *pi_state)
  *	p->pi_state_list -> pi_state->list, relation
  *	pi_mutex->owner -> pi_state->owner, relation
  *
+ * pi->ping_lock:
+ *
+ *	p->futex.ping_state_list -> ping_state->list, relation
+ *	ping_mutex->owner -> ping_state->owner, relation
+ *
  * pi_state->refcount:
  *
  *	pi_state lifetime
@@ -192,6 +197,7 @@ void put_pi_state(struct futex_pi_state *pi_state)
  *   hb->lock
  *     pi_mutex->wait_lock
  *       p->pi_lock
+ *	   p->proxy_futex_task_ext.pi_futex_lock
  *
  */
 
@@ -235,6 +241,8 @@ int attach_to_pi_state(u32 __user *uaddr, u32 uval,
 	 */
 	if (!ping)
 		raw_spin_lock_irq(&pi_state->pi_mutex.wait_lock);
+	else
+		raw_spin_lock_irq(&pi_state->ping_mutex.wait_lock);
 
 	/*
 	 * Since {uval, pi_state} is serialized by wait_lock, and our current
@@ -301,6 +309,9 @@ out_attach:
 	if (!ping) {
 		get_pi_state(pi_state);
 		raw_spin_unlock_irq(&pi_state->pi_mutex.wait_lock);
+	} else {
+		get_ping_state(pi_state);
+		raw_spin_unlock_irq(&pi_state->ping_mutex.wait_lock);
 	}
 	*ps = pi_state;
 	return 0;
@@ -320,11 +331,12 @@ out_efault:
 out_error:
 	if (!ping)
 		raw_spin_unlock_irq(&pi_state->pi_mutex.wait_lock);
+	else
+		raw_spin_unlock_irq(&pi_state->ping_mutex.wait_lock);
 	return ret;
 }
 
-int pi_handle_exit_race(u32 __user *uaddr, u32 uval,
-			struct task_struct *tsk)
+int pi_handle_exit_race(u32 __user *uaddr, u32 uval, struct task_struct *tsk)
 {
 	u32 uval2;
 
@@ -399,6 +411,19 @@ static void __attach_to_pi_owner(struct task_struct *p, union futex_key *key,
 		rt_mutex_init_proxy_locked(&pi_state->pi_mutex, p);
 		WARN_ON(!list_empty(&pi_state->list));
 		list_add(&pi_state->list, &p->pi_state_list);
+	} else {
+		struct proxy_futex_task_ext *ext = p->proxy_futex_task_ext;
+		/*
+		 * Initialize the pi_mutex in locked state and make @p
+		 * the owner of it:
+		 */
+		pi_state->ping_mutex.owner = p;
+		raw_spin_lock_init(&pi_state->ping_mutex.wait_lock);
+
+		WARN_ON(!list_empty(&pi_state->list));
+		raw_spin_lock(&ext->pi_futex_lock);
+		list_add(&pi_state->list, &ext->ping_state_list);
+		raw_spin_unlock(&ext->pi_futex_lock);
 	}
 
 	/* Store the key for possible exit cleanups: */
