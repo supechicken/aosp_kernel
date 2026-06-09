@@ -3529,6 +3529,12 @@
   wireless_send_event
   woken_wake_function
   work_busy
+  wrapfd_acquire_ownership
+  wrapfd_add_listener
+  wrapfd_del_listener
+  wrapfd_get_mappable
+  wrapfd_put_mappable
+  wrapfd_release_ownership
   wwan_create_port
   wwan_port_get_drvdata
   wwan_port_rx
