@@ -12,6 +12,9 @@
 #include <linux/module.h>
 #include <linux/platform_device.h>
 #include "ufshcd-priv.h"
+#include <trace/hooks/ufshcd.h>
+#include <linux/android_kabi.h>
+ANDROID_KABI_DECLONLY(trace_eval_map);
 #include <linux/delay.h>
 #include <scsi/scsi_cmnd.h>
 #include <linux/bitfield.h>
@@ -586,10 +589,12 @@ int ufshcd_mcq_sq_cleanup(struct ufs_hba *hba, int task_tag)
 
 	guard(mutex)(&hwq->sq_mutex);
 
+	trace_android_vh_ufs_mcq_cleanup(hba, task_tag, true);
+
 	/* stop the SQ fetching before working on it */
 	err = ufshcd_mcq_sq_stop(hba, hwq);
 	if (err)
-		return err;
+		goto exit;
 
 	/* SQCTI = EXT_IID, IID, LUN, Task Tag */
 	nexus = lrbp->ucd_req_ptr->header.iid << 16 | lrbp->lun << 8 | task_tag;
@@ -616,6 +621,8 @@ int ufshcd_mcq_sq_cleanup(struct ufs_hba *hba, int task_tag)
 	if (ufshcd_mcq_sq_start(hba, hwq))
 		err = -ETIMEDOUT;
 
+exit:
+	trace_android_vh_ufs_mcq_cleanup(hba, task_tag, false);
 	return err;
 }
 

@@ -52,6 +52,10 @@ DECLARE_HOOK(android_vh_ufs_check_int_errors,
 	TP_PROTO(struct ufs_hba *hba, bool queue_eh_work),
 	TP_ARGS(hba, queue_eh_work));
 
+DECLARE_HOOK(android_vh_ufs_mcq_cleanup,
+	TP_PROTO(struct ufs_hba *hba, int task_tag, bool start),
+	TP_ARGS(hba, task_tag, start));
+
 #endif /* _TRACE_HOOK_UFSHCD_H */
 /* This part must be outside protection */
 #include <trace/define_trace.h>
