@@ -132,6 +132,7 @@ static inline bool should_fail_futex(bool fshared)
  * GKI KMI.
  */
 struct proxy_futex_task_ext {
+	raw_spinlock_t pi_futex_lock;
 };
 
 /*
