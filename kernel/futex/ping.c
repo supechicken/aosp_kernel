@@ -373,6 +373,9 @@ retry_private:
 
 		queued = false;
 		while (1) {
+			set_task_blocked_on(current, &q.ping_state->ping_mutex,
+					    BO_T_PING_FUTEX);
+
 			set_current_state(TASK_INTERRUPTIBLE|TASK_FREEZABLE);
 			if (!queued) {
 				futex_queue(&q, hb, current);
@@ -384,6 +387,9 @@ retry_private:
 			}
 
 			futex_do_wait(&q, to);
+
+			clear_task_blocked_on(current,
+					      &q.ping_state->ping_mutex);
 
 			futex_q_lockptr_lock(&q);
 			if (to && !to->task) {
@@ -518,6 +524,7 @@ retry:
 	get_ping_state(ping_state);
 	/* Leave it queued, it gets unqueued on the lock side */
 	get_task_struct(top_waiter->task);
+	set_task_blocked_on_waking(top_waiter->task, &ping_state->ping_mutex);
 
 	/*
 	 * Unconditionally set FUTEX_WAITERS.
@@ -527,6 +534,7 @@ retry:
 	new = FUTEX_WAITERS;
 	ret = lock_pi_update_atomic(uaddr, uval, new);
 	if (ret) {
+		/* We've lost the blocked_on relationship at this point. */
 		put_task_struct(top_waiter->task);
 		raw_spin_unlock_irq(&ping_state->ping_mutex.wait_lock);
 		spin_unlock(&hb->lock);
