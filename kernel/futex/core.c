@@ -1418,6 +1418,8 @@ int futex_init_proxy_task_ext(struct task_struct *tsk)
 	if (!ext)
 		return -ENOMEM;
 
+	raw_spin_lock_init(&ext->pi_futex_lock);
+
 	tsk->proxy_futex_task_ext = ext;
 	return 0;
 }
