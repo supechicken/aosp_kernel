@@ -265,6 +265,127 @@ static void clear_content(struct __test_metadata *_metadata,
 	ASSERT_EQ(munmap(ptr, self->size), 0);
 }
 
+/* Returns @ret, or -errno if @ret is negative. @ret may be of any signed integer type. */
+#define ret_or_errno(ret) ({ \
+	__typeof__(ret) __ret = (ret); \
+	__ret < 0 ? (__typeof__(ret))-errno : __ret; \
+})
+
+/* Returns the WRAPFD_CONTENT_* state of @wrapfd, or -errno. */
+static int state_of(int wrapfd)
+{
+	unsigned int state;
+
+	return wrapfd_get_state(wrapfd, &state) ? -errno : (int)state;
+}
+
+/* Maps @fd read-only and unmaps it again. Returns 0, or the -errno of mmap(). */
+static int try_map(int fd, size_t len)
+{
+	void *ptr = mmap(NULL, len, PROT_READ, MAP_SHARED, fd, 0);
+
+	if (ptr == MAP_FAILED)
+		return -errno;
+	munmap(ptr, len);
+	return 0;
+}
+
+/*
+ * A forked worker process. worker_start() returns 0 in the worker and the worker's pid in the
+ * test process, like fork().
+ *
+ * The two pipes form a lockstep handshake: the worker announces a state with worker_ready() and
+ * waits in worker_wait_go(); the test process waits for it with worker_wait_ready() and lets it
+ * continue with worker_go(). Workers report failures through EXPECT_*() only, which records them
+ * in the shared test metadata: an ASSERT_*() in a worker would run the fixture teardown there.
+ * While a worker waits in worker_wait_go(), the test process checks with EXPECT_*() too, so that
+ * a failed check still lets the worker go and be joined.
+ */
+struct worker {
+	pid_t pid;
+	int ready_fd;	/* worker: write end; test process: read end */
+	int go_fd;	/* worker: read end; test process: write end */
+};
+
+static pid_t worker_start(struct __test_metadata *_metadata, struct worker *wk)
+{
+	int ready[2], go[2];
+
+	/* A write to a dead worker's pipe should fail the check, not kill the test. */
+	signal(SIGPIPE, SIG_IGN);
+	ASSERT_EQ(0, pipe2(ready, O_CLOEXEC));
+	ASSERT_EQ(0, pipe2(go, O_CLOEXEC));
+	fflush(NULL);
+	wk->pid = fork();
+	ASSERT_LE(0, wk->pid);
+	if (!wk->pid) {
+		close(ready[0]);
+		close(go[1]);
+		wk->ready_fd = ready[1];
+		wk->go_fd = go[0];
+		return 0;
+	}
+	close(ready[1]);
+	close(go[0]);
+	wk->ready_fd = ready[0];
+	wk->go_fd = go[1];
+	return wk->pid;
+}
+
+static void worker_ready(struct worker *wk)
+{
+	char c = 0;
+
+	if (write(wk->ready_fd, &c, 1) != 1)
+		_exit(1);
+}
+
+static void worker_wait_go(struct worker *wk)
+{
+	char c;
+
+	if (read(wk->go_fd, &c, 1) != 1)
+		_exit(1);
+}
+
+/*
+ * Ends the worker. Called from the handler of a failed EXPECT_*(), it must clear the shared
+ * trigger that the handler loop would otherwise reset, or the test process's next ASSERT_*()
+ * would abort.
+ */
+static void __attribute__((noreturn)) worker_exit(struct __test_metadata *_metadata)
+{
+	_metadata->trigger = 0;
+	_exit(0);
+}
+
+static void worker_wait_ready(struct __test_metadata *_metadata, struct worker *wk)
+{
+	char c;
+
+	ASSERT_EQ(1, read(wk->ready_fd, &c, 1))
+		TH_LOG("worker %d exited before it was ready", wk->pid);
+}
+
+static void worker_go(struct __test_metadata *_metadata, struct worker *wk)
+{
+	char c = 0;
+
+	ASSERT_EQ(1, write(wk->go_fd, &c, 1));
+}
+
+/* Reaps the worker and checks that it exited normally. */
+static void worker_join(struct __test_metadata *_metadata, struct worker *wk)
+{
+	int status;
+
+	close(wk->ready_fd);
+	close(wk->go_fd);
+	ASSERT_EQ(wk->pid, waitpid(wk->pid, &status, 0));
+	ASSERT_TRUE(WIFEXITED(status) && !WEXITSTATUS(status))
+		TH_LOG("worker %d ended with status 0x%x", wk->pid, status);
+}
+
 static void test_wrap(struct __test_metadata *_metadata,
 		      FIXTURE_DATA(wrapfd_tests) *self, int fd)
 {
@@ -949,8 +1070,12 @@ static void test_rewrap(struct __test_metadata *_metadata,
 	ASSERT_TRUE(wrapfd_get_state(wrapfd, &state) == 0 &&
 		    state == WRAPFD_CONTENT_EMPTY);
 
-	/* Check rewrapped content */
-	ASSERT_EQ(cmp_content(_metadata, self, wrapfd2, 0, 0, self->size), 0);
+	/*
+	 * Check rewrapped content which should be cleared
+	 * by the wrapfd driver
+	 */
+	ASSERT_EQ(is_content_clear(_metadata, self, wrapfd2,
+				   0, self->size), true);
 
 	/* Take ownership of the rewrapped buffer */
 	ASSERT_EQ(wrapfd_acquire_ownership(wrapfd2), 0);
@@ -968,8 +1093,12 @@ static void test_rewrap(struct __test_metadata *_metadata,
 		   wrapfd3, 0);
 	ASSERT_TRUE(ptr == MAP_FAILED && errno == EACCES);
 
-	/* Check rewrapped content */
-	ASSERT_EQ(cmp_content(_metadata, self, wrapfd3, 0, 0, self->size), 0);
+	/*
+	 * Check rewrapped content which should be cleared
+	 * by the wrapfd driver
+	 */
+	ASSERT_EQ(is_content_clear(_metadata, self, wrapfd3,
+				   0, self->size), true);
 
 	/* Try mapping the original empty wrap file */
 	ptr = mmap(NULL, self->size, PROT_READ, MAP_SHARED,
