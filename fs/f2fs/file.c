@@ -4471,7 +4471,7 @@ static int redirty_blocks(struct inode *inode, pgoff_t page_idx, int len)
 		page_idx = folio_next_index(folio);
 	} while (page_len < len);
 
-	do {
+	while (redirty_idx < page_idx) {
 		folio = filemap_lock_folio(mapping, redirty_idx);
 
 		/* It will never fail, when folio has pinned above */
@@ -4484,7 +4484,7 @@ static int redirty_blocks(struct inode *inode, pgoff_t page_idx, int len)
 		redirty_idx = folio_next_index(folio);
 		folio_unlock(folio);
 		folio_put_refs(folio, 2);
-	} while (redirty_idx < page_idx);
+	}
 
 	return ret;
 }
