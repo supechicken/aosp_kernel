@@ -58,6 +58,7 @@
 #include "cred.c"
 #include "device.c"
 #include "dma.c"
+#include "dma-buf.c"
 #ifdef CONFIG_DMA_SHARED_BUFFER
 #include "dma-resv.c"
 #endif
