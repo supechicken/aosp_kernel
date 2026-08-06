@@ -490,10 +490,46 @@ out:
 	return ret;
 }
 
+#ifdef CONFIG_SCHED_PROXY_EXEC
+static inline
+struct task_struct *ping_current_proxy_donor(struct futex_pi_state *ping_state)
+{
+	struct task_struct *ret = NULL;
+
+	if (sched_proxy_exec()) {
+		struct task_struct *donor;
+
+		raw_spin_lock(&current->blocked_lock);
+		donor = current->blocked_donor;
+		if (donor) {
+			void *ping_lock = (void *)&ping_state->ping_mutex;
+
+			raw_spin_lock_nested(&donor->blocked_lock,
+					     SINGLE_DEPTH_NESTING);
+			if (__get_task_blocked_on(donor) == ping_lock) {
+				ret = get_task_struct(donor);
+				__clear_task_blocked_on(donor, ping_lock);
+				current->blocked_donor = NULL;
+			}
+			raw_spin_unlock(&donor->blocked_lock);
+		}
+		raw_spin_unlock(&current->blocked_lock);
+	}
+	return ret;
+}
+#else
+static inline
+struct task_struct *ping_current_proxy_donor(struct futex_pi_state *ping_state)
+{
+	return NULL;
+}
+#endif
+
 int futex_unlock_ping(u32 __user *uaddr, unsigned int flags)
 {
 	struct futex_pi_state *ping_state;
 	u32 new, uval, vpid = task_pid_vnr(current);
+	struct task_struct *next;
 	union futex_key key = FUTEX_KEY_INIT;
 	struct futex_q *top_waiter;
 	DEFINE_WAKE_Q(wake_q);
@@ -541,17 +577,21 @@ retry:
 
 	ping_state = top_waiter->ping_state;
 	ret = -EINVAL;
-	if (!ping_state)
-		goto out_unlock;
-	raw_spin_lock_irq(&ping_state->ping_mutex.wait_lock);
-	if (ping_state->owner != current) {
-		raw_spin_unlock_irq(&ping_state->ping_mutex.wait_lock);
-		goto out_unlock;
+	if (!ping_state) {
+		spin_unlock(&hb->lock);
+		return ret;
 	}
+
+	raw_spin_lock_irq(&ping_state->ping_mutex.wait_lock);
+
+	next = ping_current_proxy_donor(ping_state);
 	get_ping_state(ping_state);
 	/* Leave it queued, it gets unqueued on the lock side */
-	get_task_struct(top_waiter->task);
-	set_task_blocked_on_waking(top_waiter->task, &ping_state->ping_mutex);
+	if (next == NULL) {
+		next = get_task_struct(top_waiter->task);
+		clear_task_blocked_on(next, &ping_state->ping_mutex);
+	}
+	set_task_blocked_on_waking(next, &ping_state->ping_mutex);
 
 	/*
 	 * Unconditionally set FUTEX_WAITERS.
@@ -561,15 +601,15 @@ retry:
 	new = FUTEX_WAITERS;
 	handoff = false;
 	if (ping_state->ping_mutex.handoff) {
-		new |= task_pid_vnr(top_waiter->task);
+		new |= task_pid_vnr(next);
 		handoff = true;
 	}
 	ret = lock_pi_update_atomic(uaddr, uval, new);
+	spin_unlock(&hb->lock);
 	if (ret) {
 		/* We've lost the blocked_on relationship at this point. */
-		put_task_struct(top_waiter->task);
+		put_task_struct(next);
 		raw_spin_unlock_irq(&ping_state->ping_mutex.wait_lock);
-		spin_unlock(&hb->lock);
 		put_ping_state(ping_state);
 		switch (ret) {
 		case -EFAULT:
@@ -586,20 +626,15 @@ retry:
 	if (handoff) {
 		ping_state->ping_mutex.handoff = 0;
 		ping_state->ping_mutex.pickup = 1;
-		WRITE_ONCE(ping_state->ping_mutex.owner, top_waiter->task);
+		WRITE_ONCE(ping_state->ping_mutex.owner, next);
 	} else
 		WRITE_ONCE(ping_state->ping_mutex.owner, NULL);
 
-	wake_q_add_safe(&wake_q, top_waiter->task);
-	ping_state_update_owner(ping_state, top_waiter->task);
-	spin_unlock(&hb->lock);
+	wake_q_add_safe(&wake_q, next);
+	ping_state_update_owner(ping_state, next);
 	raw_spin_unlock_irq_wake(&ping_state->ping_mutex.wait_lock, &wake_q);
 	put_ping_state(ping_state);
 	return 0;
-
-out_unlock:
-	spin_unlock(&hb->lock);
-	return ret;
 
 uaddr_faulted:
 	ret = fault_in_user_writeable(uaddr);
