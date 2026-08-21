@@ -180,7 +180,7 @@ static int futex_trylock_ping_state(u32 __user *uaddr,
 			ping_state_update_owner(ping_state, current);
 		WRITE_ONCE(ping_state->ping_mutex.owner, current);
 		ret = 1;
-	} else if (ping_state->ping_mutex.pickup) {
+	} else if (ping_state->ping_mutex.pickup || owner == current) {
 		if (owner != current) {
 			ret = -EAGAIN;
 			goto err;
@@ -198,18 +198,8 @@ static int futex_trylock_ping_state(u32 __user *uaddr,
 
 err:
 	raw_spin_unlock_irq(&ping_state->ping_mutex.wait_lock);
-	switch (ret) {
-	case -EFAULT:
-		ret = fault_in_user_writeable(uaddr);
-		break;
-	case -EAGAIN:
+	if (ret == -EAGAIN)
 		ret = 0;
-		break;
-	case -EINVAL:
-		break;
-	default:
-		WARN_ON(1);
-	}
 	return ret;
 }
 
@@ -307,6 +297,50 @@ static int futex_lock_ping_atomic(u32 __user *uaddr,
 }
 
 /*
+ * Returns >0 on successfully having taken the lock, <0 on error
+ */
+static int ping_spin_or_trylock(u32 __user *uaddr,
+				struct futex_pi_state *ping_state,
+				bool handoff)
+{
+	struct task_struct *owner = ping_mutex_owner(&ping_state->ping_mutex);
+	struct task_struct *new;
+	int ret;
+
+	if (owner && !owner_on_cpu(owner))
+		return 0;
+
+	/*
+	 * XXX We'll want to try to limit spinning either with an osq or
+	 * by only allowing the top waiter to spin.
+	 */
+
+	while (1) {
+		new = ping_mutex_owner(&ping_state->ping_mutex);
+		ret = 0;
+		if (!owner || !new || new == current) {
+			ret = futex_trylock_ping_state(uaddr, ping_state,
+			    handoff);
+			if (ret != 0)
+				break;
+			/* Spin on new owner if we didn't get the lock */
+			owner = ping_mutex_owner(&ping_state->ping_mutex);
+			goto next;
+		}
+		if (new != owner) {
+			owner = ping_mutex_owner(&ping_state->ping_mutex);
+			goto next;
+		}
+		if (!owner_on_cpu(owner) || need_resched())
+			break;
+next:
+		cpu_relax();
+	}
+
+	return ret;
+}
+
+/*
  * Return values:
  *     < 0: error.
  *     0: did not get the lock.
@@ -391,10 +425,6 @@ retry_private:
 		queued = false;
 		should_handoff = false;
 		while (1) {
-			set_task_blocked_on(current, &q.ping_state->ping_mutex,
-					    BO_T_PING_FUTEX);
-
-			set_current_state(TASK_INTERRUPTIBLE|TASK_FREEZABLE);
 			if (!queued) {
 				futex_queue(&q, hb, current);
 				queued = true;
@@ -403,6 +433,32 @@ retry_private:
 				spin_unlock(&hb->lock);
 				__release(q->lock_ptr);
 			}
+
+			preempt_disable();
+			set_current_state(TASK_INTERRUPTIBLE|TASK_FREEZABLE);
+			ret = ping_spin_or_trylock(uaddr, q.ping_state,
+						   should_handoff);
+			if (ret > 0) {
+				/* Got the futex */
+				ret = 0;
+				preempt_enable();
+				futex_q_lockptr_lock(&q);
+				goto out_unqueue;
+			} else if (ret < 0) {
+				preempt_enable();
+				futex_q_lockptr_lock(&q);
+				if (ret == -EFAULT) {
+					futex_unqueue_ping(&q);
+					spin_unlock(q.lock_ptr);
+					__release(q.lock_ptr);
+					goto uaddr_faulted_unlocked;
+				}
+				goto out_unqueue;
+			}
+			preempt_enable();
+
+			set_task_blocked_on(current, &q.ping_state->ping_mutex,
+					    BO_T_PING_FUTEX);
 
 			futex_do_wait(&q, to);
 
@@ -418,19 +474,12 @@ retry_private:
 				ret = -EINTR;
 				goto out_unqueue;
 			}
-
-			ret = futex_trylock_ping_state(uaddr, q.ping_state,
-						       should_handoff);
-			if (ret > 0) {
-				/* Got the futex */
-				ret = 0;
-				goto out_unqueue;
-			} else if (ret < 0)
-				goto out_unqueue;
 			should_handoff = true;
 		}
 
 out_unqueue:
+		__set_current_state(TASK_RUNNING);
+
 		/*
 		 * We got a pending signal or timeout, but the futex was handed
 		 * off to us. Fix up the return value to indicate success.
@@ -472,7 +521,7 @@ out_unlock:
 uaddr_faulted:
 		futex_q_unlock(hb);
 		__release(q.lock_ptr);
-
+uaddr_faulted_unlocked:
 		ret = fault_in_user_writeable(uaddr);
 		if (ret)
 			goto out;
