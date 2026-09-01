@@ -936,3 +936,97 @@ unsafe extern "C" fn wrapfd_put_mappable(
         Err(err) => err.to_errno(),
     }
 }
+
+#[export]
+/// # Safety
+///
+/// - `file` must be a valid, non-null pointer to a live C `struct file` created by this driver.
+/// - `dev` must be a valid pointer to a live C `struct device` or null (handled gracefully).
+/// - `ops` must be a valid pointer to a live C `struct wrapfd_listener_operations`.
+/// - The caller must ensure `file` and `dev` remain allocated for the duration of this call.
+/// - `ops` must remain allocated and `param` valid until a matching call to `wrapfd_del_listener`.
+unsafe extern "C" fn wrapfd_add_listener(
+    file: *mut bindings::file,
+    dev: *mut bindings::device,
+    ops: *const bindings::wrapfd_listener_operations,
+    param: *mut ffi::c_void,
+    handlep: *mut *mut ffi::c_void,
+) -> ffi::c_int {
+    let result = with_wrap_helper(file, "wrapfd_add_listener", |wrap| {
+        if dev.is_null() {
+            pr_warn!("wrapfd_add_listener: dev is NULL!\n");
+            return Err(ENODEV);
+        }
+
+        if ops.is_null() || handlep.is_null() {
+            return Err(EINVAL);
+        }
+
+        // SAFETY: We've previously verified that `ops` is a non-null pointer, the contract for
+        // `wrapfd_add_listener` requires `ops` to point to a valid `struct
+        // wrapfd_listener_operation` and remain valid for as long as the listener is
+        // registered.
+        if unsafe { (*ops).on_content_release }.is_none() {
+            return Err(EINVAL);
+        }
+
+        let mut guard = wrap.inner.lock();
+
+        let WrapOwner::Device(ref owning_dev) = guard.owner else {
+            return Err(EBUSY);
+        };
+
+        // SAFETY: `dev` has been verified to be a non-null pointer and points to a live C `struct
+        // device` per function contract.
+        if owning_dev != &unsafe { kernel::device::Device::get_device(dev) } {
+            return Err(EBUSY);
+        }
+
+        let Some(ref mut content) = guard.content else {
+            return Err(ENOENT);
+        };
+
+        let handle = content.add_listener(ops, param)?;
+
+        // SAFETY: We've verified that `handlep` is a non-null pointer, per function contract it
+        // points to writable memory and can store a `*mut c_void`.
+        unsafe {
+            *handlep = handle as _;
+        }
+
+        Ok(())
+    });
+
+    match result {
+        Ok(()) => 0,
+        Err(err) => err.to_errno(),
+    }
+}
+
+#[export]
+/// # Safety
+///
+/// - `file` must be a valid, non-null pointer to a live C `struct file` created by this driver.
+unsafe extern "C" fn wrapfd_del_listener(
+    file: *mut bindings::file,
+    handle: *mut ffi::c_void,
+) -> ffi::c_int {
+    let result = with_wrap_helper(file, "wrapfd_del_listener", |wrap| {
+        let mut guard = wrap.inner.lock();
+
+        if handle.is_null() {
+            return Err(EINVAL);
+        }
+
+        let Some(ref mut content) = guard.content else {
+            return Err(EINVAL);
+        };
+
+        content.remove_listener(handle)
+    });
+
+    match result {
+        Ok(()) => 0,
+        Err(err) => err.to_errno(),
+    }
+}

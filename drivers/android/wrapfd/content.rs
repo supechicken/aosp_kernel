@@ -15,9 +15,21 @@ use kernel::{
     sync::Arc,
 };
 
+struct Listener {
+    ops: *const bindings::wrapfd_listener_operations,
+    param: *mut ffi::c_void,
+}
+
+// SAFETY: `Listener` can be safely sent across threads.
+unsafe impl Send for Listener {}
+
+// SAFETY: `Listener` can be shared across threads.
+unsafe impl Sync for Listener {}
+
 pub(crate) struct DmaBufContent {
     pub(crate) dmabuf: ARef<DmaBuf>,
     writable: bool,
+    listeners: KVec<Pin<KBox<Listener>>>,
 }
 
 impl DmaBufContent {
@@ -56,7 +68,13 @@ impl DmaBufContent {
             return Err(EACCES);
         }
 
-        Ok(Self { dmabuf, writable })
+        let listeners = KVec::new();
+
+        Ok(Self {
+            dmabuf,
+            writable,
+            listeners,
+        })
     }
 
     pub(crate) fn publish_wrap(
@@ -106,7 +124,9 @@ impl DmaBufContent {
             })?;
 
         if clear_content {
-            _ = guard.content.as_mut().unwrap().clear();
+            let content = guard.content.as_mut().unwrap();
+            content.notify_listeners();
+            _ = content.clear();
         }
 
         drop(guard);
@@ -231,5 +251,55 @@ impl DmaBufContent {
         })?;
 
         Ok(0)
+    }
+
+    pub(crate) fn add_listener(
+        &mut self,
+        ops: *const bindings::wrapfd_listener_operations,
+        param: *mut ffi::c_void,
+    ) -> Result<*const ffi::c_void> {
+        let listener = KBox::pin(Listener { ops, param }, GFP_KERNEL)?;
+        let handle = listener.as_ref().get_ref() as *const Listener as _;
+        self.listeners.push(listener, GFP_KERNEL)?;
+        Ok(handle)
+    }
+
+    pub(crate) fn remove_listener(&mut self, handle: *mut ffi::c_void) -> Result<()> {
+        let index = (0..self.listeners.len())
+            .position(|index| {
+                let listener = &self.listeners[index];
+                let listener_handle =
+                    listener.as_ref().get_ref() as *const Listener as *const ffi::c_void;
+
+                listener_handle == handle
+            })
+            .ok_or(EINVAL)?;
+
+        _ = self.listeners.remove(index);
+
+        Ok(())
+    }
+
+    fn notify_listeners(&mut self) {
+        let mut listeners = KVec::new();
+        core::mem::swap(&mut self.listeners, &mut listeners);
+
+        for listener in listeners {
+            // SAFETY: We've previously verified that `ops` is a non-null pointer, the contract for
+            // `wrapfd_add_listener` requires `ops` to point to a valid `struct
+            // wrapfd_listener_operation` and remain valid for as long as the listener is
+            // registered.
+            let Some(on_content_release) = (unsafe { (*listener.ops).on_content_release }) else {
+                continue;
+            };
+            // SAFETY: Safe by contract.
+            unsafe { on_content_release(listener.param) };
+        }
+    }
+}
+
+impl Drop for DmaBufContent {
+    fn drop(&mut self) {
+        self.notify_listeners();
     }
 }
