@@ -4750,12 +4750,6 @@ try_onemore:
 		goto free_sbi;
 	}
 
-	/* set a block size */
-	if (unlikely(!sb_set_blocksize(sb, F2FS_BLKSIZE))) {
-		f2fs_err(sbi, "unable to set blocksize");
-		goto free_sbi;
-	}
-
 	err = read_raw_super_block(sbi, &raw_super, &valid_super_block,
 								&recovery);
 	if (err)
@@ -4763,6 +4757,14 @@ try_onemore:
 
 	sb->s_fs_info = sbi;
 	sbi->raw_super = raw_super;
+	init_sb_info(sbi);
+
+	/* set a block size */
+	if (unlikely(!sb_set_blocksize(sb, sbi->blocksize))) {
+		f2fs_err(sbi, "unable to set blocksize %u", sbi->blocksize);
+		err = -EINVAL;
+		goto free_sb_buf;
+	}
 	sbi->max_atc_write_bio_size = UINT_MAX;
 
 	INIT_WORK(&sbi->s_error_work, f2fs_record_error_work);
@@ -4845,8 +4847,6 @@ try_onemore:
 	err = f2fs_init_write_merge_io(sbi);
 	if (err)
 		goto free_bio_info;
-
-	init_sb_info(sbi);
 
 	err = f2fs_init_iostat(sbi);
 	if (err)
