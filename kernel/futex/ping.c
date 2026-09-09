@@ -101,6 +101,25 @@ put_ping_state(struct futex_pi_state *ping_state)
 	}
 }
 
+int fixup_ping_owner_after_user_steal(struct futex_pi_state *ping_state,
+				      u32 __user *uaddr, u32 uval)
+{
+	struct task_struct *p;
+
+	p = find_get_task_by_vpid(uval & FUTEX_TID_MASK);
+	if (p == NULL)
+		return pi_handle_exit_race(uaddr, uval, NULL);
+	if (unlikely(p->flags & PF_KTHREAD)) {
+		put_task_struct(p);
+		return -EPERM;
+	}
+	ping_state_update_owner(ping_state, p);
+	WRITE_ONCE(ping_state->ping_mutex.owner, p);
+	put_task_struct(p);
+
+	return 0;
+}
+
 static void futex_unqueue_ping(struct futex_q *q)
 {
 	if (!plist_node_empty(&q->list))
@@ -154,6 +173,7 @@ static int futex_trylock_ping_state(u32 __user *uaddr,
 				    bool handoff)
 {
 	struct task_struct *owner;
+	pid_t pid;
 	u32 uval, new, newtid;
 	int ret;
 
@@ -168,8 +188,17 @@ static int futex_trylock_ping_state(u32 __user *uaddr,
 
 		WARN_ON_ONCE(ping_state->ping_mutex.handoff || ping_state->ping_mutex.pickup);
 
-		if (uval & FUTEX_TID_MASK) {
-			ret = -EAGAIN;
+		/*
+		 * No owner but a userspace TID means that it got stolen
+		 * from userspace.
+		 * Fix up the ownership.
+		 */
+		pid = uval & FUTEX_TID_MASK;
+		if (pid) {
+			ret = fixup_ping_owner_after_user_steal(ping_state,
+								uaddr, uval);
+			if (ret == 0)
+				ret = -EAGAIN;
 			goto err;
 		}
 		new = newtid | FUTEX_WAITERS;
@@ -632,6 +661,12 @@ retry:
 	}
 
 	raw_spin_lock_irq(&ping_state->ping_mutex.wait_lock);
+
+	/*
+	 * If we're unlocking a lock we stole from userspace,
+	 * it's possible that we don't own the ping_state or the
+	 * ping_mutex. But we'll give them to the next task here anyway.
+	 */
 
 	next = ping_current_proxy_donor(ping_state);
 	get_ping_state(ping_state);
