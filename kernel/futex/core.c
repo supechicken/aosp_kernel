@@ -1431,8 +1431,63 @@ void futex_free_proxy_task_ext(struct task_struct *tsk)
 	tsk->proxy_futex_task_ext = NULL;
 }
 
+/* Similar to exit_pi_state_list() */
+static void exit_ping_state_list(struct task_struct *curr)
+{
+	struct proxy_futex_task_ext *ext = curr->proxy_futex_task_ext;
+	struct list_head *next, *head = &ext->ping_state_list;
+	struct futex_pi_state *ping_state;
+	union futex_key key = FUTEX_KEY_INIT;
+
+	might_sleep();
+	WARN_ON(curr != current);
+	guard(private_hash)();
+
+	raw_spin_lock_irq(&ext->pi_futex_lock);
+	while (!list_empty(head)) {
+		next = head->next;
+		ping_state = list_entry(next, struct futex_pi_state, list);
+		key = ping_state->key;
+		if (1) {
+			CLASS(hb, hb)(&key);
+
+			if (!refcount_inc_not_zero(&ping_state->refcount)) {
+				raw_spin_unlock_irq(&ext->pi_futex_lock);
+				cpu_relax();
+				raw_spin_lock_irq(&ext->pi_futex_lock);
+				continue;
+			}
+			raw_spin_unlock_irq(&ext->pi_futex_lock);
+
+			spin_lock(&hb->lock);
+			raw_spin_lock_irq(&ping_state->ping_mutex.wait_lock);
+			raw_spin_lock(&ext->pi_futex_lock);
+			if (head->next != next) {
+				raw_spin_unlock(&ping_state->ping_mutex.wait_lock);
+				spin_unlock(&hb->lock);
+				put_ping_state(ping_state);
+				continue;
+			}
+
+			WARN_ON(ping_state->owner != curr);
+			WARN_ON(list_empty(&ping_state->list));
+			list_del_init(&ping_state->list);
+			ping_state->owner = NULL;
+			raw_spin_unlock(&ext->pi_futex_lock);
+			raw_spin_unlock_irq(&ping_state->ping_mutex.wait_lock);
+			spin_unlock(&hb->lock);
+		}
+		put_ping_state(ping_state);
+
+		raw_spin_lock_irq(&ext->pi_futex_lock);
+	}
+	raw_spin_unlock_irq(&ext->pi_futex_lock);
+}
+
 static void futex_cleanup(struct task_struct *tsk)
 {
+	struct proxy_futex_task_ext *ext = tsk->proxy_futex_task_ext;
+
 	if (unlikely(tsk->robust_list)) {
 		exit_robust_list(tsk);
 		tsk->robust_list = NULL;
@@ -1447,6 +1502,9 @@ static void futex_cleanup(struct task_struct *tsk)
 
 	if (unlikely(!list_empty(&tsk->pi_state_list)))
 		exit_pi_state_list(tsk);
+
+	if (unlikely(ext && !list_empty(&ext->ping_state_list)))
+		exit_ping_state_list(tsk);
 }
 
 /**
