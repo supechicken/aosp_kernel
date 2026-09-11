@@ -671,10 +671,10 @@ static inline bool has_curseg_enough_space(struct f2fs_sb_info *sbi,
 static inline void __get_secs_required(struct f2fs_sb_info *sbi,
 		unsigned int *lower_p, unsigned int *upper_p, bool *curseg_p)
 {
-	unsigned int total_node_blocks = get_pages(sbi, F2FS_DIRTY_NODES) +
-					get_pages(sbi, F2FS_DIRTY_DENTS) +
-					get_pages(sbi, F2FS_DIRTY_IMETA);
-	unsigned int total_dent_blocks = get_pages(sbi, F2FS_DIRTY_DENTS);
+	unsigned int total_node_blocks = get_nr_caches(sbi, F2FS_DIRTY_NODES) +
+					get_nr_caches(sbi, F2FS_DIRTY_DENTS) +
+					get_nr_caches(sbi, F2FS_DIRTY_IMETA);
+	unsigned int total_dent_blocks = get_nr_caches(sbi, F2FS_DIRTY_DENTS);
 	unsigned int total_data_blocks = 0;
 	unsigned int node_secs = total_node_blocks / CAP_BLKS_PER_SEC(sbi);
 	unsigned int dent_secs = total_dent_blocks / CAP_BLKS_PER_SEC(sbi);
@@ -684,7 +684,7 @@ static inline void __get_secs_required(struct f2fs_sb_info *sbi,
 	unsigned int data_blocks = 0;
 
 	if (f2fs_lfs_mode(sbi)) {
-		total_data_blocks = get_pages(sbi, F2FS_DIRTY_DATA);
+		total_data_blocks = get_nr_caches(sbi, F2FS_DIRTY_DATA);
 		data_secs = total_data_blocks / CAP_BLKS_PER_SEC(sbi);
 		data_blocks = total_data_blocks % CAP_BLKS_PER_SEC(sbi);
 	}
