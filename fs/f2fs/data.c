@@ -71,8 +71,7 @@ bool f2fs_is_cp_guaranteed(const struct folio *folio)
 	inode = mapping->host;
 	sbi = F2FS_I_SB(inode);
 
-	if (inode->i_ino == F2FS_META_INO(sbi) ||
-			inode->i_ino == F2FS_NODE_INO(sbi) ||
+	if (inode->i_ino == F2FS_NODE_INO(sbi) ||
 			S_ISDIR(inode->i_mode))
 		return true;
 
@@ -89,9 +88,6 @@ static enum count_type __read_io_type(struct folio *folio)
 	if (mapping) {
 		struct inode *inode = mapping->host;
 		struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
-
-		if (inode->i_ino == F2FS_META_INO(sbi))
-			return F2FS_RD_META;
 
 		if (inode->i_ino == F2FS_NODE_INO(sbi))
 			return F2FS_RD_NODE;
@@ -1459,7 +1455,7 @@ static int f2fs_submit_page_read(struct inode *inode, struct folio *folio,
 	if (IS_ERR(bio))
 		return PTR_ERR(bio);
 
-	/* wait for GCed page writeback via META_MAPPING */
+	/* wait for GCed page writeback via generic cache */
 	f2fs_wait_on_block_writeback(inode, blkaddr);
 
 	if (!bio_add_folio(bio, folio, PAGE_SIZE, 0)) {
@@ -3123,7 +3119,7 @@ static void f2fs_readahead(struct readahead_control *rac)
 int f2fs_encrypt_one_page(struct f2fs_io_info *fio)
 {
 	struct inode *inode = fio_inode(fio);
-	struct folio *mfolio;
+	struct f2fs_cached_block *entry;
 	struct page *page;
 	gfp_t gfp_flags = GFP_NOFS;
 
@@ -3149,12 +3145,14 @@ retry_encrypt:
 		return PTR_ERR(fio->encrypted_page);
 	}
 
-	mfolio = filemap_lock_folio(META_MAPPING(fio->sbi), fio->old_blkaddr);
-	if (!IS_ERR(mfolio)) {
-		if (folio_test_uptodate(mfolio))
-			memcpy(folio_address(mfolio),
-				page_address(fio->encrypted_page), PAGE_SIZE);
-		f2fs_folio_put(mfolio, true);
+	entry = f2fs_find_cache(META_CACHE(fio->sbi), fio->old_blkaddr, 0);
+	if (!IS_ERR(entry)) {
+		f2fs_lock_cache(entry);
+		if (f2fs_cache_test_uptodate(entry))
+			memcpy(cache_address(entry),
+				page_address(fio->encrypted_page),
+				F2FS_BLKSIZE(fio->sbi));
+		f2fs_put_cache(entry, true);
 	}
 	return 0;
 }
@@ -3316,7 +3314,7 @@ got_it:
 		goto out_writepage;
 	}
 
-	/* wait for GCed page writeback via META_MAPPING */
+	/* wait for GCed page writeback via generic cache */
 	if (fio->meta_gc)
 		f2fs_wait_on_block_writeback(inode, fio->old_blkaddr);
 
@@ -4397,9 +4395,7 @@ void f2fs_invalidate_folio(struct folio *folio, size_t offset, size_t length)
 		return;
 
 	if (folio_test_dirty(folio)) {
-		if (inode->i_ino == F2FS_META_INO(sbi)) {
-			dec_page_count(sbi, F2FS_DIRTY_META);
-		} else if (inode->i_ino == F2FS_NODE_INO(sbi)) {
+		if (inode->i_ino == F2FS_NODE_INO(sbi)) {
 			dec_page_count(sbi, F2FS_DIRTY_NODES);
 		} else {
 			inode_dec_dirty_pages(inode);
