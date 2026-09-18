@@ -1136,7 +1136,7 @@ SYSCALL_DEFINE5(remap_file_pages, unsigned long, start, unsigned long, size,
 	 */
 	vma = vma_lookup(mm, start);
 
-	if (!vma || !vma_test(vma, VMA_SHARED_BIT)) {
+	if (!vma || !vma_test(vma, VMA_SHARED_BIT) || vma_test(vma, VMA_NO_REMAP_FILE_PAGES_BIT)) {
 		mmap_read_unlock(mm);
 		return -EINVAL;
 	}
