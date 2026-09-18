@@ -355,6 +355,7 @@ enum {
 	DECLARE_VMA_BIT(UFFD_MINOR, 41),
 	DECLARE_VMA_BIT(SEALED, 42),
 	DECLARE_VMA_BIT(UFFD_RWP, 43),
+	DECLARE_VMA_BIT(NO_REMAP_FILE_PAGES, 44),
 	/* Flags that reuse flags above. */
 	DECLARE_VMA_BIT_ALIAS(PKEY_BIT0, HIGH_ARCH_0),
 	DECLARE_VMA_BIT_ALIAS(PKEY_BIT1, HIGH_ARCH_1),
@@ -542,6 +543,12 @@ enum {
 #else
 #define VM_DROPPABLE		VM_NONE
 #define VMA_DROPPABLE		EMPTY_VMA_FLAGS
+#endif
+
+#ifdef CONFIG_64BIT
+#define VM_NO_REMAP_FILE_PAGES	INIT_VM_FLAG(NO_REMAP_FILE_PAGES)
+#else
+#define VM_NO_REMAP_FILE_PAGES		VM_NONE
 #endif
 
 /* Bits set in the VMA until the stack is in its final location */
