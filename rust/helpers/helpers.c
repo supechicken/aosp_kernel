@@ -46,6 +46,7 @@
 #include "bitmap.c"
 #include "bitops.c"
 #include "blk.c"
+#include "bpf.c"
 #include "bug.c"
 #include "build_assert.c"
 #include "build_bug.c"
