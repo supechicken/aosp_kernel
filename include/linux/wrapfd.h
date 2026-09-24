@@ -36,6 +36,7 @@ bool is_wrapfd_vma(struct vm_area_struct *vma);
  * -EINVAL: buffer is mapped or mappable is NULL.
  * -EBUSY: buffer is owned by another device.
  * -ENOENT: wrap is empty (buffer got freed or moved)
+ * -EOPNOTSUPP: wrapfd driver is not enabled
  */
 int wrapfd_get_mappable(struct file *file, struct device *dev,
 			union wrapfd_mappable *mappable);
@@ -54,6 +55,7 @@ int wrapfd_get_mappable(struct file *file, struct device *dev,
  * On success returns 0. On error returns:
  * -EBADF: file is invalid.
  * -ENODEV: device is invalid.
+ * -EOPNOTSUPP: wrapfd driver is not enabled
  * -EBUSY: buffer is not owned by the caller.
  * -EINVAL: wrap is empty or mappable is NULL or mappable's contents does not
  *	    match the one passed to wrapfd_get_mappable.
@@ -78,6 +80,7 @@ int wrapfd_put_mappable(struct file *file, struct device *dev,
  * On success returns 0. On error returns:
  * -EBADF: file is invalid.
  * -ENODEV: device is invalid.
+ * -EOPNOTSUPP: wrapfd driver is not enabled
  * -EBUSY: buffer is not owned by the caller.
  * -ENOENT: wrap is empty (buffer got freed or moved).
  * -EINVAL: @ops or @handlep parameter is invalid.
@@ -99,6 +102,7 @@ int wrapfd_add_listener(struct file *file, struct device *dev,
  * On success returns 0. On error returns:
  * -EBADF: file is invalid.
  * -EINVAL: handle is invalid or not found.
+ * -EOPNOTSUPP: wrapfd driver is not enabled
  */
 int wrapfd_del_listener(struct file *file, void *handle);
 
@@ -112,25 +116,25 @@ static inline bool is_wrapfd_vma(struct vm_area_struct *vma)
 static inline int wrapfd_get_mappable(struct file *file, struct device *dev,
 				      union wrapfd_mappable *mappable)
 {
-	return -ENOENT;
+	return -EOPNOTSUPP;
 }
 
 static inline int wrapfd_put_mappable(struct file *file, struct device *dev,
 				      union wrapfd_mappable *mappable)
 {
-	return -ENOENT;
+	return -EOPNOTSUPP;
 }
 
 static inline int wrapfd_add_listener(struct file *file, struct device *dev,
 				      const struct wrapfd_listener_operations *ops,
 				      void *param, void **handlep);
 {
-	return -EINVAL;
+	return -EOPNOTSUPP;
 }
 
 static inline int wrapfd_del_listener(struct file *file, void *handle)
 {
-	return -EINVAL;
+	return -EOPNOTSUPP;
 }
 
 #endif /* CONFIG_ANDROID_WRAPFD */
