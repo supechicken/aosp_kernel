@@ -20,14 +20,19 @@
 unsigned int __page_size;
 unsigned int __page_shift;
 
+bool pagemap_read_entry(int fd, uintptr_t address, unsigned long page_size,
+			uint64_t *entry)
+{
+	unsigned long pfn = address / page_size;
+
+	return pread(fd, entry, sizeof(*entry), pfn * sizeof(*entry)) == sizeof(*entry);
+}
+
 uint64_t pagemap_get_entry(int fd, char *start)
 {
-	const unsigned long pfn = (unsigned long)start / getpagesize();
 	uint64_t entry;
-	int ret;
 
-	ret = pread(fd, &entry, sizeof(entry), pfn * sizeof(entry));
-	if (ret != sizeof(entry))
+	if (!pagemap_read_entry(fd, (uintptr_t)start, getpagesize(), &entry))
 		ksft_exit_fail_msg("reading pagemap failed\n");
 	return entry;
 }
