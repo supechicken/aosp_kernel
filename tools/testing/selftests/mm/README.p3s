@@ -1,0 +1,29 @@
+P3S selftests
+=============
+
+Run on an AArch64 16KB kernel with CONFIG_ARM64_PER_PROCESS_PAGE_SIZE.
+Compatibility-only tests re-exec into real 4KB mode. Mixed-geometry tests first
+check native 16KB pages and probe a 4KB child. Unsupported kernels report SKIP.
+Generate matching UAPI headers with make headers in the kernel tree before
+building with make in this directory, then use run_vmtests.sh. For a separate
+header output directory, set KHDR_INCLUDES to its usr/include path using
+-isystem. Build the
+fixtures against the tested kernel with KDIR (and P3S_KERNEL_SOURCE for a
+separate O= directory); missing config/exports are
+reported separately from compiler errors. Install preserves page_frag/ and
+p3s_modules/ paths. A missing fixture is not a passed assertion.
+
+Tests also cover fixes already present in the baseline; they are not claims
+that this test commit adds corresponding production behavior:
+
+  uffd_sigbus_anon_p3s: SIGBUS-mode anonymous refault (Gerrit 4312528).
+  exec_env_p3s: copy_strings across 4KB pages (Gerrit 4368095).
+  dontneed_refault_p3s: zeroing and sibling reuse (Gerrit 4312529/4367603).
+
+shmem_quota_p3s was removed: its tmpfs UFFD population is unsupported for P3S.
+userfaultfd_shmem_p3s retains the supported registration-rejection checks.
+Anonymous ownership probes compare actual page PFNs rather than a removed
+downstream folio flag. Hidden PFNs and unavailable fixtures are explicit SKIPs.
+folio_within_range_p3s checks the native helper's query bounds; its separate
+vma_address_end check covers a nonzero slice offset. It does not require the
+native helper to account for vm_slice_off.

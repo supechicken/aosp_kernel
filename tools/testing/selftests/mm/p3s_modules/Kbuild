@@ -1,0 +1,44 @@
+# SPDX-License-Identifier: GPL-2.0
+# Kernel-side fixtures for the mm P3S selftests, one misc device each.
+ccflags-y += -I$(srctree)/mm
+
+# Fixtures must use the exports of the tested kernel; do not add exports only
+# for tests, and do not turn compiler failures into SKIPs.
+p3s_exports := $(shell cat $(wildcard $(objtree)/Module.symvers $(KBUILD_EXTRA_SYMBOLS)) 2>/dev/null | awk '{print $$2}')
+define p3s_export_fixture
+ifeq ($$(filter-out $$(p3s_exports),$(2)),)
+obj-m += $(1).o
+else
+$$(info SKIP $(1): missing exports $$(filter-out $$(p3s_exports),$(2)))
+endif
+endef
+$(eval $(call p3s_export_fixture,gup_retry_p3s_module,pin_user_pages_unlocked))
+obj-m += iov_iter_p3s_module.o
+$(eval $(call p3s_export_fixture,fault_in_p3s_module,fault_in_readable fault_in_safe_writeable fault_in_writeable))
+obj-m += mremap_pgoff_p3s_module.o
+obj-m += vm_iomap_memory_p3s_module.o
+obj-m += vm_iomap_unaligned_p3s_module.o
+obj-m += remap_pfn_cow_p3s_module.o
+obj-m += dma_mmap_attrs_p3s_module.o
+obj-m += dma_mmap_pages_p3s_module.o
+obj-m += dma_mmap_bounds_p3s_module.o
+ifeq ($(filter-out $(p3s_exports),dma_alloc_noncontiguous dma_free_noncontiguous dma_mmap_noncontiguous dma_vmap_noncontiguous dma_vunmap_noncontiguous),)
+CFLAGS_dma_mmap_bounds_p3s_module.o += -DP3S_DMA_NONCONTIG
+endif
+obj-m += vm_map_pages_p3s_module.o
+$(eval $(call p3s_export_fixture,iommu_dma_mmap_p3s_module,dma_mmap_noncontiguous))
+obj-m += folio_within_range_p3s_module.o
+ifneq ($(CONFIG_MAPPING_DIRTY_HELPERS),)
+obj-m += pagewalk_p3s_module.o
+endif
+ifneq ($(CONFIG_MMU_NOTIFIER),)
+obj-m += mmu_notifier_p3s_module.o
+endif
+ifneq ($(CONFIG_VIDEOBUF2_VMALLOC),)
+$(eval $(call p3s_export_fixture,vb2_mmap_p3s_module,vb2_core_expbuf vb2_core_queue_init vb2_core_queue_release vb2_core_reqbufs))
+$(eval $(call p3s_export_fixture,vb2_userptr_reject_p3s_module,vb2_core_queue_init vb2_core_queue_release vb2_core_reqbufs))
+endif
+obj-m += anon_exclusive_probe_p3s_module.o
+obj-m += vmalloc_align_p3s_module.o
+
+obj-m += iov_range_retry_p3s_module.o
