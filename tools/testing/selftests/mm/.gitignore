@@ -14,6 +14,7 @@ thuge-gen
 compaction_test
 migration
 mlock2-tests
+/*_p3s
 mrelease_test
 mremap_dontunmap
 mremap_test
@@ -60,3 +61,7 @@ guard-regions
 merge
 prctl_thp_disable
 rmap
+brk_aslr_p3s_sample
+elf_4k_align_probe
+exec_aslr_p3s_helper
+exec_aslr_p3s_interp

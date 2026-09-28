@@ -1,2 +1,3 @@
 # SPDX-License-Identifier: GPL-2.0-only
 binderfs_test
+binder_alloc_p3s
