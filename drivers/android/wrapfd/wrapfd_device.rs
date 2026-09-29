@@ -62,14 +62,7 @@ impl WrapFdDevice {
 
         let wrap: Pin<KBox<Wrap>> = KBox::pin_init(Wrap::new(close_on_exec), GFP_KERNEL)?;
 
-        Self::publish_wrap(wrap, content, close_on_exec).map_err(|(err, _content)| err)
-    }
-
-    pub(crate) fn publish_wrap(
-        dev: Pin<KBox<Wrap>>,
-        content: DmaBufContent,
-        close_on_exec: bool,
-    ) -> Result<u32, (Error, DmaBufContent)> {
-        DmaBufContent::create_wrap(dev, content, close_on_exec)
+        DmaBufContent::publish_wrap(wrap, content, close_on_exec, false)
+            .map_err(|(err, _content)| err)
     }
 }

@@ -35,6 +35,11 @@ impl DmaBufContent {
         Ok(())
     }
 
+    fn clear(&mut self) -> Result {
+        let map = self.dmabuf.vmap()?;
+        map.begin_cpu_access_to(|mut access| access.memset(0, 0, self.dmabuf.size()))
+    }
+
     pub(crate) fn is_writable(&self) -> bool {
         self.writable && Self::is_dmabuf_writable(&self.dmabuf)
     }
@@ -54,10 +59,11 @@ impl DmaBufContent {
         Ok(Self { dmabuf, writable })
     }
 
-    pub(crate) fn create_wrap(
+    pub(crate) fn publish_wrap(
         context: Pin<KBox<Wrap>>,
         content: DmaBufContent,
         close_on_exec: bool,
+        clear_content: bool,
     ) -> Result<u32, (Error, DmaBufContent)> {
         let size = content.dmabuf.size();
         let size = match Offset::try_from(size) {
@@ -98,6 +104,10 @@ impl DmaBufContent {
                     .expect("We put a Some() in, we expect it still to be there");
                 (err, content)
             })?;
+
+        if clear_content {
+            _ = guard.content.as_mut().unwrap().clear();
+        }
 
         drop(guard);
 
