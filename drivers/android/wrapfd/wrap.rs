@@ -449,7 +449,7 @@ impl Wrap {
         let close_on_exec = self.close_on_exec;
 
         let result = match KBox::pin_init(Wrap::new(close_on_exec), GFP_KERNEL) {
-            Ok(new_wrap) => crate::WrapFdDevice::publish_wrap(new_wrap, content, close_on_exec),
+            Ok(new_wrap) => DmaBufContent::publish_wrap(new_wrap, content, close_on_exec, true),
             Err(err) => Err((err, content)),
         };
 
