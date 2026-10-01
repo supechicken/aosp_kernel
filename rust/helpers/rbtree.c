@@ -18,3 +18,8 @@ __rust_helper struct rb_node *rust_helper_rb_last(const struct rb_root *root)
 {
 	return rb_last(root);
 }
+
+__rust_helper bool rust_helper_RB_EMPTY_ROOT(const struct rb_root *root)
+{
+	return RB_EMPTY_ROOT(root) != 0;
+}

@@ -121,4 +121,6 @@ config ANDROID_VENDOR_OEM_DATA
 
 source "drivers/android/wonder/Kconfig"
 
+source "drivers/android/wrapfd/Kconfig"
+
 endmenu
