@@ -45,6 +45,7 @@ pub use ffi;
 
 pub mod acpi;
 pub mod alloc;
+pub mod anon_inodes;
 #[cfg(CONFIG_AUXILIARY_BUS)]
 pub mod auxiliary;
 pub mod bitfield;
