@@ -63,6 +63,19 @@ config ANDROID_BINDER_ALLOC_KUNIT_TEST
 	  test-specific freelist, which allows this KUnit module to be loaded
 	  for testing without interfering with a running system.
 
+config ANDROID_FUTEX
+	bool "Android futex ioctl device"
+	depends on FUTEX
+	help
+	  Creates /dev/android_futex, which provides an ioctl interface
+	  taking sys_futex() style arguments to access the
+	  ANDROID_FUTEX_LOCK_PING, ANDROID_FUTEX_UNLOCK_PING and
+	  ANDROID_FUTEX_TRYLOCK_PING operations. This is intended as a
+	  temporary bridge driver to be used until equivalent FUTEX_
+	  functionality is upstream after which this will be removed.
+
+	  If unsure, say N.
+
 config ANDROID_VENDOR_HOOKS
 	bool "Android Vendor Hooks"
 	depends on TRACEPOINTS
