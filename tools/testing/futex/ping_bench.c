@@ -18,14 +18,19 @@
 #include <pthread.h>
 #include <limits.h>
 #include <linux/futex.h>
+#include <sys/ioctl.h>
 #include <sys/prctl.h>
 #include <sys/syscall.h>
 #include <sys/time.h>
 
+#include "../../../include/uapi/linux/android_futex.h"
+
 #define	MAX_THR 512
 
+#ifndef FUTEX_LOCK_PING
 #define	FUTEX_LOCK_PING		14
 #define	FUTEX_UNLOCK_PING	15
+#endif
 
 #define	READ_ONCE(x) (*(volatile typeof(x) *)&(x))
 
@@ -61,6 +66,7 @@ enum futex_type {
 	FUTEX_PI,
 	FUTEX_PING,
 	FUTEX_PING_USTEAL,
+	FUTEX_PING_IOCTL,
 	MUTEX,
 };
 static enum futex_type futex_type = FUTEX_PING;
@@ -69,6 +75,7 @@ extern char *optarg;
 extern int optind;
 
 int trace_marker_fd;
+static int android_futex_fd = -1;
 
 static void
 init_trace_marker(void)
@@ -115,6 +122,19 @@ futex(uint32_t *uaddr, int op, uint32_t val, struct timespec *to)
 	return (syscall(SYS_futex, uaddr, op, val, to));
 }
 
+static int
+futex_ioctl(uint32_t *uaddr, int op, uint32_t val, struct timespec *to)
+{
+	struct android_futex_args args = {
+		.uaddr = (uintptr_t)uaddr,
+		.op = op,
+		.val = val,
+		.timeout = (uintptr_t)to,
+	};
+
+	return (ioctl(android_futex_fd, ANDROID_FUTEX_IOC_FUTEX, &args));
+}
+
 static void
 futex_lock(void *lock)
 {
@@ -144,6 +164,7 @@ futex_lock(void *lock)
 		break;
 	case FUTEX_PING:
 	case FUTEX_PING_USTEAL:
+	case FUTEX_PING_IOCTL:
 		old = 0;
 		if (atomic_compare_exchange_strong(fu, &old, tid))
 			return;
@@ -152,7 +173,11 @@ futex_lock(void *lock)
 		    atomic_compare_exchange_strong(fu, &old, tid |
 		    FUTEX_WAITERS))
 			return;
-		if ((ret = futex(fu, FUTEX_LOCK_PING, 0, NULL)) != 0)
+		if (futex_type == FUTEX_PING_IOCTL)
+			ret = futex_ioctl(fu, FUTEX_LOCK_PING, 0, NULL);
+		else
+			ret = futex(fu, FUTEX_LOCK_PING, 0, NULL);
+		if (ret != 0)
 			err(1, "FUTEX_LOCK_PING");
 		break;
 	case MUTEX:
@@ -167,6 +192,7 @@ futex_unlock(void *lock)
 {
 	pthread_mutex_t *mu;
 	uint32_t *fu, old;
+	int ret;
 
 	fu = lock;
 	mu = lock;
@@ -187,10 +213,15 @@ futex_unlock(void *lock)
 		break;
 	case FUTEX_PING:
 	case FUTEX_PING_USTEAL:
+	case FUTEX_PING_IOCTL:
 		old = tid;
 		if (atomic_compare_exchange_strong(fu, &old, 0))
 			return;
-		if (futex(fu, FUTEX_UNLOCK_PING, 0, NULL) != 0)
+		if (futex_type == FUTEX_PING_IOCTL)
+			ret = futex_ioctl(fu, FUTEX_UNLOCK_PING, 0, NULL);
+		else
+			ret = futex(fu, FUTEX_UNLOCK_PING, 0, NULL);
+		if (ret != 0)
 			err(1, "FUTEX_UNLOCK_PING t %x old %x", tid,
 			    READ_ONCE(*fu));
 		break;
@@ -308,7 +339,7 @@ busy(void *p)
 static void
 usage(char *a)
 {
-	fprintf(stderr, "Usage: %s [-a] [-b n] [-c] [-f f/m/n/N/p] [-n n] [-q]"
+	fprintf(stderr, "Usage: %s [-a] [-b n] [-c] [-f f/i/m/n/N/p] [-n n] [-q]"
 	    " [-r n] [-s n] [-S n] [-t n] [-w n]\n", a);
 	exit(1);
 }
@@ -327,6 +358,9 @@ main(int argc, char **argv)
 			switch (*optarg) {
 			case 'f':
 				futex_type = FUTEX;
+				break;
+			case 'i':
+				futex_type = FUTEX_PING_IOCTL;
 				break;
 			case 'm':
 				futex_type = MUTEX;
@@ -375,6 +409,12 @@ main(int argc, char **argv)
 		default:
 			usage(argv[0]);
 		}
+	}
+
+	if (futex_type == FUTEX_PING_IOCTL) {
+		android_futex_fd = open("/dev/android_futex", O_RDWR);
+		if (android_futex_fd < 0)
+			err(1, "open(/dev/android_futex)");
 	}
 
 	init_trace_marker();
