@@ -427,7 +427,8 @@ static void f2fs_write_end_io(struct bio *bio)
 
 	sbi = bio->bi_private;
 
-	if (in_atomic() && bio->bi_iter.bi_size > sbi->max_atc_write_bio_size) {
+	if (in_atomic() && (bio->bi_iter.bi_size > sbi->max_atc_write_bio_size ||
+			F2FS_BIO(bio)->entry_cnt > sbi->max_atc_write_bio_entry_cnt)) {
 		struct work_struct *w;
 
 		w = &container_of(bio, struct f2fs_bio, bio)->work;
@@ -582,6 +583,7 @@ static struct bio *__bio_alloc(struct f2fs_io_info *fio, int npages)
 		bio->bi_private = sbi;
 		bio->bi_write_hint = f2fs_io_type_to_rw_hint(sbi,
 						fio->type, fio->temp);
+		F2FS_BIO(bio)->entry_cnt = 0;
 	}
 	iostat_alloc_and_bind_ctx(sbi, bio, NULL);
 
@@ -1271,6 +1273,8 @@ alloc_new:
 		goto alloc_new;
 	}
 
+	F2FS_BIO(io->bio)->entry_cnt++;
+
 	if (fio->io_wbc)
 		wbc_account_cgroup_owner(fio->io_wbc, fio->folio,
 				folio_size(fio->folio));
@@ -1378,6 +1382,7 @@ alloc_new:
 	}
 
 	f2fs_bio_add_cache(fio, io->bio);
+	F2FS_BIO(io->bio)->entry_cnt++;
 
 	io->last_block_in_bio = fio->new_blkaddr;
 
