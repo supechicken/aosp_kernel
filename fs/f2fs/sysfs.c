@@ -1375,6 +1375,7 @@ F2FS_FEATURE_RO_ATTR(pin_file);
 F2FS_FEATURE_RO_ATTR(linear_lookup);
 #endif
 F2FS_FEATURE_RO_ATTR(packed_ssa);
+F2FS_FEATURE_RO_ATTR(metadata_cache);
 
 #define ATTR_LIST(name) (&f2fs_attr_##name.attr)
 static struct attribute *f2fs_attrs[] = {
@@ -1539,6 +1540,7 @@ static struct attribute *f2fs_feat_attrs[] = {
 	BASE_ATTR_LIST(linear_lookup),
 #endif
 	BASE_ATTR_LIST(packed_ssa),
+	BASE_ATTR_LIST(metadata_cache),
 	NULL,
 };
 ATTRIBUTE_GROUPS(f2fs_feat);
