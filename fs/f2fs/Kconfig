@@ -3,6 +3,7 @@ config F2FS_FS
 	tristate "F2FS filesystem support"
 	depends on BLOCK
 	select BUFFER_HEAD
+	select DMA_SHARED_BUFFER
 	select NLS
 	select CRC32
 	select F2FS_FS_XATTR if FS_ENCRYPTION
