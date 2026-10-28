@@ -18,6 +18,10 @@ DECLARE_HOOK(android_vh_ufs_fill_prdt,
 		 unsigned int segments, int *err),
 	TP_ARGS(hba, cmd, segments, err));
 
+DECLARE_HOOK(android_vh_ufs_eh_timed_out,
+	TP_PROTO(struct ufs_hba *hba, struct scsi_cmnd *scmd),
+	TP_ARGS(hba, scmd));
+
 DECLARE_RESTRICTED_HOOK(android_rvh_ufs_reprogram_all_keys,
 			TP_PROTO(struct ufs_hba *hba, int *err),
 			TP_ARGS(hba, err), 1);
