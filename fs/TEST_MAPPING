@@ -44,6 +44,14 @@
   ],
   "presubmit": [
     {
+      "name": "selftests",
+      "options": [
+        {
+          "include-filter": "kselftest_fuse_bpf_test"
+        }
+      ]
+    },
+    {
       "name": "snapuserd_test"
     }
   ]
