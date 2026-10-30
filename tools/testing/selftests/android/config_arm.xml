@@ -80,4 +80,12 @@ SPDX-License-Identifier: GPL-2.0 OR Apache-2.0
         <option name="test-command-line" key="kselftest_vdso_vdso_test_getcpu" value="cd &ktest_dir;; ./kselftest_vdso_vdso_test_getcpu" />
         <option name="test-command-line" key="kselftest_vdso_vdso_test_gettimeofday" value="cd &ktest_dir;; ./kselftest_vdso_vdso_test_gettimeofday" />
     </test>
+
+    <test class="com.android.tradefed.testtype.binary.KernelTargetTest" >
+        <option name="exit-code-skip" value="4" />
+        <option name="skip-binary-check" value="true" />
+        <option name="parse-ktap" value="true" />
+        <option name="ktap-result-parser-resolution" value="INDIVIDUAL_LEAVES" />
+        <option name="test-command-line" key="kselftest_fuse_bpf_test" value="cd &ktest_dir;; ./kselftest_fuse_bpf_test" />
+    </test>
 </configuration>
