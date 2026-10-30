@@ -5,6 +5,7 @@ write_extend_eof_test
 fuse_acl_cache_test
 fuse_daemon
 fuse_test
+fuse_bpf_android_test
 fd.sh
 *.bpf
 *.ir
