@@ -71,6 +71,9 @@
 #include <linux/livepatch_sched.h>
 #include <linux/futex.h>
 
+ANDROID_KABI_DECLONLY(robust_list);
+ANDROID_KABI_DECLONLY(robust_list_head);
+
 #ifdef CONFIG_PREEMPT_DYNAMIC
 # ifdef CONFIG_GENERIC_IRQ_ENTRY
 #  include <linux/irq-entry-common.h>
