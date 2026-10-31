@@ -84,6 +84,7 @@ struct pkvm_pgtable_cap {
 	int allowed_pgsz;
 	u64 table_prot;
 	bool flush_tlb_lazy;
+	bool coalesce_on_map;
 };
 
 struct pkvm_pgtable {
