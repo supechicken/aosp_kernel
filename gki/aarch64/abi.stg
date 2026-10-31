@@ -311719,6 +311719,10 @@ enumeration {
       name: "BO_T_RWSEM"
       value: 2
     }
+    enumerator {
+      name: "BO_T_PING_FUTEX"
+      value: 3
+    }
   }
 }
 enumeration {
