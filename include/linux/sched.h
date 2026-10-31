@@ -834,6 +834,7 @@ enum blocked_on_type {
 	BO_T_RWSEM,
 	BO_T_PING_FUTEX,
 };
+ANDROID_KABI_ENUMERATOR_IGNORE(blocked_on_type, BO_T_PING_FUTEX);
 
 struct blocked_on_lock {
 	void *lock;
