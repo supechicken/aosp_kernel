@@ -102608,6 +102608,10 @@ enumeration {
       name: "BO_T_RWSEM"
       value: 2
     }
+    enumerator {
+      name: "BO_T_PING_FUTEX"
+      value: 3
+    }
   }
 }
 enumeration {
@@ -113392,7 +113396,7 @@ elf_symbol {
   name: "__put_task_struct"
   is_defined: true
   symbol_type: FUNCTION
-  crc: 0xd4d64166
+  crc: 0xebe12f00
   type_id: 0x17de3be6
   full_name: "__put_task_struct"
 }
@@ -113401,7 +113405,7 @@ elf_symbol {
   name: "module_layout"
   is_defined: true
   symbol_type: FUNCTION
-  crc: 0xcba4c6fc
+  crc: 0x7d4c6349
   type_id: 0x12d88613
   full_name: "module_layout"
 }
