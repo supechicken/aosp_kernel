@@ -19,6 +19,7 @@
 #include <trace/hooks/cpuidle.h>
 #include <trace/hooks/cpuidle_psci.h>
 #include <trace/hooks/debug.h>
+#include <trace/hooks/dtask.h>
 #include <trace/hooks/epoch.h>
 #include <trace/hooks/fault.h>
 #include <trace/hooks/fpsimd.h>
@@ -29,8 +30,8 @@
 #include <trace/hooks/mpam.h>
 #include <trace/hooks/net.h>
 #include <trace/hooks/pm_domain.h>
-#include <trace/hooks/psi.h>
 #include <trace/hooks/printk.h>
+#include <trace/hooks/psi.h>
 #include <trace/hooks/reboot.h>
 #include <trace/hooks/remoteproc.h>
 #include <trace/hooks/selinux.h>
@@ -105,6 +106,7 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_psi_group);
 EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_ptype_head);
 EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_rproc_recovery);
 EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_rproc_recovery_set);
+EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_set_tsk_need_resched_lazy);
 EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_show_resume_epoch_val);
 EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_show_suspend_epoch_val);
 EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_syscall_prctl_finished);
