@@ -323,8 +323,14 @@
   __traceiter_android_vh_f2fs_printk
   __tracepoint_android_vh_f2fs_create
   __traceiter_android_vh_f2fs_create
+<<<<<<< HEAD   (e1b556eb2d11c07ede833cd0a20d9b02914dec3c ANDROID: binder: fix page leak in concurrent page installati)
   __tracepoint_android_vh_io_statistics
   __traceiter_android_vh_io_statistics
+||||||| BASE   (49ee5e2c2c52f71ba9c4b5294bf24709646769e9 ANDROID: block/mq-deadline: Add vendor hook to balance prior)
+=======
+  __traceiter_android_vh_dd_dispatch_request_bypass
+  __tracepoint_android_vh_dd_dispatch_request_bypass
+>>>>>>> CHANGE (87d5283d72990bea95ea717b1d68edc795bb6eeb ANDROID: GKI: Honor add symbols to symbol list)
   wb_wakeup
   redirty_tail_locked
   bdi_list
