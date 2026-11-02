@@ -5,6 +5,7 @@
 #include <linux/cma.h>
 #include <linux/debugfs.h>
 #include <linux/kobject.h>
+#include <linux/android_vendor.h>
 
 struct cma_kobject {
 	struct kobject kobj;
@@ -63,6 +64,7 @@ struct cma {
 	unsigned long flags;
 	/* NUMA node (NUMA_NO_NODE if unspecified) */
 	int nid;
+	ANDROID_VENDOR_DATA(1);
 };
 
 enum cma_flags {
