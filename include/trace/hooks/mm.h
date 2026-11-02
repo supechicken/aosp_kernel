@@ -41,6 +41,11 @@ DECLARE_HOOK(android_vh_filemap_fault_end,
 	TP_PROTO(struct file *file, pgoff_t pgoff),
 	TP_ARGS(file, pgoff));
 
+DECLARE_HOOK(android_vh_tune_mmap_readaround,
+	TP_PROTO(unsigned int ra_pages, pgoff_t pgoff,
+		pgoff_t *start, unsigned int *size, unsigned int *async_size),
+	TP_ARGS(ra_pages, pgoff, start, size, async_size));
+
 #endif /* _TRACE_HOOK_MM_H */
 /* This part must be outside protection */
 #include <trace/define_trace.h>
