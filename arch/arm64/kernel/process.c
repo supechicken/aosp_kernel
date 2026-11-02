@@ -845,6 +845,7 @@ void arch_setup_new_exec(void)
 	}
 
 	current->mm->context.flags = mmflags;
+	p3s_sync_4k_personality();
 	ptrauth_thread_init_user();
 	mte_thread_init_user();
 	do_set_tsc_mode(PR_TSC_ENABLE);

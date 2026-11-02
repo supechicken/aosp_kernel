@@ -66,18 +66,41 @@ static inline void mm_init_pte_shift(struct mm_struct *mm,
 	 * In ALTERNATE mode, assign 4KB to odd PIDs and 16KB to even PIDs
 	 * based strictly on PID parity rather than inheriting parent pte_shift,
 	 * ensuring child tasks alternate regardless of what init or parent ran.
+	 * Check the mode before the personality: p3s_sync_4k_personality()
+	 * sets ADDR_PAGE_SIZE_4KB in every 4KB task, and children inherit it.
 	 */
 	if (system_state >= SYSTEM_RUNNING) {
-		if (tsk && personality_4kb_pages(tsk->personality))
+		if (p3s_4k_mode == P3S_4K_MODE_ALTERNATE)
+			use_4kb = tsk && (tsk->pid & 1);
+		else if (tsk && personality_4kb_pages(tsk->personality))
 			use_4kb = true;
 		else if (p3s_4k_mode == P3S_4K_MODE_ON)
-			use_4kb = true;
-		else if (p3s_4k_mode == P3S_4K_MODE_ALTERNATE &&
-			 tsk && (tsk->pid & 1))
 			use_4kb = true;
 	}
 
 	mm_set_pte_shift(mm, use_4kb ? PAGE_SHIFT_4KB : PAGE_SHIFT_KERNEL);
+}
+
+/*
+ * p3s_sync_4k_personality - Report the page size that p3s_4k= chose
+ *
+ * Userspace recognizes a 4KB process by ADDR_PAGE_SIZE_4KB in its
+ * personality; bionic's linker, for example, then aligns its CFI shadow
+ * updates to 16KB. The p3s_4k=on and p3s_4k=alternate modes pick the page
+ * size of a new program without that flag, so set the flag in their 4KB
+ * processes and clear it in their native ones. Called at exec once the new
+ * mm is installed, before the program runs. The default mode is left alone:
+ * there the flag is what selected the page size.
+ */
+static inline void p3s_sync_4k_personality(void)
+{
+	if (p3s_4k_mode == P3S_4K_MODE_OFF || !current->mm)
+		return;
+
+	if (mm_pte_shift(current->mm) == PAGE_SHIFT_4KB)
+		current->personality |= ADDR_PAGE_SIZE_4KB;
+	else
+		current->personality &= ~ADDR_PAGE_SIZE_4KB;
 }
 
 /*
@@ -116,6 +139,10 @@ static inline void mm_set_pte_shift(struct mm_struct *mm, unsigned int shift)
 
 static inline void mm_init_pte_shift(struct mm_struct *mm,
 				     const struct task_struct *p)
+{
+}
+
+static inline void p3s_sync_4k_personality(void)
 {
 }
 
