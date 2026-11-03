@@ -13,4 +13,13 @@ int empty_wrapfd(struct file *file, struct device *dev);
 
 #endif
 
+#if IS_ENABLED(CONFIG_ANDROID_RUST_WRAPFD_KUNIT_TEST)
+
+#include <linux/dma-buf.h>
+#include <linux/fs.h>
+
+struct file *wrapfd_kunit_create_file(struct dma_buf *dmabuf);
+
+#endif
+
 #endif /* _WRAPFD_INTERNAL_H */

@@ -1094,3 +1094,38 @@ unsafe extern "C" fn wrapfd_release_ownership(
         Err(err) => err.to_errno(),
     }
 }
+
+#[cfg(CONFIG_ANDROID_RUST_WRAPFD_KUNIT_TEST)]
+#[export]
+unsafe extern "C" fn wrapfd_kunit_create_file(
+    dmabuf: *mut bindings::dma_buf,
+) -> *mut bindings::file {
+    let create = || -> Result<ARef<File>> {
+        let content = match NonNull::new(dmabuf) {
+            Some(non_null) => {
+                // SAFETY: `dmabuf` is a valid `struct dma_buf` pointer with a live reference held
+                // by the caller, and `DmaBuf` is `#[repr(transparent)]` over `bindings::dma_buf`.
+                let dmabuf_ref = ARef::from(unsafe { non_null.cast::<DmaBuf>().as_ref() });
+                Some(DmaBufContent::from_dmabuf(
+                    dmabuf_ref,
+                    bindings::PROT_READ | bindings::PROT_WRITE,
+                )?)
+            }
+            None => None,
+        };
+
+        let wrap = KBox::pin_init(Wrap::new(true), GFP_KERNEL)?;
+        wrap.inner.lock().content = content;
+        create_wrap_file(
+            kernel::c_str!("[wrapfd]"),
+            wrap,
+            bindings::O_CLOEXEC | bindings::O_RDWR,
+        )
+        .map_err(|(err, _)| err)
+    };
+
+    match create() {
+        Ok(file) => ARef::into_raw(file).as_ptr().cast(),
+        Err(err) => err.to_ptr(),
+    }
+}

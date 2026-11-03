@@ -6,6 +6,7 @@
  * Sorted alphabetically.
  */
 
+#include <kunit/device.h>
 #include <kunit/test.h>
 #include <linux/anon_inodes.h>
 #include <linux/bitmap.h>
@@ -91,4 +92,5 @@ const vm_flags_t RUST_CONST_HELPER_VM_MERGEABLE = VM_MERGEABLE;
 
 #if IS_ENABLED(CONFIG_ANDROID_WRAPFD)
 #include <linux/wrapfd.h>
+#include "../../drivers/android/wrapfd_internal.h"
 #endif

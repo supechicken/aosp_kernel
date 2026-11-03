@@ -62,6 +62,10 @@ impl DmaBufContent {
         // to EINVAL by default.
         let fd = i32::try_from(fd).map_err(|_| EBADF)?;
         let dmabuf = DmaBuf::get(fd)?;
+        Self::from_dmabuf(dmabuf, prot)
+    }
+
+    pub(crate) fn from_dmabuf(dmabuf: ARef<DmaBuf>, prot: u32) -> Result<Self> {
         let writable = (prot & bindings::PROT_WRITE) != 0;
 
         if writable && !Self::is_dmabuf_writable(&dmabuf) {

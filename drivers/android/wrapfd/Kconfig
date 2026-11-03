@@ -10,3 +10,16 @@ config ANDROID_WRAPFD
 	  WrapFD allows wrapping an fd representing a memory buffer into a new
 	  file supporting ioctl API for file ownership that controls ability to
 	  map the file.
+
+config ANDROID_RUST_WRAPFD_KUNIT_TEST
+	tristate "KUnit test for Rust wrapfd driver" if !KUNIT_ALL_TESTS
+	depends on KUNIT
+	depends on ANDROID_WRAPFD
+	default KUNIT_ALL_TESTS
+	help
+	  This builds the Rust wrapfd driver unit test.
+	  Tests the Rust wrapfd driver functionality.
+	  For more information on KUnit and unit tests in general please refer
+	  to the KUnit documentation in Documentation/dev-tools/kunit/.
+
+	  If unsure, say N.
