@@ -65,6 +65,7 @@
 #include "ratelimit.c"
 #include "rbtree.c"
 #include "refcount.c"
+#include "scatterlist.c"
 #include "security.c"
 #include "signal.c"
 #include "slab.c"
