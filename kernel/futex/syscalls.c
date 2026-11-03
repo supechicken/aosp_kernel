@@ -119,8 +119,7 @@ long do_futex(u32 __user *uaddr, int op, u32 val, ktime_t *timeout,
 	if (flags & FLAGS_CLOCKRT) {
 		if (cmd != FUTEX_WAIT_BITSET &&
 		    cmd != FUTEX_WAIT_REQUEUE_PI &&
-		    cmd != FUTEX_LOCK_PI2 &&
-		    cmd != FUTEX_LOCK_PING)
+		    cmd != FUTEX_LOCK_PI2)
 			return -ENOSYS;
 	}
 
@@ -151,12 +150,6 @@ long do_futex(u32 __user *uaddr, int op, u32 val, ktime_t *timeout,
 		return futex_unlock_pi(uaddr, flags);
 	case FUTEX_TRYLOCK_PI:
 		return futex_lock_pi(uaddr, flags, NULL, 1);
-	case FUTEX_LOCK_PING:
-		return futex_lock_ping(uaddr, flags, timeout, 0);
-	case FUTEX_UNLOCK_PING:
-		return futex_unlock_ping(uaddr, flags);
-	case FUTEX_TRYLOCK_PING:
-		return futex_lock_ping(uaddr, flags, NULL, 1);
 	case FUTEX_WAIT_REQUEUE_PI:
 		val3 = FUTEX_BITSET_MATCH_ANY;
 		return futex_wait_requeue_pi(uaddr, flags, val, timeout, val3,
@@ -175,7 +168,6 @@ static __always_inline bool futex_cmd_has_timeout(u32 cmd)
 	case FUTEX_LOCK_PI2:
 	case FUTEX_WAIT_BITSET:
 	case FUTEX_WAIT_REQUEUE_PI:
-	case FUTEX_LOCK_PING:
 		return true;
 	}
 	return false;
