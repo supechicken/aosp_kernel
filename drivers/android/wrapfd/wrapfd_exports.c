@@ -12,6 +12,8 @@
 #include <linux/mm_types.h>
 #include <linux/wrapfd.h>
 
+#include "../wrapfd_internal.h"
+
 /*
  * List symbols that need to be exported to loadable kernel modules below. This is needed because
  * the logic that exports symbols from Rust crates only considers the crates under the rust/
@@ -24,3 +26,7 @@ EXPORT_SYMBOL_GPL(wrapfd_add_listener);
 EXPORT_SYMBOL_GPL(wrapfd_del_listener);
 EXPORT_SYMBOL_GPL(wrapfd_acquire_ownership);
 EXPORT_SYMBOL_GPL(wrapfd_release_ownership);
+
+#if IS_ENABLED(CONFIG_ANDROID_RUST_WRAPFD_KUNIT_TEST)
+EXPORT_SYMBOL_GPL(wrapfd_kunit_create_file);
+#endif
