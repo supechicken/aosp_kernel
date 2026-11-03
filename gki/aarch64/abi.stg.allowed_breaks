@@ -62,3 +62,8 @@ type 'struct futex_pi_state' changed
 type 'enum blocked_on_type' changed
   enumerator 'BO_T_PING_FUTEX' (3) was added
 
+type 'struct ping_mutex' changed
+  byte size changed from 16 to 24
+  member 'bool handoff' was added
+  member 'bool pickup' was added
+
