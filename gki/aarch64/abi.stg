@@ -114122,6 +114122,12 @@ member {
   offset: 384
 }
 member {
+  id: 0x2fff8789
+  name: "handoff"
+  type_id: 0x6d7f5ff6
+  offset: 128
+}
+member {
   id: 0x5b9eadfb
   name: "hang_detected"
   type_id: 0x4585663f
@@ -170222,6 +170228,12 @@ member {
   name: "pick_task"
   type_id: 0x169f1a25
   offset: 448
+}
+member {
+  id: 0x76f89504
+  name: "pickup"
+  type_id: 0x6d7f5ff6
+  offset: 136
 }
 member {
   id: 0x2e08fd3b
@@ -284565,9 +284577,11 @@ struct_union {
   kind: STRUCT
   name: "ping_mutex"
   definition {
-    bytesize: 16
+    bytesize: 24
     member_id: 0xebe277d2
     member_id: 0x4a8068c4
+    member_id: 0x2fff8789
+    member_id: 0x76f89504
   }
 }
 struct_union {

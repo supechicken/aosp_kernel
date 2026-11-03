@@ -126,6 +126,8 @@ static inline int futex_mm_init(struct mm_struct *mm) { return 0; }
 struct ping_mutex {
 	raw_spinlock_t wait_lock;
 	struct task_struct *owner;
+	bool handoff;
+	bool pickup;
 };
 
 static inline struct task_struct *ping_mutex_owner(struct ping_mutex *ping_mutex)
