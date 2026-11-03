@@ -40,3 +40,8 @@
   kunit_try_catch_run
   kunit_try_catch_throw
   kunit_unary_assert_format
+  wrapfd_acquire_ownership
+  wrapfd_get_mappable
+  wrapfd_kunit_create_file
+  wrapfd_put_mappable
+  wrapfd_release_ownership
