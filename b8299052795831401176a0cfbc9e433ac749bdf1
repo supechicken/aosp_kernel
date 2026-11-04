@@ -92,6 +92,25 @@
       "isAi": true,
       "revId": "b8299052795831401176a0cfbc9e433ac749bdf1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75e36d7d_c1777ff2",
+        "filename": "mm/p3s/memory.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1710792
+      },
+      "writtenOn": "2026-11-04T20:10:25Z",
+      "side": 1,
+      "message": "Done, folded the edge clipping and raced page table fixes into this patch, and updated the subject and commit message accordingly.",
+      "parentUuid": "47f61da4_cc5a2956",
+      "isAi": true,
+      "revId": "b8299052795831401176a0cfbc9e433ac749bdf1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
