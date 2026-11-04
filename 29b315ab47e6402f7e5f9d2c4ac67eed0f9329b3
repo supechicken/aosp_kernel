@@ -1,0 +1,22 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53eebc9d_5459787b",
+        "filename": "net/ipv4/tcp.c",
+        "patchSetId": 45
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1499410
+      },
+      "writtenOn": "2026-11-04T17:30:09Z",
+      "side": 1,
+      "message": "Nit: would it be OK to drop this include? `p3s_4k_unsupported()` already reaches `net/ipv4/tcp.c` through `\u003clinux/mm_types.h\u003e`, which includes `\u003clinux/p3s.h\u003e` at its end, and the merged refusals (e.g. `io_uring/memmap.c`, `kernel/bpf/syscall.c`, `drivers/vfio/vfio_main.c`) don\u0027t include it either. I checked that it still builds without the include in the 16k-p3s, 4k-native, 16k-nop3s and x86_64 configs.\n\nThen `tcp.c` would only carry the hook, and upstream changes to its include list couldn\u0027t conflict with it.",
+      "isAi": true,
+      "revId": "29b315ab47e6402f7e5f9d2c4ac67eed0f9329b3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
