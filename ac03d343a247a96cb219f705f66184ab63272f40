@@ -19,6 +19,25 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d58eac6_8d2d9d6b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1710792
+      },
+      "writtenOn": "2026-11-04T18:00:07Z",
+      "side": 1,
+      "message": "Done, updated the commit message with the failure scenario.",
+      "parentUuid": "a3c6bca2_17633629",
+      "isAi": true,
+      "revId": "ac03d343a247a96cb219f705f66184ab63272f40",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "110f1788_f3561a0a",
@@ -37,6 +56,25 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "98f2e4f6_18dbeb7d",
+        "filename": "mm/memory.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 3005,
+      "author": {
+        "id": 1710792
+      },
+      "writtenOn": "2026-11-04T18:00:07Z",
+      "side": 1,
+      "message": "Done, moved the vma_is_p3s_4k() check into the helper and dropped P3S_CONTEXT_REMOTE_MM().",
+      "parentUuid": "110f1788_f3561a0a",
+      "isAi": true,
+      "revId": "ac03d343a247a96cb219f705f66184ab63272f40",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "edd786fb_62c4e438",
@@ -50,6 +88,25 @@
       "writtenOn": "2026-11-04T17:29:21Z",
       "side": 1,
       "message": "I\u0027m worried the `vma_slice_off(vma)` check turns mmaps that work today into errors. Since aosp/4368055, `remap_pfn_range()` maps a 4KB VMA with `vm_slice_off !\u003d 0` from that slice, and several callers bound such mappings for it: `system_heap_mmap()` remaps `vma_kernel_page_bytes()` chunks (aosp/4367597), the DMA mmaps check `vma_kernel_pages()` (aosp/4368058) and `vma_exceeds_object()` (aosp/4368011), and `p3s_vm_iomap_memory()` checks `vma_file_offset()` (aosp/4368009).\n\nWith this check, a 4KB process that mmaps a system heap dma-buf or a DMA buffer at an offset that isn\u0027t 16KB-aligned gets `-EINVAL`, while `vm_map_pages()` (e.g. `iommu_dma_mmap()` of a non-contiguous buffer) still maps it.\n\nThe tail trim looks right to me, and as far as I can see it doesn\u0027t need this condition, since `vma_slice_offset()` already counts from `vm_slice_off`. Would it be OK to drop it?\n\nIf it\u0027s meant to protect drivers that ignore `vm_slice_off`, such as `uio_mmap_physical()`, could the commit message say so, and could the refusal go through `p3s_4k_unsupported()` (aosp/4366134) so that it shows up in the log? The slice handling in aosp/4367597, aosp/4368009 and aosp/4368011 would then no longer be reachable through `remap_pfn_range()`.",
+      "isAi": true,
+      "revId": "ac03d343a247a96cb219f705f66184ab63272f40",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0450a486_b6c2d5e1",
+        "filename": "mm/p3s/memory.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1710792
+      },
+      "writtenOn": "2026-11-04T18:00:07Z",
+      "side": 1,
+      "message": "Kept this conservative check to prevent drivers that ignore vm_slice_off from mapping the wrong physical slice, and documented the rationale in the commit message.",
+      "parentUuid": "edd786fb_62c4e438",
       "isAi": true,
       "revId": "ac03d343a247a96cb219f705f66184ab63272f40",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
