@@ -669,6 +669,7 @@ extern phys_addr_t pkvm_sym(pvmfw_size);
 
 extern phys_addr_t pkvm_sym(pkvm_ramoops_console_pa);
 extern size_t pkvm_sym(pkvm_ramoops_console_size);
+extern unsigned int pkvm_sym(pkvm_ramoops_console_ecc_size);
 
 extern bool pkvm_sym(gsmi_present);
 extern u16 pkvm_sym(smi_command_port);

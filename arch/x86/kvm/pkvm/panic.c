@@ -15,6 +15,8 @@
  * from fs/pstore/ram_core.c
  */
 #define PERSISTENT_RAM_SIG (0x43474244) /* DBGC */
+#define PERSISTENT_RAM_ECC_BLOCK_SIZE	128
+#define PERSISTENT_RAM_ECC_MAX_SIZE	16
 
 struct persistent_ram_buffer {
 	uint32_t    sig;
@@ -23,15 +25,100 @@ struct persistent_ram_buffer {
 	uint8_t     data[];
 };
 
+static u8 pkvm_gf256_mul(u8 a, u8 b)
+{
+	u8 p = 0;
+	int i;
+
+	for (i = 0; i < 8; i++) {
+		if (b & 1)
+			p ^= a;
+		if (a & 0x80)
+			a = (a << 1) ^ 0x1d;
+		else
+			a <<= 1;
+		b >>= 1;
+	}
+	return p;
+}
+
+static void pkvm_rs8_init_genpoly(u8 *genpoly, unsigned int ecc_size)
+{
+	unsigned int i, j;
+	u8 root = 1;
+
+	memset(genpoly, 0, ecc_size + 1);
+	genpoly[0] = 1;
+	for (i = 0; i < ecc_size; i++) {
+		genpoly[i + 1] = 1;
+		for (j = i; j > 0; j--)
+			genpoly[j] = genpoly[j - 1] ^
+				     pkvm_gf256_mul(genpoly[j], root);
+		genpoly[0] = pkvm_gf256_mul(genpoly[0], root);
+		root = pkvm_gf256_mul(root, 2);
+	}
+}
+
+static void pkvm_rs8_encode(const u8 *genpoly, unsigned int ecc_size,
+			    const void *data, size_t len, u8 *par)
+{
+	const u8 *src = data;
+	unsigned int j;
+	size_t i;
+
+	memset(par, 0, ecc_size);
+	for (i = 0; i < len; i++) {
+		u8 fb = src[i] ^ par[0];
+
+		for (j = 0; j < ecc_size - 1; j++)
+			WRITE_ONCE(par[j], par[j + 1]);
+		par[ecc_size - 1] = 0;
+
+		if (fb) {
+			for (j = 0; j < ecc_size; j++)
+				par[j] ^= pkvm_gf256_mul(fb, genpoly[ecc_size - 1 - j]);
+		}
+	}
+}
+
+static void pkvm_ramoops_update_ecc(struct persistent_ram_buffer *buffer,
+				    size_t capacity, u8 *par_buffer,
+				    const u8 *genpoly, unsigned int ecc_size,
+				    size_t start, size_t count)
+{
+	u8 *buffer_end = buffer->data + capacity;
+	u8 *block;
+	u8 *par;
+	size_t size = PERSISTENT_RAM_ECC_BLOCK_SIZE;
+
+	if (!ecc_size || !count)
+		return;
+
+	block = buffer->data + (start & ~(PERSISTENT_RAM_ECC_BLOCK_SIZE - 1));
+	par = par_buffer + (start / PERSISTENT_RAM_ECC_BLOCK_SIZE) * ecc_size;
+
+	do {
+		if (block + PERSISTENT_RAM_ECC_BLOCK_SIZE > buffer_end)
+			size = buffer_end - block;
+		pkvm_rs8_encode(genpoly, ecc_size, block, size, par);
+		block += PERSISTENT_RAM_ECC_BLOCK_SIZE;
+		par += ecc_size;
+	} while (block < buffer->data + start + count);
+}
+
 static void pkvm_write_ramoops_console(const char *msg)
 {
 	struct persistent_ram_buffer *buffer;
+	u8 genpoly[PERSISTENT_RAM_ECC_MAX_SIZE + 1];
+	unsigned int ecc_size = pkvm_ramoops_console_ecc_size;
+	u8 *par_buffer = NULL, *par_header = NULL;
 	size_t msg_len = strlen(msg);
-	size_t capacity;
+	size_t data_total, capacity;
 	u32 start, size;
 
 	/* Size check is sufficient; address validity is verified during init */
-	if (!pkvm_ramoops_console_size)
+	if (pkvm_ramoops_console_size <= sizeof(struct persistent_ram_buffer) ||
+	    !msg_len)
 		return;
 
 	buffer = __pkvm_va(pkvm_ramoops_console_pa);
@@ -48,7 +135,33 @@ static void pkvm_write_ramoops_console(const char *msg)
 	 * fs/pstore/ram_core.c. The buffer starts with a header:
 	 * [u32 sig] [u32 start] [u32 size] [raw data...]
 	 */
-	capacity = pkvm_ramoops_console_size - sizeof(struct persistent_ram_buffer);
+	data_total = pkvm_ramoops_console_size - sizeof(struct persistent_ram_buffer);
+	if (ecc_size > PERSISTENT_RAM_ECC_MAX_SIZE)
+		ecc_size = 0;
+
+	if (ecc_size) {
+		size_t ecc_blocks, ecc_total;
+
+		if (data_total <= ecc_size)
+			return;
+		ecc_blocks = DIV_ROUND_UP(data_total - ecc_size,
+					  PERSISTENT_RAM_ECC_BLOCK_SIZE + ecc_size);
+		ecc_total = (ecc_blocks + 1) * ecc_size;
+		if (ecc_total >= data_total)
+			return;
+
+		capacity = data_total - ecc_total;
+		par_buffer = &buffer->data[capacity];
+		par_header = &par_buffer[ecc_blocks * ecc_size];
+		pkvm_rs8_init_genpoly(genpoly, ecc_size);
+	} else {
+		capacity = data_total;
+	}
+
+	if (msg_len > capacity) {
+		msg += msg_len - capacity;
+		msg_len = capacity;
+	}
 
 	/*
 	 * 'start' indicates where the host stopped logging. In the
@@ -63,19 +176,27 @@ static void pkvm_write_ramoops_console(const char *msg)
 
 	if (start >= capacity)
 		start = 0;
+	if (size > capacity)
+		size = capacity;
+	else if (size < capacity)
+		size = start;
 
 	/* Circular append logic */
 	if (start + msg_len <= capacity) {
 		memcpy(&buffer->data[start], msg, msg_len);
+		pkvm_ramoops_update_ecc(buffer, capacity, par_buffer, genpoly,
+					ecc_size, start, msg_len);
 		start += msg_len;
 	} else {
 		size_t first_part = capacity - start;
 		size_t second_part = msg_len - first_part;
 
 		memcpy(&buffer->data[start], msg, first_part);
-		if (second_part > capacity)
-			second_part = capacity;
+		pkvm_ramoops_update_ecc(buffer, capacity, par_buffer, genpoly,
+					ecc_size, start, first_part);
 		memcpy(&buffer->data[0], msg + first_part, second_part);
+		pkvm_ramoops_update_ecc(buffer, capacity, par_buffer, genpoly,
+					ecc_size, 0, second_part);
 		start = second_part;
 	}
 
@@ -92,6 +213,9 @@ static void pkvm_write_ramoops_console(const char *msg)
 	/* Sync metadata so host pstore can find the new data after reboot */
 	atomic_set(&buffer->start, start);
 	atomic_set(&buffer->size, size);
+	if (ecc_size)
+		pkvm_rs8_encode(genpoly, ecc_size, buffer, sizeof(*buffer),
+				par_header);
 
 	/* Ensure data is visible in physical RAM before the hardware reset */
 	clflush_cache_range(buffer, pkvm_ramoops_console_size);
