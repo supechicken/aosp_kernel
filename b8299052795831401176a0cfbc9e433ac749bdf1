@@ -19,6 +19,25 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d230cae7_f4a8bc09",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1710792
+      },
+      "writtenOn": "2026-11-04T18:00:10Z",
+      "side": 1,
+      "message": "Done, updated the commit message to explain the native-PFN contract and avoiding repeated faults.",
+      "parentUuid": "821bb94a_5f5f6528",
+      "isAi": true,
+      "revId": "b8299052795831401176a0cfbc9e433ac749bdf1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f1299293_3dd05315",
@@ -32,6 +51,25 @@
       "writtenOn": "2026-11-04T17:29:38Z",
       "side": 1,
       "message": "I\u0027m worried this turns faults at the ends of many 4KB VMAs into `SIGBUS`. A 4KB VMA can start at any slice of a kernel page (`vm_slice_off !\u003d 0`), end inside one (any length that isn\u0027t a multiple of 16KB), or be split by a 4KB `mprotect()` or `munmap()`. The window of an edge slice then never fits in the VMA, so every fault on those slices returns `VM_FAULT_SIGBUS`. Today, `insert_pfn()` maps the slice at `addr` in that case (aosp/4368054).\n\nFor example, a 20KB `mmap()` of a udmabuf would now get `SIGBUS` from `udmabuf_vm_fault()` on its last 4KB. udmabuf is built into GKI, and `dma_buf_mmap_internal()` accepts that mapping because it bounds the VMA with `vma_kernel_pages()`. aosp/4413966 also accepts the same partial last page for `remap_pfn_range()`.\n\nWould it be OK to map only the slices of the window that lie inside the VMA, as `vma_insert_page_slices()` does? A loop over `insert_pfn()` would do that: it already maps the slice that `vma_slice_offset()` gives each address (aosp/4368054) and leaves a populated PTE alone, and taking `get_locked_pte()` once per slice handles a window that crosses two PTE tables without holding both locks. Something like:\n\n```\nstatic vm_fault_t insert_pfn(struct vm_area_struct *vma, unsigned long addr,\n\t\t\t     unsigned long pfn, pgprot_t prot, bool mkwrite);\n\nstatic inline vm_fault_t p3s_insert_pfn_prot(struct vm_area_struct *vma,\n\t\t\t\t\t     unsigned long addr,\n\t\t\t\t\t     unsigned long pfn, pgprot_t prot)\n{\n\tunsigned long off \u003d (unsigned long)vma_slice_offset(vma, addr) \u003c\u003c\n\t\t\t    PAGE_SHIFT_4KB;\n\tvm_fault_t ret \u003d VM_FAULT_NOPAGE;\n\tunsigned long end;\n\n\taddr \u0026\u003d PAGE_MASK_4KB;\n\tend \u003d min(addr + PAGE_SIZE_KERNEL - off, vma-\u003evm_end);\n\taddr -\u003d min(off, addr - vma-\u003evm_start);\n\tfor (; addr \u003c end \u0026\u0026 !(ret \u0026 VM_FAULT_ERROR); addr +\u003d PAGE_SIZE_4KB)\n\t\tret \u003d insert_pfn(vma, addr, pfn, prot, false);\n\treturn ret;\n}\n```\n\nThe prototype would go next to `validate_page_before_insert()` and `insert_page_into_pte_locked()`, with this helper below them. The PTE would then still be built only in `insert_pfn()`, and the PFN and page paths would agree on the bounds and on populated PTEs. It would also drop the two-table locking, which looks right to me but which 4KB processes only reach when a `[vvar]` window crosses a 2MB boundary, so a bug there would rarely show up.",
+      "isAi": true,
+      "revId": "b8299052795831401176a0cfbc9e433ac749bdf1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e8231c9_c39ee947",
+        "filename": "mm/p3s/memory.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1710792
+      },
+      "writtenOn": "2026-11-04T18:00:10Z",
+      "side": 1,
+      "message": "Addressed in downstream commit aosp/4414007 (\u0027ANDROID: P3S: mm: Clip PFN insertion to VMA boundaries\u0027), which clips the native PFN window to the in-VMA slices.",
+      "parentUuid": "f1299293_3dd05315",
       "isAi": true,
       "revId": "b8299052795831401176a0cfbc9e433ac749bdf1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
