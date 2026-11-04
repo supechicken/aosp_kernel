@@ -46,6 +46,110 @@
       },
       "revId": "31badcf3e85a8f987e9fd772a2393101cea3479b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a482953e_d732c629",
+        "filename": "arch/x86/include/asm/kvm_pkvm.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-04T19:00:55Z",
+      "side": 1,
+      "message": "We only need 1 bit? (And same for `iommu_coherency` and `use_first_level` actually?)",
+      "fixSuggestions": [
+        {
+          "fixId": "39c6ae25_c9816cd4",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "arch/x86/include/asm/kvm_pkvm.h",
+              "range": {
+                "startLine": 135,
+                "startChar": 0,
+                "endLine": 136,
+                "endChar": 0
+              },
+              "replacement": "\tu8 pkvm_nested: 1;\n"
+            }
+          ]
+        }
+      ],
+      "revId": "31badcf3e85a8f987e9fd772a2393101cea3479b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5cc6cc3_76f6b104",
+        "filename": "drivers/iommu/intel/iommu.c",
+        "patchSetId": 16
+      },
+      "lineNbr": 1723,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-04T19:00:55Z",
+      "side": 1,
+      "message": "Why not check this at the caller side in the pKVM-specific code (`iommu_set_lm_ce()`/`iommu_pasid_setup_fl()`/`iommu_pasid_setup_sl()`)?",
+      "revId": "31badcf3e85a8f987e9fd772a2393101cea3479b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29341e38_844f4644",
+        "filename": "drivers/iommu/intel/iommu.c",
+        "patchSetId": 16
+      },
+      "lineNbr": 1726,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-04T19:00:55Z",
+      "side": 1,
+      "message": "Maybe rather e.g. -EINVAL? (Likewise elsewhere.)",
+      "revId": "31badcf3e85a8f987e9fd772a2393101cea3479b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5946e0a3_16adcee5",
+        "filename": "drivers/iommu/intel/pkvm/iommu_hc.c",
+        "patchSetId": 16
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-04T19:00:55Z",
+      "side": 1,
+      "message": "What about `pkvm_hyp_donate_host()` in the failure path below?",
+      "fixSuggestions": [
+        {
+          "fixId": "534ca4fb_18f2cfdd",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "drivers/iommu/intel/pkvm/iommu_hc.c",
+              "range": {
+                "startLine": 479,
+                "startChar": 0,
+                "endLine": 480,
+                "endChar": 0
+              },
+              "replacement": "\t\tif (!data-\u003epkvm_nested)\n\t\t\tpkvm_hyp_donate_host(__pkvm_pa(pgd), VTD_PAGE_SIZE, false);\n"
+            }
+          ]
+        }
+      ],
+      "revId": "31badcf3e85a8f987e9fd772a2393101cea3479b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
