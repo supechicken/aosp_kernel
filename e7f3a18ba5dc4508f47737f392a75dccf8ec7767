@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8121604_1121e761",
+        "filename": "drivers/block/zram/zram_drv.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 1220,
+      "author": {
+        "id": 2044797
+      },
+      "writtenOn": "2026-11-04T15:41:51Z",
+      "side": 1,
+      "message": "Future suggestion:\n\nEmbedding struct bio_vec bio_vec; struct bio bio; \ninside struct zram_rb_req (just like struct zram_wb_req at zram_drv.c:481) and using bio_init(\u0026req-\u003ebio, zram-\u003ebdev, \u0026req-\u003ebio_vec, 1, REQ_OP_READ) immediately cuts slab allocations and frees per prefetched page in half.",
+      "revId": "e7f3a18ba5dc4508f47737f392a75dccf8ec7767",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
