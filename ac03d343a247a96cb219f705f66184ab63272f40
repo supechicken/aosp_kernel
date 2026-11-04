@@ -110,6 +110,25 @@
       "isAi": true,
       "revId": "ac03d343a247a96cb219f705f66184ab63272f40",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b686559_f4b48155",
+        "filename": "mm/p3s/memory.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1499410
+      },
+      "writtenOn": "2026-11-04T19:27:28Z",
+      "side": 1,
+      "message": "Thanks, the reason in the commit message makes sense to me, since `remap_pfn_range()` can\u0027t tell which callers handle `vm_slice_off`.\n\nCould the refusal go through `p3s_4k_unsupported()`, as `p3s_vm_iomap_memory()` does in aosp/4368009? Then a 4KB app whose `mmap()` fails here shows up in the log, and we\u0027d notice if the check turns away a caller that handles the slice, such as `system_heap_mmap()`. Something like:\n\n```\n\tif (vma_slice_off(vma) \u0026\u0026 p3s_4k_unsupported(vma-\u003evm_mm))\n\t\treturn -EINVAL;\n```\n\nwith `vma_slice_off(vma)` dropped from the check below.",
+      "parentUuid": "0450a486_b6c2d5e1",
+      "isAi": true,
+      "revId": "ac03d343a247a96cb219f705f66184ab63272f40",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
