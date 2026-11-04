@@ -34,6 +34,24 @@
       "parentUuid": "382ac1d6_ae4bf8ca",
       "revId": "b434937b3e245a1115eb4672340ba25f266054b0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "525f5a29_8cde4a5f",
+        "filename": "arch/x86/kvm/pkvm/pgtable.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-04T19:53:46Z",
+      "side": 1,
+      "message": "Preliminarily, `cap-\u003ecoalesce_on_map` sounds reasonable.\n\nThough we might also add a TODO to remove it in the future, once we implement TLB flush for hyp_mmu (which we want in order to be able to unmap unused mappings as needed - b/541580341), so that we have no particular reason to avoid coalescing for hyp_mmu anymore.\n\nHmm... then maybe just remove that BUG() instead, making `hyp_mmu_flush_tlb()` a successful no-op for now (with a comment explaining why exactly it is so)?",
+      "parentUuid": "7be886e2_b16af586",
+      "revId": "b434937b3e245a1115eb4672340ba25f266054b0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
