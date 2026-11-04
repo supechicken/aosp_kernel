@@ -51,3 +51,7 @@ variable symbol changed from 'u64 jiffies_64' {jiffies} to 'volatile unsigned lo
     underlying type changed from 'u64' = '__u64' = 'unsigned long long' to 'unsigned long'
       resolved type changed from 'unsigned long long' to 'unsigned long'
 
+type 'struct task_struct' changed
+  member 'u64 __kabi_reserved1' was removed
+  member 'union { void* proxy_futex_task_ext; struct { u64 __kabi_reserved1; }; union { }; }' was added
+
