@@ -1,0 +1,10 @@
+function symbol 'void __put_task_struct(struct task_struct*)' changed
+  CRC changed from 0xcde72045 to 0xd4d64166
+
+function symbol 'void module_layout(struct module*, struct modversion_info*, struct kernel_param*, struct kernel_symbol*, struct tracepoint* const*)' changed
+  CRC changed from 0xc6c7af6f to 0xcba4c6fc
+
+type 'struct task_struct' changed
+  member 'u64 __kabi_reserved1' was removed
+  member 'union { void* proxy_futex_task_ext; struct { u64 __kabi_reserved1; }; union { }; }' was added
+
