@@ -70,6 +70,24 @@
       "parentUuid": "525f5a29_8cde4a5f",
       "revId": "b434937b3e245a1115eb4672340ba25f266054b0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c246e132_b5cc71d1",
+        "filename": "arch/x86/kvm/pkvm/pgtable.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 3702829
+      },
+      "writtenOn": "2026-11-04T20:10:47Z",
+      "side": 1,
+      "message": "\u003e Hmm... then maybe just remove that BUG() instead, making hyp_mmu_flush_tlb() a successful no-op for now (with a comment explaining why exactly it is so)?\n\nThats a good idea. I think hyp_mmu would not have the split issue like host_ept and hence coalesce may never happen. But if ever a map caused coalescing, then we might have an issue because flush_tlb and cross-CPU TLB/PSC shootdown support is not yet present for hyp_mmu - the coalescing may leave stale entries. \n\nFrom reading the code, I think we create all hyp mappings during pKVM initialization and do not perform any unmap and later maps. Only other runtime hyp_mmu change is `pkvm_host_donate_hyp_mmio` calls `pkvm_hyp_mmu_map` during IOMMU initialization and I don\u0027t think it can trigger a coalesce. So we should be safe. But still - would it be risky if we allow coalescing support for hyp_mmu before we support tlb flush?",
+      "parentUuid": "525f5a29_8cde4a5f",
+      "revId": "b434937b3e245a1115eb4672340ba25f266054b0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
