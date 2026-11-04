@@ -8,3 +8,7 @@ type 'struct task_struct' changed
   member 'u64 __kabi_reserved1' was removed
   member 'union { void* proxy_futex_task_ext; struct { u64 __kabi_reserved1; }; union { }; }' was added
 
+type 'struct futex_pi_state' changed
+  member 'struct rt_mutex_base pi_mutex' was removed
+  member 'union { struct { union { struct rt_mutex_base pi_mutex; struct ping_mutex ping_mutex; }; }; struct { struct rt_mutex_base __kabi_renamedpi_mutex; }; union { }; d
+
