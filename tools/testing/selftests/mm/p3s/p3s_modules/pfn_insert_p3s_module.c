@@ -29,7 +29,9 @@ static int pfn_insert_p3s_mmap(struct file *file, struct vm_area_struct *vma)
 	u64 offset = vma_file_offset(vma);
 	unsigned long pfn;
 
-	if (vma->vm_end - vma->vm_start != PAGE_SIZE || offset > 2 * PAGE_SIZE)
+	if (vma->vm_end - vma->vm_start > PAGE_SIZE ||
+	    offset > 2 * PAGE_SIZE ||
+	    (offset >= PAGE_SIZE && vma_slice_off(vma)))
 		return -EINVAL;
 	vm_flags_set(vma, VM_IO | VM_PFNMAP | VM_DONTEXPAND | VM_DONTDUMP);
 	vma->vm_ops = &pfn_insert_p3s_vm_ops;
@@ -65,7 +67,10 @@ static long pfn_insert_p3s_ioctl(struct file *file, unsigned int cmd,
 	}
 	if (cmd == PFN_INSERT_P3S_INSPECT) {
 		request.present_mask = 0;
-		for (i = 0; i < PAGE_SIZE / USER_PAGE_SIZE; i++) {
+		for (i = 0; i < min_t(unsigned long,
+					PAGE_SIZE / USER_PAGE_SIZE,
+					(vma->vm_end - request.address) /
+					USER_PAGE_SIZE); i++) {
 			struct follow_pfnmap_args args = {
 				.vma = vma,
 				.address = request.address + i * USER_PAGE_SIZE,
