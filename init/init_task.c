@@ -178,6 +178,7 @@ struct task_struct init_task __aligned(L1_CACHE_BYTES) = {
 						 &init_task.alloc_lock),
 #endif
 	.blocked_donor = NULL,
+	.proxy_futex_task_ext = NULL,
 #ifdef CONFIG_SCHED_PROXY_EXEC
 	.blocked_head = LIST_HEAD_INIT(init_task.blocked_head),
 	.blocked_node = LIST_HEAD_INIT(init_task.blocked_node),
