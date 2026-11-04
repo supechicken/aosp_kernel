@@ -13715,6 +13715,10 @@ member {
   type_id: 0x143e2a36
 }
 member {
+  id: 0x26c69c44
+  type_id: 0x14340100
+}
+member {
   id: 0x26c9c4e3
   type_id: 0x1409639e
 }
@@ -13769,6 +13773,10 @@ member {
 member {
   id: 0x277f4bd0
   type_id: 0x12d35f52
+}
+member {
+  id: 0x27950da0
+  type_id: 0x117a4693
 }
 member {
   id: 0x27e3d457
@@ -14036,6 +14044,10 @@ member {
   offset: 64
 }
 member {
+  id: 0x3161176e
+  type_id: 0x4aaa2daa
+}
+member {
   id: 0x318695b6
   type_id: 0x49340c50
   offset: 896
@@ -14230,6 +14242,11 @@ member {
   id: 0x3419a4fe
   type_id: 0x5f48f06f
   offset: 64
+}
+member {
+  id: 0x341b3145
+  type_id: 0x5f42920e
+  offset: 128
 }
 member {
   id: 0x341e83f1
@@ -15635,6 +15652,11 @@ member {
   id: 0x31f552a4
   name: "__kabi_renamedcpumask"
   type_id: 0x99caa0ae
+}
+member {
+  id: 0x24580923
+  name: "__kabi_renamedpi_mutex"
+  type_id: 0x6a0f9ac9
 }
 member {
   id: 0x415b003f
@@ -54414,6 +54436,12 @@ member {
   offset: 192
 }
 member {
+  id: 0x4a8068c4
+  name: "owner"
+  type_id: 0x1d19a9d5
+  offset: 64
+}
+member {
   id: 0x4a806db7
   name: "owner"
   type_id: 0x1d19a9d5
@@ -56161,10 +56189,9 @@ member {
   offset: 18144
 }
 member {
-  id: 0x71601996
+  id: 0x71601054
   name: "pi_mutex"
   type_id: 0x6a0f9ac9
-  offset: 128
 }
 member {
   id: 0x0e93f6ca
@@ -56360,6 +56387,11 @@ member {
   name: "ping_group_range"
   type_id: 0x5d6e0aa2
   offset: 5568
+}
+member {
+  id: 0x23d1f9b3
+  name: "ping_mutex"
+  type_id: 0xc2d14410
 }
 member {
   id: 0x47c20e66
@@ -78475,6 +78507,14 @@ struct_union {
   }
 }
 struct_union {
+  id: 0x117a4693
+  kind: STRUCT
+  definition {
+    bytesize: 32
+    member_id: 0x24580923
+  }
+}
+struct_union {
   id: 0x1261d033
   kind: STRUCT
   definition {
@@ -78762,6 +78802,14 @@ struct_union {
   definition {
     bytesize: 8
     member_id: 0x31f552a4
+  }
+}
+struct_union {
+  id: 0x14340100
+  kind: STRUCT
+  definition {
+    bytesize: 32
+    member_id: 0x3161176e
   }
 }
 struct_union {
@@ -80779,6 +80827,15 @@ struct_union {
   }
 }
 struct_union {
+  id: 0x4aaa2daa
+  kind: UNION
+  definition {
+    bytesize: 32
+    member_id: 0x71601054
+    member_id: 0x23d1f9b3
+  }
+}
+struct_union {
   id: 0x4aac7bac
   kind: UNION
   definition {
@@ -81672,6 +81729,16 @@ struct_union {
     bytesize: 64
     member_id: 0x2704c73b
     member_id: 0x32359e3d
+  }
+}
+struct_union {
+  id: 0x5f42920e
+  kind: UNION
+  definition {
+    bytesize: 32
+    member_id: 0x26c69c44
+    member_id: 0x27950da0
+    member_id: 0x36752b74
   }
 }
 struct_union {
@@ -89077,7 +89144,7 @@ struct_union {
   definition {
     bytesize: 88
     member_id: 0x7c00ef52
-    member_id: 0x71601996
+    member_id: 0x341b3145
     member_id: 0x4a806db7
     member_id: 0x05243c4b
     member_id: 0x205045b4
@@ -96374,6 +96441,16 @@ struct_union {
     bytesize: 16
     member_id: 0x2decf096
     member_id: 0x0efc1fc3
+  }
+}
+struct_union {
+  id: 0xc2d14410
+  kind: STRUCT
+  name: "ping_mutex"
+  definition {
+    bytesize: 16
+    member_id: 0xebe277d2
+    member_id: 0x4a8068c4
   }
 }
 struct_union {
