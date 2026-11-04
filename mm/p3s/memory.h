@@ -86,12 +86,12 @@ static inline vm_fault_t p3s_insert_pfn_prot(struct vm_area_struct *vma,
 		table[0] = pte_offset_map_rw_nolock(mm, pmd[0], first,
 						  &pmdval[0], &ptl[0]);
 		if (!table[0])
-			return VM_FAULT_SIGBUS;
+			return VM_FAULT_NOPAGE;
 		table[1] = pte_offset_map_rw_nolock(mm, pmd[1], second,
 						  &pmdval[1], &ptl[1]);
 		if (!table[1]) {
 			pte_unmap(table[0]);
-			return VM_FAULT_SIGBUS;
+			return VM_FAULT_NOPAGE;
 		}
 		low_ptl = ptl[0];
 		high_ptl = ptl[1];
@@ -101,8 +101,10 @@ static inline vm_fault_t p3s_insert_pfn_prot(struct vm_area_struct *vma,
 		if (high_ptl != low_ptl)
 			spin_lock_nested(high_ptl, SINGLE_DEPTH_NESTING);
 		if (!pmd_same(pmdval[0], pmdp_get_lockless(pmd[0])) ||
-		    !pmd_same(pmdval[1], pmdp_get_lockless(pmd[1])))
+		    !pmd_same(pmdval[1], pmdp_get_lockless(pmd[1]))) {
+			ret = VM_FAULT_NOPAGE;
 			goto out;
+		}
 	}
 
 	/* Preflight under the PTE lock(s): never fill a partial/wrong map. */
