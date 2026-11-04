@@ -16,6 +16,98 @@
       "message": "@surenb@google.com would you mind reviewing?",
       "revId": "dbb8566694054c65eb36b06244217a7bdd4844f5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ed62e02_b76c346c",
+        "filename": "drivers/block/zram/zram_drv.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 1182,
+      "author": {
+        "id": 1275554
+      },
+      "writtenOn": "2026-11-04T21:34:19Z",
+      "side": 1,
+      "message": "Not introduced by this patch, but while reading this: is it safe for the worker in zram_deferred_prefetch() to access pf_ctl, which lives on the stack of zram_prefetch_slots()?\n\nWhat guarantees that the on-stack pf_ctl is still valid when zram_prefetch_dec_and_wake() calls wake_up()? wait_event() can return via its fast path as soon as num_inflight hits 0, without taking the\nwaitqueue lock, so wake_up() may touch a dead stack frame. The bio error path in zram_prefetch_read_endio() has the same issue.",
+      "revId": "dbb8566694054c65eb36b06244217a7bdd4844f5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18248d4b_5313a4bd",
+        "filename": "include/uapi/linux/zram_ioctl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1275554
+      },
+      "writtenOn": "2026-11-04T21:34:19Z",
+      "side": 1,
+      "message": "Adding a new _ext struct and ioctl number works for now, but it doesn\u0027t scale: the next field would need _EXT2, then _EXT3, each with another ioctl number and another legacy branch in zram_ioctl().\n\nWhat do you think about making struct zram_android_ioc_process_prefetch itself extensible instead, similar to openat2/clone3/sched_setattr (or drm_ioctl() for an ioctl example)? Roughly:\n \n - keep the struct append-only, with its size taken from _IOC_SIZE(cmd)\n - match the ioctl by _IOC_TYPE/_IOC_NR rather than the full cmd, and\n   parse it with copy_struct_from_user()\n - copy back min(usize, ksize) only when _IOC_DIR(cmd) \u0026 _IOC_READ\n\nThat way, existing _IOW(..., 3) users go through the same path as a smaller struct, and future fields can simply be appended.\n\nIt might also be worth adding a flags/reserved field (in, must be 0) and having the kernel return its struct size (out) for feature detection, so we don\u0027t need to bump ZRAM_ANDROID_IOC_VERSION for every extension.",
+      "fixSuggestions": [
+        {
+          "fixId": "b4aef063_b4ac5375",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "include/uapi/linux/zram_ioctl.h",
+              "range": {
+                "startLine": 53,
+                "startChar": 0,
+                "endLine": 58,
+                "endChar": 0
+              },
+              "replacement": ""
+            },
+            {
+              "path": "include/uapi/linux/zram_ioctl.h",
+              "range": {
+                "startLine": 59,
+                "startChar": 0,
+                "endLine": 63,
+                "endChar": 0
+              },
+              "replacement": ""
+            },
+            {
+              "path": "include/uapi/linux/zram_ioctl.h",
+              "range": {
+                "startLine": 78,
+                "startChar": 0,
+                "endLine": 79,
+                "endChar": 0
+              },
+              "replacement": ""
+            },
+            {
+              "path": "include/uapi/linux/zram_ioctl.h",
+              "range": {
+                "startLine": 80,
+                "startChar": 0,
+                "endLine": 81,
+                "endChar": 0
+              },
+              "replacement": "\t_IOWR(ZRAM_ANDROID_IOC_MAGIC, 3, struct zram_android_ioc_process_prefetch)\n"
+            },
+            {
+              "path": "include/uapi/linux/zram_ioctl.h",
+              "range": {
+                "startLine": 84,
+                "startChar": 0,
+                "endLine": 86,
+                "endChar": 0
+              },
+              "replacement": ""
+            }
+          ]
+        }
+      ],
+      "revId": "dbb8566694054c65eb36b06244217a7bdd4844f5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
