@@ -37,7 +37,7 @@
 #include "internal.h"
 #include <trace/hooks/syscall_check.h>
 
-int do_truncate(struct mnt_idmap *idmap, struct dentry *dentry,
+int do_truncate(const struct mnt_idmap *idmap, struct dentry *dentry,
 		loff_t length, unsigned int time_attrs, struct file *filp)
 {
 	int ret;
@@ -73,7 +73,7 @@ int do_truncate(struct mnt_idmap *idmap, struct dentry *dentry,
 
 int vfs_truncate(const struct path *path, loff_t length)
 {
-	struct mnt_idmap *idmap;
+	const struct mnt_idmap *idmap;
 	struct inode *inode;
 	int error;
 
@@ -788,7 +788,7 @@ static inline bool setattr_vfsgid(struct iattr *attr, kgid_t kgid)
 
 int chown_common(const struct path *path, uid_t user, gid_t group)
 {
-	struct mnt_idmap *idmap;
+	const struct mnt_idmap *idmap;
 	struct user_namespace *fs_userns;
 	struct inode *inode = path->dentry->d_inode;
 	struct delegated_inode delegated_inode = { };
