@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d837e319_ff647b12",
+        "filename": "drivers/android/vendor_hooks.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1069543
+      },
+      "writtenOn": "2026-11-04T20:41:04Z",
+      "side": 1,
+      "message": "Please fix this ERROR reported by Keep Sorted: These lines are out of order.",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 31
+      },
+      "revId": "1bab57720c68676c1230b3cd7fffcbbfc2cc5207",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81e94d03_bba12191",
+        "filename": "drivers/android/vendor_hooks.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1069543
+      },
+      "writtenOn": "2026-11-04T20:41:04Z",
+      "side": 1,
+      "message": "Please fix this ERROR reported by Keep Sorted: These lines are out of order.",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 141,
+        "endChar": 66
+      },
+      "revId": "1bab57720c68676c1230b3cd7fffcbbfc2cc5207",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
