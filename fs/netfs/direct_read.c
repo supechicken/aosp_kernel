@@ -68,7 +68,38 @@ static void netfs_dispatch_unbuffered_reads(struct netfs_io_request *rreq)
 		subreq->start	= start;
 		subreq->len	= size;
 
+<<<<<<< HEAD   (ee9c8fd574f1b2c93cfc74b74b6f3a0d78a5e3a0 Merge 4b200e0c9c33 ("KVM: x86: Add dedicated API for getting)
 		netfs_queue_read(rreq, subreq);
+||||||| BASE   (b407fa25ed74c1b04217af9d9a1de7ac93e4e64c FROMGIT: HID: vivaldi: avoid redundant feature report reads )
+		__set_bit(NETFS_SREQ_IN_PROGRESS, &subreq->flags);
+
+		spin_lock(&rreq->lock);
+		list_add_tail(&subreq->rreq_link, &stream->subrequests);
+		if (list_is_first(&subreq->rreq_link, &stream->subrequests)) {
+			stream->front = subreq;
+			if (!stream->active) {
+				stream->collected_to = stream->front->start;
+				/* Store list pointers before active flag */
+				smp_store_release(&stream->active, true);
+			}
+		}
+		trace_netfs_sreq(subreq, netfs_sreq_trace_added);
+		spin_unlock(&rreq->lock);
+=======
+		__set_bit(NETFS_SREQ_IN_PROGRESS, &subreq->flags);
+
+		spin_lock(&rreq->lock);
+		list_add_tail(&subreq->rreq_link, &stream->subrequests);
+		if (list_is_first(&subreq->rreq_link, &stream->subrequests)) {
+			if (!stream->active) {
+				stream->collected_to = subreq->start;
+				/* Store list pointers before active flag */
+				smp_store_release(&stream->active, true);
+			}
+		}
+		trace_netfs_sreq(subreq, netfs_sreq_trace_added);
+		spin_unlock(&rreq->lock);
+>>>>>>> BRANCH (0ded20fe17312e3beb85ae8d0d95984036fe32cd BACKPORT: scsi: sd: Mark the disk dead if runtime resume fai)
 
 		netfs_stat(&netfs_n_rh_download);
 		if (rreq->netfs_ops->prepare_read) {
