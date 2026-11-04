@@ -17,6 +17,25 @@
       "isAi": true,
       "revId": "27ff60bcb9164a55ef697ec8c7bf257826cfac2d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9b12be3_46ed4041",
+        "filename": "tools/testing/vma/vma_internal.h",
+        "patchSetId": 45
+      },
+      "lineNbr": 814,
+      "author": {
+        "id": 1710792
+      },
+      "writtenOn": "2026-11-04T17:59:44Z",
+      "side": 1,
+      "message": "Done, dropped the unused stub.",
+      "parentUuid": "b9a7e4ed_0f89039c",
+      "isAi": true,
+      "revId": "27ff60bcb9164a55ef697ec8c7bf257826cfac2d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
