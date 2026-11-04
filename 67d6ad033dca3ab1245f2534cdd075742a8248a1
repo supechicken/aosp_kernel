@@ -17,6 +17,25 @@
       "isAi": true,
       "revId": "67d6ad033dca3ab1245f2534cdd075742a8248a1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebd4fb99_f167713b",
+        "filename": "net/xdp/xdp_umem.c",
+        "patchSetId": 44
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1710792
+      },
+      "writtenOn": "2026-11-04T18:00:00Z",
+      "side": 1,
+      "message": "Done, dropped the include.",
+      "parentUuid": "10f715bb_2d32d327",
+      "isAi": true,
+      "revId": "67d6ad033dca3ab1245f2534cdd075742a8248a1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }

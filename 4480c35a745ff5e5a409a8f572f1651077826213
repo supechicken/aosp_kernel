@@ -55,6 +55,25 @@
       "isAi": true,
       "revId": "4480c35a745ff5e5a409a8f572f1651077826213",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8f26fbe_b3613aaf",
+        "filename": "net/xdp/xdp_umem.c",
+        "patchSetId": 38
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1710792
+      },
+      "writtenOn": "2026-11-04T18:00:00Z",
+      "side": 1,
+      "message": "Done, dropped the local mm and kept current-\u003emm.",
+      "parentUuid": "a9824a6f_48be8c39",
+      "isAi": true,
+      "revId": "4480c35a745ff5e5a409a8f572f1651077826213",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
