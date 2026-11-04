@@ -1418,15 +1418,6 @@ static void z_erofs_decompressqueue_kthread_work(struct kthread_work *work)
 }
 #endif
 
-/* Use (kthread_)work in atomic contexts to minimize scheduling overhead */
-static inline bool z_erofs_in_atomic(void)
-{
-	if (IS_ENABLED(CONFIG_PREEMPTION) && rcu_preempt_depth())
-		return true;
-	if (!IS_ENABLED(CONFIG_PREEMPT_COUNT))
-		return true;
-	return !preemptible();
-}
 
 static void z_erofs_decompress_kickoff(struct z_erofs_decompressqueue *io,
 				       int bios)
@@ -1443,10 +1434,16 @@ static void z_erofs_decompress_kickoff(struct z_erofs_decompressqueue *io,
 
 	if (atomic_add_return(bios, &io->pending_bios))
 		return;
+<<<<<<< HEAD   (ee9c8fd574f1b2c93cfc74b74b6f3a0d78a5e3a0 Merge 4b200e0c9c33 ("KVM: x86: Add dedicated API for getting)
 	if (z_erofs_in_atomic()) {
 		/* See `sync_decompress` in sysfs-fs-erofs for more details */
 		if (sbi->sync_decompress == EROFS_SYNC_DECOMPRESS_AUTO)
 			sbi->sync_decompress = EROFS_SYNC_DECOMPRESS_FORCE_ON;
+||||||| BASE   (b407fa25ed74c1b04217af9d9a1de7ac93e4e64c FROMGIT: HID: vivaldi: avoid redundant feature report reads )
+	if (z_erofs_in_atomic()) {
+=======
+	if (bio_in_atomic()) {
+>>>>>>> BRANCH (7f6781b88960dc2f0e4090d0d4eaeb2465de371a FROMGIT: virtio_blk: use synchronous quiesce in virtblk_free)
 #ifdef CONFIG_EROFS_FS_PCPU_KTHREAD
 		struct kthread_worker *worker;
 

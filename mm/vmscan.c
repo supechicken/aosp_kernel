@@ -2038,7 +2038,7 @@ static bool too_many_isolated(struct pglist_data *pgdat, int file,
  * Returns the number of pages moved to the given lruvec.
  */
 static unsigned int move_folios_to_lru(struct lruvec *lruvec,
-		struct list_head *list)
+		struct list_head *list, bool do_rotate)
 {
 	int nr_pages, nr_moved = 0;
 	struct folio_batch free_folios;
@@ -2088,7 +2088,20 @@ static unsigned int move_folios_to_lru(struct lruvec *lruvec,
 		 * inhibits memcg migration).
 		 */
 		VM_BUG_ON_FOLIO(!folio_matches_lruvec(folio, lruvec), folio);
-		lruvec_add_folio(lruvec, folio);
+
+		/*
+		 * Put clean, unreferenced and unpinned folios that may have
+		 * missed folio_rotate_reclaimable() at the tail to avoid
+		 * cold/hot inversion.
+		 */
+		if (do_rotate && !folio_test_active(folio) && !folio_mapped(folio) &&
+		    !folio_test_dirty(folio) && !folio_test_writeback(folio) &&
+		    !folio_test_referenced(folio) &&
+		    folio_ref_count(folio) == folio_expected_ref_count(folio))
+			lruvec_add_folio_tail(lruvec, folio);
+		else
+			lruvec_add_folio(lruvec, folio);
+
 		nr_pages = folio_nr_pages(folio);
 		nr_moved += nr_pages;
 		if (folio_test_active(folio))
@@ -2169,7 +2182,7 @@ static unsigned long shrink_inactive_list(unsigned long nr_to_scan,
 					 lruvec_memcg(lruvec));
 
 	spin_lock_irq(&lruvec->lru_lock);
-	move_folios_to_lru(lruvec, &folio_list);
+	move_folios_to_lru(lruvec, &folio_list, true);
 
 	__mod_lruvec_state(lruvec, PGDEMOTE_KSWAPD + reclaimer_offset(sc),
 					stat.nr_demoted);
@@ -2340,8 +2353,8 @@ skip_folio_referenced:
 	 */
 	spin_lock_irq(&lruvec->lru_lock);
 
-	nr_activate = move_folios_to_lru(lruvec, &l_active);
-	nr_deactivate = move_folios_to_lru(lruvec, &l_inactive);
+	nr_activate = move_folios_to_lru(lruvec, &l_active, false);
+	nr_deactivate = move_folios_to_lru(lruvec, &l_inactive, false);
 
 	__count_vm_events(PGDEACTIVATE, nr_deactivate);
 	count_memcg_events(lruvec_memcg(lruvec), PGDEACTIVATE, nr_deactivate);
@@ -4944,7 +4957,7 @@ retry:
 
 	spin_lock_irq(&lruvec->lru_lock);
 
-	move_folios_to_lru(lruvec, &list);
+	move_folios_to_lru(lruvec, &list, false);
 
 	walk = current->reclaim_state->mm_walk;
 	if (walk && walk->batched) {

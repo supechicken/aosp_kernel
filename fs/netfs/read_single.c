@@ -101,7 +101,28 @@ static int netfs_single_dispatch_read(struct netfs_io_request *rreq)
 	subreq->len	= rreq->len;
 	subreq->io_iter	= rreq->buffer.iter;
 
+<<<<<<< HEAD   (ee9c8fd574f1b2c93cfc74b74b6f3a0d78a5e3a0 Merge 4b200e0c9c33 ("KVM: x86: Add dedicated API for getting)
 	netfs_queue_read(rreq, subreq);
+||||||| BASE   (b407fa25ed74c1b04217af9d9a1de7ac93e4e64c FROMGIT: HID: vivaldi: avoid redundant feature report reads )
+	__set_bit(NETFS_SREQ_IN_PROGRESS, &subreq->flags);
+
+	spin_lock(&rreq->lock);
+	list_add_tail(&subreq->rreq_link, &stream->subrequests);
+	trace_netfs_sreq(subreq, netfs_sreq_trace_added);
+	stream->front = subreq;
+	/* Store list pointers before active flag */
+	smp_store_release(&stream->active, true);
+	spin_unlock(&rreq->lock);
+=======
+	__set_bit(NETFS_SREQ_IN_PROGRESS, &subreq->flags);
+
+	spin_lock(&rreq->lock);
+	list_add_tail(&subreq->rreq_link, &stream->subrequests);
+	trace_netfs_sreq(subreq, netfs_sreq_trace_added);
+	/* Store list pointers before active flag */
+	smp_store_release(&stream->active, true);
+	spin_unlock(&rreq->lock);
+>>>>>>> BRANCH (7f6781b88960dc2f0e4090d0d4eaeb2465de371a FROMGIT: virtio_blk: use synchronous quiesce in virtblk_free)
 
 	netfs_single_cache_prepare_read(rreq, subreq);
 	switch (subreq->source) {
