@@ -1240,8 +1240,14 @@ int f2fs_truncate_partial_cluster(struct inode *inode, u64 from, bool lock)
 		int i;
 
 		for (i = cluster_size - 1; i >= 0; i--) {
+<<<<<<< HEAD   (6bc0f533f17a1eff8941f0009e759eee80086cf7 Merge android16-6.12 into android16-6.12-lts)
 			struct folio *folio = page_folio(rpages[i]);
 			loff_t start = folio->index << PAGE_SHIFT;
+||||||| BASE   (7475d784169c7df48b0c55525fb862e06674d63c Linux 6.12.58)
+			loff_t start = rpages[i]->index << PAGE_SHIFT;
+=======
+			loff_t start = (loff_t)rpages[i]->index << PAGE_SHIFT;
+>>>>>>> BRANCH (cf23d531a9d496863aa4c5a0e2f71f0a23f3df3c netfilter: nf_tables: reject duplicate device on updates)
 
 			if (from <= start) {
 				folio_zero_segment(folio, 0, folio_size(folio));
