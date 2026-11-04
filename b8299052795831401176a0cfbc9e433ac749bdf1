@@ -73,6 +73,25 @@
       "isAi": true,
       "revId": "b8299052795831401176a0cfbc9e433ac749bdf1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47f61da4_cc5a2956",
+        "filename": "mm/p3s/memory.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1499410
+      },
+      "writtenOn": "2026-11-04T19:28:23Z",
+      "side": 1,
+      "message": "Thanks, the clipping in aosp/4414007 fixes the edge faults, and returning `VM_FAULT_NOPAGE` on the page table races in aosp/4414008 looks right to me too.\n\nWe\u0027d like to submit the core patches of this topic ahead of the b17 and b18 topics, though, and on its own this patch still returns `VM_FAULT_SIGBUS` whenever the window of the faulting slice crosses `vm_start` or `vm_end`, e.g. on the last 4KB of a 20KB udmabuf mapping. Would you mind folding aosp/4414007 and aosp/4414008 into this patch? Both only change `p3s_insert_pfn_prot()`, and I checked that they cherry-pick cleanly onto this patch set and that `mm/memory.o` then builds in the 16k-p3s and 4k-native configs. That would also make their `Fixes: b82990527958` tags unnecessary: b82990527958 is PS2 of this patch, so that SHA won\u0027t exist once it is submitted.\n\nCould the subject and commit message then describe the clipped window, rather than \"complete PFNs\" and \"all four PTEs\"? Keeping `SIGBUS` for a partly populated or wrong-frame window looks fine to me, since as far as I can see nothing in GKI leaves part of a window in one VMA mapped.",
+      "parentUuid": "9e8231c9_c39ee947",
+      "isAi": true,
+      "revId": "b8299052795831401176a0cfbc9e433ac749bdf1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
