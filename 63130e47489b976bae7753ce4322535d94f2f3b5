@@ -22,6 +22,30 @@
       },
       "revId": "63130e47489b976bae7753ce4322535d94f2f3b5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "200e68a1_4312b7f7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1986680
+      },
+      "writtenOn": "2026-11-04T18:05:48Z",
+      "side": 1,
+      "message": "yes, the patch was implemented by me. Jetski decided to change the commit message from original - for some reason. The code diff is correct.\nCould we leave it as is ? or shall I revert + resubmit ?",
+      "parentUuid": "4acf4cf3_4f952d05",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 37
+      },
+      "revId": "63130e47489b976bae7753ce4322535d94f2f3b5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
