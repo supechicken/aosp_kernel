@@ -17,6 +17,25 @@
       "isAi": true,
       "revId": "83506bb292fd535d50931936ffa16af427fc97a8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba4862ba_bd4e8a4e",
+        "filename": "sound/core/pcm_native.c",
+        "patchSetId": 43
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1710792
+      },
+      "writtenOn": "2026-11-04T18:00:04Z",
+      "side": 1,
+      "message": "Done, dropped the include.",
+      "parentUuid": "a7d5b0bd_c0859ad4",
+      "isAi": true,
+      "revId": "83506bb292fd535d50931936ffa16af427fc97a8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
