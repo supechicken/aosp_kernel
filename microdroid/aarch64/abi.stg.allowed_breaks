@@ -1,0 +1,4 @@
+type 'struct task_struct' changed
+  member 'u64 __kabi_reserved1' was removed
+  member 'union { void* proxy_futex_task_ext; struct { u64 __kabi_reserved1; }; union { }; }' was added
+
