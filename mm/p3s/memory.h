@@ -38,33 +38,32 @@ static inline int p3s_remap_pfn_range_size(struct vm_area_struct *vma,
 	return 0;
 }
 
-/* Insert a complete native PFN or verify an already-complete quartet. */
+/* Insert or verify the slices of a native PFN that lie in this VMA. */
 static inline vm_fault_t p3s_insert_pfn_prot(struct vm_area_struct *vma,
 					      unsigned long addr,
 					      unsigned long pfn,
 					      pgprot_t prot)
 {
 	struct mm_struct *mm = vma->vm_mm;
-	unsigned long offset = (unsigned long)vma_slice_offset(vma, addr) <<
-			       PAGE_SHIFT_4KB;
-	unsigned long first;
-	unsigned int first_count, present = 0, i;
+	unsigned long offset, first, end;
+	unsigned int first_slice, count, first_count, present = 0, i;
 	spinlock_t *ptl[2], *low_ptl, *high_ptl;
 	pte_t *table[2], *pte;
 	pmd_t *pmd[2], pmdval[2];
 	vm_fault_t ret = VM_FAULT_SIGBUS;
 	bool split;
 
-	/* A partial window cannot satisfy the all-four-slices contract. */
-	if (addr - vma->vm_start < offset)
-		return VM_FAULT_SIGBUS;
-	first = addr - offset;
-	if (vma->vm_end - first < PAGE_SIZE_KERNEL)
-		return VM_FAULT_SIGBUS;
-	first_count = min_t(unsigned int, P3S_SLICES_PER_PAGE,
+	/* Clip the native PFN window to the VMA at either edge. */
+	addr &= PAGE_MASK_4KB;
+	offset = (unsigned long)vma_slice_offset(vma, addr) << PAGE_SHIFT_4KB;
+	first = addr - min(offset, addr - vma->vm_start);
+	end = addr + min(PAGE_SIZE_KERNEL - offset, vma->vm_end - addr);
+	first_slice = vma_slice_offset(vma, first);
+	count = (end - first) >> PAGE_SHIFT_4KB;
+	first_count = min_t(unsigned int, count,
 		(PMD_SIZE_4KB - (first & (PMD_SIZE_4KB - 1))) >>
 		PAGE_SHIFT_4KB);
-	split = first_count != P3S_SLICES_PER_PAGE;
+	split = first_count != count;
 
 	table[0] = get_locked_pte(mm, first, &ptl[0]);
 	if (!table[0])
@@ -107,7 +106,7 @@ static inline vm_fault_t p3s_insert_pfn_prot(struct vm_area_struct *vma,
 	}
 
 	/* Preflight under the PTE lock(s): never fill a partial/wrong map. */
-	for (i = 0; i < P3S_SLICES_PER_PAGE; i++) {
+	for (i = 0; i < count; i++) {
 		pte_t entry;
 
 		pte = i < first_count ? table[0] + i :
@@ -117,21 +116,23 @@ static inline vm_fault_t p3s_insert_pfn_prot(struct vm_area_struct *vma,
 		if (pte_none(entry))
 			continue;
 		if (!pte_present(entry) ||
-		    __pte_to_phys(entry) != PFN_PHYS(pfn) + i * PAGE_SIZE_4KB)
+		    __pte_to_phys(entry) != PFN_PHYS(pfn) +
+					    (first_slice + i) * PAGE_SIZE_4KB)
 			goto out;
 		present++;
 	}
-	if (present == P3S_SLICES_PER_PAGE) {
+	if (present == count) {
 		ret = VM_FAULT_NOPAGE;
 		goto out;
 	}
 	if (present)
 		goto out;
 
-	for (i = 0; i < P3S_SLICES_PER_PAGE; i++) {
+	for (i = 0; i < count; i++) {
 		unsigned long page_addr = first + i * PAGE_SIZE_4KB;
 		pte_t entry = pte_mkspecial(mm_frame_pte(mm,
-				(pfn << P3S_SLICE_SHIFT) + i, prot));
+				(pfn << P3S_SLICE_SHIFT) + first_slice + i,
+				prot));
 
 		pte = i < first_count ? table[0] + i :
 					table[1] + i - first_count;
