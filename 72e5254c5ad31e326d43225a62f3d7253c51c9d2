@@ -1,0 +1,58 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df71892e_f4274c8d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1499410
+      },
+      "writtenOn": "2026-11-04T22:44:14Z",
+      "side": 1,
+      "message": "Nit: could the end of this paragraph avoid \"this change\"? Something like:\n\n```\nfaults, the window can mix frames. No application failure from\nthe old path has been reproduced; inserting the window in one fault\ngives an atomic native-PFN insertion contract and avoids the repeated\nfaults.\n```",
+      "isAi": true,
+      "revId": "72e5254c5ad31e326d43225a62f3d7253c51c9d2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17952229_1bca38d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1499410
+      },
+      "writtenOn": "2026-11-04T22:44:14Z",
+      "side": 1,
+      "message": "Since aosp/4414007 and aosp/4414008 are folded into this patch now, could you abandon them? They\u0027re still open, without a topic.",
+      "isAi": true,
+      "revId": "72e5254c5ad31e326d43225a62f3d7253c51c9d2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33fce65a_19ec9d04",
+        "filename": "mm/p3s/memory.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1499410
+      },
+      "writtenOn": "2026-11-04T22:44:14Z",
+      "side": 1,
+      "message": "Nit: checkpatch `--strict` flags four continuation lines in this function that don\u0027t line up with the open parenthesis: these parameters, the `min_t()` for `first_count`, and the two `pte_offset_map_rw_nolock()` calls. Would you mind aligning them? For example:\n\n```\nstatic inline vm_fault_t p3s_insert_pfn_prot(struct vm_area_struct *vma,\n\t\t\t\t\t     unsigned long addr,\n\t\t\t\t\t     unsigned long pfn,\n\t\t\t\t\t     pgprot_t prot)\n\n\tfirst_count \u003d min_t(unsigned int, count,\n\t\t\t    (PMD_SIZE_4KB - (first \u0026 (PMD_SIZE_4KB - 1))) \u003e\u003e\n\t\t\t    PAGE_SHIFT_4KB);\n\n\t\ttable[0] \u003d pte_offset_map_rw_nolock(mm, pmd[0], first,\n\t\t\t\t\t\t    \u0026pmdval[0], \u0026ptl[0]);\n```\n\nand the same for `table[1]`.",
+      "isAi": true,
+      "revId": "72e5254c5ad31e326d43225a62f3d7253c51c9d2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
