@@ -17,6 +17,25 @@
       "isAi": true,
       "revId": "6e67124b6ee854aefa228147d88b1da0071afa1e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ce2231b_ae64fa9c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 44
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1710792
+      },
+      "writtenOn": "2026-11-04T20:13:31Z",
+      "side": 1,
+      "message": "Done, moved the selftest patches into `p3s_6.18_selftests` so the core patches can be submitted on their own.",
+      "parentUuid": "8ecafe5f_397c9308",
+      "isAi": true,
+      "revId": "6e67124b6ee854aefa228147d88b1da0071afa1e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
