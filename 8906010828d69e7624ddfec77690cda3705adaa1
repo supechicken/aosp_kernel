@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6061792_fbab8eff",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1069543
+      },
+      "writtenOn": "2026-11-04T16:49:05Z",
+      "side": 1,
+      "message": "Cherry pick is not clean. Checked against cherry pick source. If the cherry-pick cannot be made clean, then please relabel the patch as BACKPORT and add an annotion explaining the changes made.\n\nSource commit: [googlesource](https://android.googlesource.com/kernel/common/+/65d466b6298470ce21ab21ebfdb51309d515737d).\n\nDifference between automated attempted cherry-pick and current commit.\n\n```\ndiff --git a/block/blk-mq-debugfs.c b/block/blk-mq-debugfs.c\nindex 681251090..168cbc609 100644\n--- a/block/blk-mq-debugfs.c\n+++ b/block/blk-mq-debugfs.c\n@@ -653,7 +653,7 @@ static void debugfs_create_files(struct request_queue *q, struct dentry *parent,\n \t * debugfs_mutex should not be nested under other locks that can be\n \t * grabbed while queue is frozen.\n \t */\n-\tlockdep_assert_not_held(\u0026q-\u003eelevator_lock);\n+\tlockdep_assert_not_held(\u0026q-\u003esysfs_lock);\n \tlockdep_assert_not_held(\u0026q-\u003erq_qos_mutex);\n \n \tif (IS_ERR_OR_NULL(parent))\n```\n\nPlease refer to the contribution guidelines for details:\nhttps://android.googlesource.com/kernel/common/+/refs/heads/android-mainline/README.md",
+      "revId": "8906010828d69e7624ddfec77690cda3705adaa1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
