@@ -16,6 +16,24 @@
       "message": "?",
       "revId": "b434937b3e245a1115eb4672340ba25f266054b0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7be886e2_b16af586",
+        "filename": "arch/x86/kvm/pkvm/pgtable.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 3702829
+      },
+      "writtenOn": "2026-11-04T19:26:03Z",
+      "side": 1,
+      "message": "This was to solve one of the issues found by AI review: hyp_mmu would panic pKVM as its flush_tlb callback BUG()s now:\n```\nstatic void hyp_mmu_flush_tlb(struct pkvm_pgtable *pgt,\n\t\t\t      unsigned long vaddr, unsigned long size)\n{\n\t/*\n\t * The pKVM hypervisor will map all valid memory in its MMU during the\n\t * init phase and won\u0027t change or unmap at the running time. So there is\n\t * no usages to change a present leaf in the hyp_mmu. Put a BUG here in\n\t * case anything is missed.\n\t */\n\tBUG();\n}\n```\n\nAnd hyp_mmu is the only one with flush_tlb_lazy \u003d false. This was the easiest way to address this and admittedly a hack and I missed adding comments around it. \n\nTo address this cleanly, we could probably add a flag in 1pkvm_pgtable_cap`. Something like this:\n```\ndiff --git a/arch/x86/kvm/pkvm/pgtable.c b/arch/x86/kvm/pkvm/pgtable.c\nindex 342a734af5a5..f6d173b7f6b4 100644\n--- a/arch/x86/kvm/pkvm/pgtable.c\n+++ b/arch/x86/kvm/pkvm/pgtable.c\n@@ -261,9 +261,6 @@ static void pgtable_try_coalesce_leaf(struct pkvm_pgtable_visit_ctx *ctx,\n \tif (!((1 \u003c\u003c ctx-\u003elevel) \u0026 ctx-\u003epgt-\u003ecap.allowed_pgsz))\n \t\treturn;\n \n-\tif (!ctx-\u003epgt-\u003ecap.flush_tlb_lazy)\n-\t\treturn;\n-\n \tchild \u003d __pkvm_va(pgt_ops-\u003epte_to_phys(ptep));\n \tentries \u003d pgt_ops-\u003epte_count(child_level);\n \n@@ -323,7 +320,7 @@ static int map_walker(struct pkvm_pgtable_visit_ctx *ctx, unsigned long walk_fla\n \tcase PKVM_PGTABLE_WALK_LEAF:\n \t\treturn __map_walker(ctx, data);\n \tcase PKVM_PGTABLE_WALK_TABLE_POST:\n-\t\tif (VALID_PAGE(data-\u003ephys))\n+\t\tif (ctx-\u003epgt-\u003ecap.coalesce_on_map \u0026\u0026 VALID_PAGE(data-\u003ephys))\n \t\t\tpgtable_try_coalesce_leaf(ctx, data);\n \t\treturn 0;\n \tcase PKVM_PGTABLE_WALK_TABLE_PRE:\ndiff --git a/arch/x86/kvm/pkvm/pgtable.h b/arch/x86/kvm/pkvm/pgtable.h\nindex e5ec4fc73643..41f1ca63e3a7 100644\n--- a/arch/x86/kvm/pkvm/pgtable.h\n+++ b/arch/x86/kvm/pkvm/pgtable.h\n@@ -84,6 +84,7 @@ struct pkvm_pgtable_cap {\n \tint allowed_pgsz;\n \tu64 table_prot;\n \tbool flush_tlb_lazy;\n+\tbool coalesce_on_map;\n };\n \n struct pkvm_pgtable {\ndiff --git a/arch/x86/kvm/pkvm/vmx/ept.c b/arch/x86/kvm/pkvm/vmx/ept.c\nindex d4cc6d05c459..9468a3468004 100644\n--- a/arch/x86/kvm/pkvm/vmx/ept.c\n+++ b/arch/x86/kvm/pkvm/vmx/ept.c\n@@ -328,6 +328,7 @@ int pkvm_host_ept_init(struct pkvm_pgtable *pgt, void *pool_base,\n \t\t.allowed_pgsz \u003d 1 \u003c\u003c PG_LEVEL_4K,\n \t\t.table_prot \u003d VMX_EPT_RWX_MASK,\n \t\t.flush_tlb_lazy \u003d true,\n+\t\t.coalesce_on_map \u003d true,\n \t};\n \tint ret;\n```\n\nWDYT?",
+      "parentUuid": "382ac1d6_ae4bf8ca",
+      "revId": "b434937b3e245a1115eb4672340ba25f266054b0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
