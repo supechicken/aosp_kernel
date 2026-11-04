@@ -127,6 +127,14 @@ static inline bool should_fail_futex(bool fshared)
 #endif
 
 /*
+ * This is a proxy/ping-specific structure that effectively
+ * extends the task_struct with minimial impact to the
+ * GKI KMI.
+ */
+struct proxy_futex_task_ext {
+};
+
+/*
  * Hash buckets are shared by all the futex_keys that hash to the same
  * location.  Each key may have multiple futex_q structures, one for each task
  * waiting on a futex.

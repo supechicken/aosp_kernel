@@ -1687,7 +1687,7 @@ struct task_struct {
 	 */
 	struct callback_head		l1d_flush_kill;
 #endif
-	ANDROID_KABI_RESERVE(1);
+	ANDROID_KABI_USE(1, void *proxy_futex_task_ext;);
 	ANDROID_KABI_RESERVE(2);
 	ANDROID_KABI_RESERVE(3);
 	ANDROID_KABI_RESERVE(4);

@@ -518,6 +518,7 @@ void free_task(struct task_struct *tsk)
 #endif
 	rt_mutex_debug_task_free(tsk);
 	ftrace_graph_exit_task(tsk);
+	futex_free_proxy_task_ext(tsk);
 	arch_release_task_struct(tsk);
 	if (tsk->flags & PF_KTHREAD)
 		free_kthread_struct(tsk);
@@ -893,6 +894,7 @@ static struct task_struct *dup_task_struct(struct task_struct *orig, int node)
 	if (err)
 		goto free_tsk;
 
+	tsk->proxy_futex_task_ext = NULL;
 	err = alloc_thread_stack_node(tsk, node);
 	if (err)
 		goto free_tsk;
@@ -2271,6 +2273,9 @@ __latent_entropy struct task_struct *copy_process(
 	p->plug = NULL;
 #endif
 	futex_init_task(p);
+	retval = futex_init_proxy_task_ext(p);
+	if (retval)
+		goto bad_fork_put_pidfd;
 
 	/*
 	 * sigaltstack should be cleared when sharing the same VM
