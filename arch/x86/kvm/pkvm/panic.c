@@ -7,31 +7,21 @@
 #include <asm/msr.h>
 #include <asm-generic/bug.h>
 #include "debug.h"
+#include "ecc.h"
 #include "pkvm.h"
 #include "memory.h"
-
-/*
- * NOTE: Both PERSISTENT_RAM_SIG and persistent_ram_buffer definition copied
- * from fs/pstore/ram_core.c
- */
-#define PERSISTENT_RAM_SIG (0x43474244) /* DBGC */
-
-struct persistent_ram_buffer {
-	uint32_t    sig;
-	atomic_t    start;
-	atomic_t    size;
-	uint8_t     data[];
-};
 
 static void pkvm_write_ramoops_console(const char *msg)
 {
 	struct persistent_ram_buffer *buffer;
+	struct pkvm_ramoops_ecc ecc;
 	size_t msg_len = strlen(msg);
 	size_t capacity;
 	u32 start, size;
 
 	/* Size check is sufficient; address validity is verified during init */
-	if (!pkvm_ramoops_console_size)
+	if (pkvm_ramoops_console_size <= sizeof(struct persistent_ram_buffer) ||
+	    !msg_len)
 		return;
 
 	buffer = __pkvm_va(pkvm_ramoops_console_pa);
@@ -43,12 +33,15 @@ static void pkvm_write_ramoops_console(const char *msg)
 	if (READ_ONCE(buffer->sig) != PERSISTENT_RAM_SIG)
 		return;
 
-	/*
-	 * The ramoops console uses the 'persistent_ram_buffer' ABI defined in
-	 * fs/pstore/ram_core.c. The buffer starts with a header:
-	 * [u32 sig] [u32 start] [u32 size] [raw data...]
-	 */
-	capacity = pkvm_ramoops_console_size - sizeof(struct persistent_ram_buffer);
+	if (pkvm_ramoops_ecc_init(&ecc, buffer, pkvm_ramoops_console_size,
+				  pkvm_ramoops_console_ecc_size))
+		return;
+	capacity = ecc.capacity;
+
+	if (msg_len > capacity) {
+		msg += msg_len - capacity;
+		msg_len = capacity;
+	}
 
 	/*
 	 * 'start' indicates where the host stopped logging. In the
@@ -63,19 +56,24 @@ static void pkvm_write_ramoops_console(const char *msg)
 
 	if (start >= capacity)
 		start = 0;
+	if (size > capacity)
+		size = capacity;
+	else if (size < capacity)
+		size = start;
 
 	/* Circular append logic */
 	if (start + msg_len <= capacity) {
 		memcpy(&buffer->data[start], msg, msg_len);
+		pkvm_ramoops_ecc_update_blocks(&ecc, start, msg_len);
 		start += msg_len;
 	} else {
 		size_t first_part = capacity - start;
 		size_t second_part = msg_len - first_part;
 
 		memcpy(&buffer->data[start], msg, first_part);
-		if (second_part > capacity)
-			second_part = capacity;
+		pkvm_ramoops_ecc_update_blocks(&ecc, start, first_part);
 		memcpy(&buffer->data[0], msg + first_part, second_part);
+		pkvm_ramoops_ecc_update_blocks(&ecc, 0, second_part);
 		start = second_part;
 	}
 
@@ -92,6 +90,7 @@ static void pkvm_write_ramoops_console(const char *msg)
 	/* Sync metadata so host pstore can find the new data after reboot */
 	atomic_set(&buffer->start, start);
 	atomic_set(&buffer->size, size);
+	pkvm_ramoops_ecc_update_header(&ecc);
 
 	/* Ensure data is visible in physical RAM before the hardware reset */
 	clflush_cache_range(buffer, pkvm_ramoops_console_size);

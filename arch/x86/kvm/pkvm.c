@@ -5,6 +5,7 @@
 #include <linux/memblock.h>
 #include <linux/module.h>
 #include <linux/sort.h>
+#include <asm/cmdline.h>
 #include <asm/e820/api.h>
 #include <asm/kvm_pkvm.h>
 
@@ -232,6 +233,46 @@ struct pkvm_ramoops_console_info {
 #define GOOG9999_RAMOOPS_DMESG_SIZE(total_size) \
 	((total_size) - GOOG9999_RAMOOPS_NON_DMESG_SIZE)
 
+#define PERSISTENT_RAM_ECC_DEFAULT_SIZE	16
+#define PERSISTENT_RAM_ECC_MAX_SIZE		16
+
+static int __init pkvm_parse_cmdline_int(const char *option, int *val)
+{
+	char buf[16];
+	int len;
+
+	len = cmdline_find_option(boot_command_line, option, buf, sizeof(buf));
+	if (len <= 0 || len >= sizeof(buf))
+		return -EINVAL;
+
+	return kstrtoint(buf, 0, val);
+}
+
+static unsigned int __init pkvm_get_ramoops_ecc_size(void)
+{
+	int ecc_size = -1;
+
+	/*
+	 * Match ramoops_probe() precedence: any non-negative ramoops.ecc
+	 * (including 0 to disable ECC) overrides chromeos_pstore.ecc_size.
+	 */
+	if (pkvm_parse_cmdline_int("ramoops.ecc", &ecc_size) < 0 || ecc_size < 0) {
+		if (pkvm_parse_cmdline_int("chromeos_pstore.ecc_size", &ecc_size) < 0)
+			ecc_size = 0;
+	}
+
+	if (ecc_size <= 0)
+		return 0;
+	if (ecc_size == 1)
+		ecc_size = PERSISTENT_RAM_ECC_DEFAULT_SIZE;
+	if (ecc_size > PERSISTENT_RAM_ECC_MAX_SIZE) {
+		pr_warn("pkvm: unsupported ramoops ecc_size %d\n", ecc_size);
+		return 0;
+	}
+
+	return ecc_size;
+}
+
 static void update_cros_ramoops_console_info(struct pkvm_ramoops_console_info *info,
 					     struct resource_entry *rentry)
 {
@@ -328,6 +369,7 @@ void __init pkvm_ramoops_init(void)
 
 		pkvm_sym(pkvm_ramoops_console_pa) = r_info.start;
 		pkvm_sym(pkvm_ramoops_console_size) = r_info.size;
+		pkvm_sym(pkvm_ramoops_console_ecc_size) = pkvm_get_ramoops_ecc_size();
 	}
 }
 
