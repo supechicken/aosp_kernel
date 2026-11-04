@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21db9ed8_be938967",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1572468
+      },
+      "writtenOn": "2026-11-04T17:02:29Z",
+      "side": 1,
+      "message": "bootconfig should be used instead as that is the upstream solution",
+      "revId": "5759cc91e19b77105f961c6cf6b3f483e68064f5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
