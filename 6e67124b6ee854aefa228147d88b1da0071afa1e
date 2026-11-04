@@ -1,0 +1,22 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ecafe5f_397c9308",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 44
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1499410
+      },
+      "writtenOn": "2026-11-04T19:25:44Z",
+      "side": 1,
+      "message": "Could you move the selftest patches in this topic, aosp/4410077 and aosp/4410078, into a separate topic, `p3s_6.18_selftests`, together with the other P3S selftest patches? Then the core patches here can be submitted on their own, and we can review the selftests as one batch.",
+      "isAi": true,
+      "revId": "6e67124b6ee854aefa228147d88b1da0071afa1e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
