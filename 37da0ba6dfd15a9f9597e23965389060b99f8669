@@ -22,6 +22,29 @@
       },
       "revId": "37da0ba6dfd15a9f9597e23965389060b99f8669",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62177c4a_147772fb",
+        "filename": "include/trace/hooks/mm.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1069543
+      },
+      "writtenOn": "2026-11-04T20:39:19Z",
+      "side": 1,
+      "message": "Please fix this ERROR reported by Conflict Markers: Complete set of conflict markers found. If this is a false alarm, add IGNORE_MER...\n\nComplete set of conflict markers found. If this is a false alarm, add IGNORE_MERGE_CONFLICT_CHECK\u003d\u003d\u003creason\u003e to your commit message.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 277,
+        "endChar": 0
+      },
+      "revId": "37da0ba6dfd15a9f9597e23965389060b99f8669",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
