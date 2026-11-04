@@ -213,6 +213,39 @@ static void generate_file_content(char *content, size_t size)
 		content[i] = 32 + rand() % 95;
 }
 
+static inline bool is_rust_wrapfd(void)
+{
+	bool is_rust = false;
+	char *line = NULL;
+	size_t len = 0;
+	FILE *fp;
+
+	if (access("/dev/wrapfd", F_OK))
+		return false;
+
+	fp = popen("zcat /proc/config.gz", "r");
+	if (!fp)
+		return false;
+
+	while (getline(&line, &len, fp) != -1) {
+		if (!strcmp(line, "CONFIG_ANDROID_WRAPFD=y\n")) {
+			is_rust = true;
+			break;
+		}
+	}
+
+	free(line);
+	pclose(fp);
+	return is_rust;
+}
+
+#define SKIP_IF_RUST_WRAPFD()						\
+	do {								\
+		if (is_rust_wrapfd())					\
+			SKIP(return,					\
+			     "Skipping test as Rust wrapfd driver is in use"); \
+	} while (0)
+
 FIXTURE(wrapfd_tests)
 {
 	size_t page_size;
@@ -1329,6 +1362,8 @@ TEST_F(wrapfd_tests, repopulate)
 	char *ptr;
 	pid_t pid;
 
+	SKIP_IF_RUST_WRAPFD();
+
 	small_fd = dmabuf_heap_alloc(heap_fd, self->page_size, O_RDWR);
 	ASSERT_TRUE(small_fd >= 0);
 	large_fd = dmabuf_heap_alloc(heap_fd, large_size, O_RDWR);
@@ -2000,6 +2035,8 @@ TEST_F(wrapfd_tests, poll_ioctls)
 	__u64 count = 0;
 	char *ptr;
 
+	SKIP_IF_RUST_WRAPFD();
+
 	wrapfd1 = wrapfd_wrap(self->dev_fd, dmabuf_fd, PROT_READ | PROT_WRITE);
 	ASSERT_TRUE(wrapfd1 >= 0);
 	wrapfd2 = wrapfd_wrap(self->dev_fd, dmabuf_fd, PROT_READ | PROT_WRITE);
@@ -2191,6 +2228,8 @@ TEST_F(wrapfd_tests, poll)
 	__u64 last_ts = 0;
 	__u64 count = 0;
 	char *ptr1, *ptr2;
+
+	SKIP_IF_RUST_WRAPFD();
 
 	wrapfd1 = wrapfd_wrap(self->dev_fd, self->dmabuf_fd, PROT_READ | PROT_WRITE);
 	ASSERT_TRUE(wrapfd1 >= 0);
