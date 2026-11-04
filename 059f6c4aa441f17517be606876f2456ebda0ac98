@@ -1,0 +1,40 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a75c5f53_21aa6b52",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 45
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1499410
+      },
+      "writtenOn": "2026-11-04T17:30:03Z",
+      "side": 1,
+      "message": "Nit: this line is 74 columns. Would you mind rewrapping the paragraph at 72? For example:\n\n```\nLimit a 4KB process to the requested DMA allocation size rounded up to\n4KB. The allocation can own additional padding up to a native 16KB\nboundary, but do not expose that extra range to a 4KB VMA. This is a\nconservative bounds policy, not a fix for an observed application\nfailure. For example, an 8193-byte object permits 12288 bytes, not\n16384 bytes.\n```",
+      "isAi": true,
+      "revId": "059f6c4aa441f17517be606876f2456ebda0ac98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79021d79_b201dd87",
+        "filename": "include/linux/p3s/vma.h",
+        "patchSetId": 45
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1499410
+      },
+      "writtenOn": "2026-11-04T17:30:03Z",
+      "side": 1,
+      "message": "It looks like `p3s_vm_iomap_memory()` from aosp/4368009 open-codes the same 4KB bound:\n\n```\n\taligned_len \u003d PAGE_ALIGN_4KB(len);\n\tif (offset \u003e aligned_len || vm_len \u003e aligned_len - offset)\n\t\treturn -EINVAL;\n```\n\nWould it make sense for it to call this helper instead, so that both 4KB bounds share one definition? Something like:\n\n```\n\tif (start + len \u003c start || vma_exceeds_object(vma, len))\n\t\treturn -EINVAL;\n```\n\nAs far as I can see the two checks agree for every VMA, since `vm_len` is never 0. That would mean adding the helper in aosp/4368009, or switching `p3s_vm_iomap_memory()` over in this patch, whichever you prefer.\n\nThe comment could then describe the check rather than the DMA caller, e.g.:\n\n```\n/*\n * vma_exceeds_object - Check if a 4KB VMA maps past the end of an object\n * @vma: Pointer to struct vm_area_struct\n * @size: Size of the object in bytes\n *\n * A 4KB VMA may map from vma_file_offset() up to @size rounded up to 4KB,\n * but not the padding after it in the last kernel page. Always false for\n * native VMAs, whose callers keep their kernel page bounds.\n */\n```",
+      "isAi": true,
+      "revId": "059f6c4aa441f17517be606876f2456ebda0ac98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
