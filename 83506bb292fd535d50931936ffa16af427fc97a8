@@ -1,0 +1,22 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7d5b0bd_c0859ad4",
+        "filename": "sound/core/pcm_native.c",
+        "patchSetId": 43
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1499410
+      },
+      "writtenOn": "2026-11-04T17:31:23Z",
+      "side": 1,
+      "message": "Nit: as on aosp/4368031, would it be OK to drop this include? I checked that it still builds without the include in the 16k-p3s, 4k-native, 16k-nop3s and x86_64 configs.",
+      "isAi": true,
+      "revId": "83506bb292fd535d50931936ffa16af427fc97a8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
