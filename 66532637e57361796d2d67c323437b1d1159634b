@@ -92,6 +92,40 @@
       ],
       "revId": "66532637e57361796d2d67c323437b1d1159634b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21dfed04_346a52ad",
+        "filename": "drivers/iommu/intel/pkvm/iommu_hc.c",
+        "patchSetId": 16
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-04T19:21:07Z",
+      "side": 1,
+      "message": "Can\u0027t we make `s1_cfg` a part of the `dmar_domain`, initialized at domain creation (like the host driver does), instead of initializing it here? Then no need to pass it to `intel_pasid_setup_nested()`, and thus less hackery needed in `intel_pasid_setup_nested()`?",
+      "revId": "66532637e57361796d2d67c323437b1d1159634b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7d9058d_04799d0c",
+        "filename": "drivers/iommu/intel/pkvm/iommu_hc.c",
+        "patchSetId": 16
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-04T19:21:07Z",
+      "side": 1,
+      "message": "Rather `domain-\u003eagaw`?",
+      "revId": "66532637e57361796d2d67c323437b1d1159634b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
