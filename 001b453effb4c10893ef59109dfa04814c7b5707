@@ -40,6 +40,25 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3fe5e82e_388849a0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 39
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1499410
+      },
+      "writtenOn": "2026-11-04T17:29:49Z",
+      "side": 1,
+      "message": "Thanks, the first paragraph now says what goes wrong with the bounds. Could the second one say it for an unaligned `start` too? I think \u0027so no separate physical-slice mapping loop is needed\u0027 also still refers to the loop of patch set 39, which isn\u0027t in this patch anymore. Maybe something like:\n\n```\nWhen start is not 16KB-aligned, vm_iomap_memory() maps the resource\nfrom the 16KB page that contains start, so a 4KB process finds it up to\n12KB after the offset it expects. No GKI caller needs that layout, so\nrefuse it in 4KB processes with a logged EOPNOTSUPP. Native processes\nretain the existing mapping semantics.\n```",
+      "parentUuid": "4602bab4_cbdc5ee2",
+      "isAi": true,
+      "revId": "001b453effb4c10893ef59109dfa04814c7b5707",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7b358eb1_82335617",
         "filename": "include/linux/mm.h",
         "patchSetId": 39
