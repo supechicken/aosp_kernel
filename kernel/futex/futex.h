@@ -8,6 +8,7 @@
 #include <linux/compat.h>
 #include <linux/uaccess.h>
 #include <linux/cleanup.h>
+#include <linux/android_kabi.h>
 
 #ifdef CONFIG_PREEMPT_RT
 #include <linux/rcuwait.h>
@@ -161,10 +162,11 @@ struct futex_pi_state {
 	/*
 	 * The PI object:
 	 */
-	union {
-		struct rt_mutex_base pi_mutex;
-		struct ping_mutex ping_mutex;
-	};
+	ANDROID_KABI_REPLACE(struct rt_mutex_base, pi_mutex,
+		union {
+			struct rt_mutex_base pi_mutex;
+			struct ping_mutex ping_mutex;
+		});
 
 	struct task_struct *owner;
 	refcount_t refcount;
