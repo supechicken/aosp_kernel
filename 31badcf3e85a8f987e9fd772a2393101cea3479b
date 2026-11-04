@@ -150,6 +150,57 @@
       ],
       "revId": "31badcf3e85a8f987e9fd772a2393101cea3479b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4207de68_b35ed734",
+        "filename": "drivers/iommu/intel/pkvm/iommu_hc.c",
+        "patchSetId": 16
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 3484945
+      },
+      "writtenOn": "2026-11-04T22:58:02Z",
+      "side": 1,
+      "message": "Please correct me if I am wrong but with nested translation pgd is owned by host, so we should not `domain_flush_cache()` in case of pkvm_nested?\n\nAlso earlier pgd was unconditionally validated by `pkvm_host_donate_hyp_share_ro` without checking `pkvm_nested` and now it reaches this point without any validation.",
+      "range": {
+        "startLine": 483,
+        "startChar": 1,
+        "endLine": 483,
+        "endChar": 48
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "3b1350d9_1ec0b9b0",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "drivers/iommu/intel/pkvm/iommu_hc.c",
+              "range": {
+                "startLine": 479,
+                "startChar": 0,
+                "endLine": 480,
+                "endChar": 0
+              },
+              "replacement": "\t\tif (!data-\u003epkvm_nested)\n\t\t\tpkvm_hyp_donate_host(__pkvm_pa(pgd), VTD_PAGE_SIZE, false);\n"
+            },
+            {
+              "path": "drivers/iommu/intel/pkvm/iommu_hc.c",
+              "range": {
+                "startLine": 483,
+                "startChar": 0,
+                "endLine": 484,
+                "endChar": 0
+              },
+              "replacement": "\tif (!data-\u003epkvm_nested)\n\t\tdomain_flush_cache(domain, pgd, VTD_PAGE_SIZE);\n"
+            }
+          ]
+        }
+      ],
+      "revId": "31badcf3e85a8f987e9fd772a2393101cea3479b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
