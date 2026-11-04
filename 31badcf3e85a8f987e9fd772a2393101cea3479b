@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5fa49679_4defeec0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-04T23:53:23Z",
+      "side": 1,
+      "message": "\u003e We need to add aosp/4017986 back to this series?\n\nAh sorry, I got confused. We don\u0027t need to add aosp/4017986 to this series for nested support, we already flush _2nd-stage_ IOMMU caches (for the host EPT use as 2nd-stage IOMMU) before any donation, in `host_ept_flush_tlb()` as a part of unmapping donated pages in the host EPT. So all good.\n\nBut it is actually this sentence \"We avoid the security risk of a malicious host not flushing the caches by making sure that IOMMU caches are flushed before any donation request from the host\" that confused me. What is this sentence talking about? It conflates 1st-stage caches managed by the host with 2nd-stage caches managed by pKVM? If the host doesn\u0027t flush its (1st-stage) caches, we just don\u0027t care, it\u0027s the host\u0027s problem, right?",
+      "parentUuid": "4970b139_a8e1ddc1",
+      "range": {
+        "startLine": 13,
+        "startChar": 24,
+        "endLine": 15,
+        "endChar": 42
+      },
+      "revId": "31badcf3e85a8f987e9fd772a2393101cea3479b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a482953e_d732c629",
         "filename": "arch/x86/include/asm/kvm_pkvm.h",
         "patchSetId": 16
