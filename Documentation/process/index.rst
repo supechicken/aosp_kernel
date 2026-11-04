@@ -68,7 +68,13 @@ beyond).
    stable-kernel-rules
    management-style
    researcher-guidelines
+<<<<<<< HEAD   (98ce85c5ffd4f7cb74248d35c419777fcd87de89 Merge 9f722cb7304f ("Merge tag 'alpha-for-v7.0-tag' of git:/)
    conclave
+||||||| BASE   (9448598b22c50c8a5bb77a9103e2d49f134c9578 Linux 6.19-rc2)
+=======
+   generated-content
+   coding-assistants
+>>>>>>> BRANCH (6cc45ee5df3bd89c8fa62aa2be91f747938686a1 docs: kdoc: some fixes to kernel-doc comments)
 
 Dealing with bugs
 -----------------
