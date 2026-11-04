@@ -1410,6 +1410,23 @@ static void exit_pi_state_list(struct task_struct *curr)
 #else
 static inline void exit_pi_state_list(struct task_struct *curr) { }
 #endif
+int futex_init_proxy_task_ext(struct task_struct *tsk)
+{
+	struct proxy_futex_task_ext *ext;
+
+	ext = kzalloc(sizeof(*ext), GFP_KERNEL);
+	if (!ext)
+		return -ENOMEM;
+
+	tsk->proxy_futex_task_ext = ext;
+	return 0;
+}
+
+void futex_free_proxy_task_ext(struct task_struct *tsk)
+{
+	kfree(tsk->proxy_futex_task_ext);
+	tsk->proxy_futex_task_ext = NULL;
+}
 
 static void futex_cleanup(struct task_struct *tsk)
 {
