@@ -22,6 +22,30 @@
       },
       "revId": "31badcf3e85a8f987e9fd772a2393101cea3479b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4970b139_a8e1ddc1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-04T16:46:38Z",
+      "side": 1,
+      "message": "While we\u0027re at it, just in case: in the lazy mode series aosp/4017986 is applied on top of aosp/4090071 (\"ANDROID: pKVM: Decouple host and guest mmu lock in pkvm_host_donate_guest\") at the moment, but I think we should drop aosp/4090071 for now, because it is somewhat controversial, and certainly not required for nested translation support. Furthermore, I think it is not required for lazy mode support either, as I noted in aosp/4017991 (\"ANDROID: pKVM: iommu/vt-d: Remove the double page table walk on unmap\"):\n\n\u003e so, this patch is not required for lazy mode support per se, it is just an optional optimization? And at the same time, this patch (specifically, moving domain-\u003eflush_lock) is the only reason for the tricky changes in the donation API in aosp/4090071?\n\u003e \n\u003e Do we already have any reliable numbers of an actual perf improvement with this optimization?\n\u003e \n\u003e I\u0027m thinking maybe we should restrain from adding this optimization, and thus avoid the need for aosp/4090071.",
+      "parentUuid": "1017cfad_97d381ed",
+      "range": {
+        "startLine": 13,
+        "startChar": 24,
+        "endLine": 15,
+        "endChar": 42
+      },
+      "revId": "31badcf3e85a8f987e9fd772a2393101cea3479b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
