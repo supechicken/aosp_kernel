@@ -46,6 +46,30 @@
       },
       "revId": "63130e47489b976bae7753ce4322535d94f2f3b5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42332207_7c056f78",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1869395
+      },
+      "writtenOn": "2026-11-04T18:42:44Z",
+      "side": 1,
+      "message": "Leave it as is would be fine by me. However, feel free to reapply if you want to. The \"real\" upstream commit should eventually land via LTS merge anyway.",
+      "parentUuid": "200e68a1_4312b7f7",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 37
+      },
+      "revId": "63130e47489b976bae7753ce4322535d94f2f3b5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
