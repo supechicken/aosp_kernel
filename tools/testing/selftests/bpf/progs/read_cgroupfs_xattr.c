@@ -17,8 +17,14 @@ static const char expected_value_b[] = "bpf_selftest_value_b";
 bool found_value_a;
 bool found_value_b;
 
+<<<<<<< HEAD   (770ffb0a835c7a10e36595d03c2735887ca21d31 ANDROID: netfilter: xt_IDLETIMER: swap sock_i_uid() for sk_u)
 SEC("lsm.s/socket_connect")
 int BPF_PROG(test_socket_connect)
+||||||| BASE   (e34a79b96ab9d49ed8b605fee11099cf3efbb428 Merge tag 'net-6.16-rc4' of git://git.kernel.org/pub/scm/lin)
+=======
+SEC("lsm.s/file_open")
+int BPF_PROG(test_file_open)
+>>>>>>> BRANCH (876f5ebd58a9ac42f48a7ead3d5b274a314e0ace bpftool: Add support for dumping streams)
 {
 	u64 cgrp_id = bpf_get_current_cgroup_id();
 	struct cgroup_subsys_state *css, *tmp;
