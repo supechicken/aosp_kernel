@@ -1,0 +1,22 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9e2d1b1_84d56d5a",
+        "filename": "mm/p3s/memory.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1499410
+      },
+      "writtenOn": "2026-11-04T22:44:09Z",
+      "side": 1,
+      "message": "Nit: could this comment also mention the `vm_slice_off` refusal below? At the moment only the commit message explains it. For example:\n\n```\n * PTEs, so the failure path never has to zap beyond @vma.  Refuse a VMA\n * with a non-zero vm_slice_off too: callers that ignore it would map the\n * wrong physical slice.\n```",
+      "isAi": true,
+      "revId": "942607a1f5523803d412a3c18c59353e5ff7a0c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
