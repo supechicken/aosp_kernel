@@ -33,6 +33,42 @@
       "message": "Discussing in the bug",
       "revId": "7f479c35952239e2e95eba632ff159415b3d33ea",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a3c74b9_8c1f6f65",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1069543
+      },
+      "writtenOn": "2026-11-04T19:24:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "07745e32_62ae0d82",
+      "revId": "7f479c35952239e2e95eba632ff159415b3d33ea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66af7c28_3a47a68d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1069543
+      },
+      "writtenOn": "2026-11-04T19:24:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c6632d5c_a8454e25",
+      "revId": "7f479c35952239e2e95eba632ff159415b3d33ea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
