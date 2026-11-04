@@ -176,6 +176,30 @@
       },
       "revId": "1d8c984cf05dbf1ceddffb16f06952ac5037356a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef0623ae_f3c82b20",
+        "filename": "include/linux/mm_types.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1255,
+      "author": {
+        "id": 1499410
+      },
+      "writtenOn": "2026-11-04T16:57:22Z",
+      "side": 1,
+      "message": "b/581715912 FYI",
+      "parentUuid": "dab8f038_97754680",
+      "range": {
+        "startLine": 1252,
+        "startChar": 0,
+        "endLine": 1255,
+        "endChar": 6
+      },
+      "revId": "1d8c984cf05dbf1ceddffb16f06952ac5037356a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
