@@ -36,6 +36,25 @@
       "isAi": true,
       "revId": "4480c35a745ff5e5a409a8f572f1651077826213",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9824a6f_48be8c39",
+        "filename": "net/xdp/xdp_umem.c",
+        "patchSetId": 38
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1499410
+      },
+      "writtenOn": "2026-11-04T17:30:53Z",
+      "side": 1,
+      "message": "Thanks, refusing `XDP_UMEM_REG` up front with `p3s_4k_unsupported()` looks good to me.\n\nNit: would you mind also dropping the new `mm` local, so that `mmap_read_lock()` and `mmap_read_unlock()` keep `current-\u003emm` as upstream has them? The check on its own would be:\n\n```\n\tif (p3s_4k_unsupported(current-\u003emm))\n\t\treturn -EOPNOTSUPP;\n```\n\nThat way the patch only adds the check to `xdp_umem_pin_pages()`, and upstream changes to the pinning lines won\u0027t conflict with it.",
+      "parentUuid": "46c833f8_059f9762",
+      "isAi": true,
+      "revId": "4480c35a745ff5e5a409a8f572f1651077826213",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }

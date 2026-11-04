@@ -1,0 +1,22 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10f715bb_2d32d327",
+        "filename": "net/xdp/xdp_umem.c",
+        "patchSetId": 44
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1499410
+      },
+      "writtenOn": "2026-11-04T17:30:53Z",
+      "side": 1,
+      "message": "Nit: as on aosp/4368031, would it be OK to drop this include? I checked that it still builds without the include in the 16k-p3s, 4k-native, 16k-nop3s and x86_64 configs.",
+      "isAi": true,
+      "revId": "67d6ad033dca3ab1245f2534cdd075742a8248a1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
