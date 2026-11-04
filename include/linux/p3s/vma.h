@@ -314,11 +314,12 @@ static inline loff_t vma_file_offset_at(const struct vm_area_struct *vma,
  * @vma: Pointer to struct vm_area_struct
  *
  * A 4KB compatibility VMA can start at any slice of a kernel page, so
- * count its pages from slice 0 of the first kernel page. A macro, as
- * vma_pages() is defined after this header is included.
+ * count its pages from slice 0 of the first kernel page. A macro, so that
+ * it uses the slice helpers of the including translation unit.
  */
 #define vma_kernel_pages(vma)						\
-	mm_kernel_pages((vma)->vm_mm, vma_slice_off(vma) + vma_pages(vma))
+	mm_kernel_pages((vma)->vm_mm, vma_slice_off(vma) +		\
+			(vma_size(vma) >> mm_pte_shift((vma)->vm_mm)))
 
 /*
  * vma_linear_page_index - Page offset that @addr maps

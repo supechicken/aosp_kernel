@@ -2516,6 +2516,12 @@ static int __mmap_new_file_vma(struct mmap_state *map,
 	/* Drivers cannot alter the address of the VMA. */
 	WARN_ON_ONCE(map->addr != vma->vm_start);
 	/*
+	 * A driver that rewrites vm_pgoff of a 4KB VMA leaves its subpage
+	 * slice offset behind, which no longer matches the new offset.
+	 */
+	VM_WARN_ON_ONCE(vma_is_p3s_4k(vma) && vma_slice_off(vma) &&
+			vma->vm_pgoff != map->pgoff);
+	/*
 	 * Drivers should not permit writability when previously it was
 	 * disallowed.
 	 */

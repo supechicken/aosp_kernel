@@ -3660,6 +3660,12 @@ static inline unsigned long vm_end_gap(const struct vm_area_struct *vma)
 
 static inline unsigned long vma_pages(const struct vm_area_struct *vma)
 {
+	/*
+	 * A 4KB VMA has 4KB pages, but callers outside the P3S opt-in
+	 * translation units index native pages: they should use
+	 * vma_kernel_pages() or vma_size() instead.
+	 */
+	VM_WARN_ON_ONCE(vma_is_p3s_4k(vma));
 	return (vma->vm_end - vma->vm_start) >> mm_pte_shift(vma->vm_mm);
 }
 
