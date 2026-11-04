@@ -34,6 +34,23 @@
       "parentUuid": "ec46bcf3_a5719cf4",
       "revId": "4f11cff8e821a7739d3bb1b4bf13f25dc11a424c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67d07268_0ebbd47c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1981633
+      },
+      "writtenOn": "2026-11-04T23:23:00Z",
+      "side": 1,
+      "message": "ABI warning, does this need to be re-generated (perhaps generated prior to the kmi thaw)? \n\n```\n...\nbuild/kernel/abi_compliance.sh \"out/prebuilt_cached/artifacts/kernel_aarch64\" \"out/prebuilt_cached/artifacts/kernel_notrim_aarch64\" \"out/prebuilt_cached/artifacts/kernel_microdroid_aarch64\"\nERROR: ABI DIFFERENCES HAVE BEEN DETECTED!\nERROR: From out/prebuilt_cached/artifacts/kernel_aarch64/abi_stgdiff/abi.report.short:\n\nfunction symbol \u0027int __hid_report_raw_event(struct hid_device*, enum hid_report_type, u8*, size_t, u32, int)\u0027 changed\n  CRC changed from 0xf10c1f79 to 0x1c19e349\n\nfunction symbol \u0027void abort_creds(struct cred*)\u0027 changed\n  CRC changed from 0xc9a1d239 to 0x14d92884\n\nfunction symbol \u0027int follow_down(struct path*, unsigned int)\u0027 changed\n  CRC changed from 0x51d64a6c to 0xfeb77ee4\n\n... 31 omitted; 34 symbols have only CRC changes\n\nERROR: ABI DIFFERENCES HAVE BEEN DETECTED!\nERROR: From out/prebuilt_cached/artifacts/kernel_notrim_aarch64/abi_stgdiff/abi.report.short:\n\nfunction symbol \u0027int __hid_report_raw_event(struct hid_device*, enum hid_report_type, u8*, size_t, u32, int)\u0027 changed\n  CRC changed from 0xf10c1f79 to 0x1c19e349\n\nfunction symbol \u0027void abort_creds(struct cred*)\u0027 changed\n  CRC changed from 0xc9a1d239 to 0x14d92884\n\nfunction symbol \u0027int follow_down(struct path*, unsigned int)\u0027 changed\n  CRC changed from 0x51d64a6c to 0xfeb77ee4\n\n... 31 omitted; 34 symbols have only CRC changes\n```",
+      "revId": "4f11cff8e821a7739d3bb1b4bf13f25dc11a424c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
