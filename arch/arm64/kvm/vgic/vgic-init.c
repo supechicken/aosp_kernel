@@ -68,6 +68,8 @@ void kvm_vgic_early_init(struct kvm *kvm)
  */
 int kvm_vgic_create(struct kvm *kvm, u32 type)
 {
+	struct kvm_vcpu *vcpu;
+	unsigned long i;
 	int ret;
 
 	/*
@@ -94,8 +96,10 @@ int kvm_vgic_create(struct kvm *kvm, u32 type)
 		goto out_unlock;
 	}
 
-	if (kvm_id_regs_final(kvm))
-		goto out_unlock;
+	kvm_for_each_vcpu(i, vcpu, kvm) {
+		if (vcpu_has_run_once(vcpu))
+			goto out_unlock;
+	}
 	ret = 0;
 
 	if (type == KVM_DEV_TYPE_ARM_VGIC_V2)
