@@ -88,6 +88,24 @@
       "parentUuid": "525f5a29_8cde4a5f",
       "revId": "b434937b3e245a1115eb4672340ba25f266054b0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0df1e83e_e54d0479",
+        "filename": "arch/x86/kvm/pkvm/pgtable.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 3702829
+      },
+      "writtenOn": "2026-11-04T20:15:21Z",
+      "side": 1,
+      "message": "\u003e Ah, no, coalescing actually requires TLB flushing in any case...\n\nYou beat me to it :-). Will implement the `coalesce_on_map` flag and test and resend soon",
+      "parentUuid": "c246e132_b5cc71d1",
+      "revId": "b434937b3e245a1115eb4672340ba25f266054b0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
