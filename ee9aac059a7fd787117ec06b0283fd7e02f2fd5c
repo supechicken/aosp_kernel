@@ -16,6 +16,24 @@
       "message": "Hi, all,\nIt seems some wrong with Treehugger Robot?",
       "revId": "ee9aac059a7fd787117ec06b0283fd7e02f2fd5c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27101615_79d61bdc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1930620
+      },
+      "writtenOn": "2026-11-04T15:45:43Z",
+      "side": 1,
+      "message": "Yeah, 6.12 testing has been busted for the last couple of days. Parts have already been fixed, but apparently there are still AVF issues. This might pass now, so I\u0027ll rerun.",
+      "parentUuid": "fa9da40d_ceab3c3e",
+      "revId": "ee9aac059a7fd787117ec06b0283fd7e02f2fd5c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
