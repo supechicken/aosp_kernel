@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec46bcf3_a5719cf4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1945845
+      },
+      "writtenOn": "2026-11-04T22:44:04Z",
+      "side": 1,
+      "message": "Neil, any objections to adding these symbols?",
+      "revId": "4f11cff8e821a7739d3bb1b4bf13f25dc11a424c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
