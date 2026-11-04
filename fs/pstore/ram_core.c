@@ -22,22 +22,10 @@
 
 #include "ram_internal.h"
 
-/**
- * struct persistent_ram_buffer - persistent circular RAM buffer
- *
- * @sig: Signature to indicate header (PERSISTENT_RAM_SIG xor PRZ-type value)
- * @start: First valid byte in the buffer.
- * @size: Number of valid bytes in the buffer.
- * @data: The contents of the buffer.
- */
-struct persistent_ram_buffer {
-	uint32_t    sig;
-	atomic_t    start;
-	atomic_t    size;
-	uint8_t     data[];
-};
-
-#define PERSISTENT_RAM_SIG (0x43474244) /* DBGC */
+#ifdef __PKVM_HYP__
+#undef memcpy_toio
+#define memcpy_toio(dst, src, count) memcpy((void __force *)(dst), (src), (count))
+#endif
 
 static inline size_t buffer_size(struct persistent_ram_zone *prz)
 {
@@ -54,10 +42,12 @@ static size_t buffer_start_add(struct persistent_ram_zone *prz, size_t a)
 {
 	int old;
 	int new;
+#ifndef __PKVM_HYP__
 	unsigned long flags = 0;
 
 	if (!(prz->flags & PRZ_FLAG_NO_LOCK))
 		raw_spin_lock_irqsave(&prz->buffer_lock, flags);
+#endif
 
 	old = atomic_read(&prz->buffer->start);
 	new = old + a;
@@ -65,8 +55,10 @@ static size_t buffer_start_add(struct persistent_ram_zone *prz, size_t a)
 		new -= prz->buffer_size;
 	atomic_set(&prz->buffer->start, new);
 
+#ifndef __PKVM_HYP__
 	if (!(prz->flags & PRZ_FLAG_NO_LOCK))
 		raw_spin_unlock_irqrestore(&prz->buffer_lock, flags);
+#endif
 
 	return old;
 }
@@ -76,10 +68,12 @@ static void buffer_size_add(struct persistent_ram_zone *prz, size_t a)
 {
 	size_t old;
 	size_t new;
+#ifndef __PKVM_HYP__
 	unsigned long flags = 0;
 
 	if (!(prz->flags & PRZ_FLAG_NO_LOCK))
 		raw_spin_lock_irqsave(&prz->buffer_lock, flags);
+#endif
 
 	old = atomic_read(&prz->buffer->size);
 	if (old == prz->buffer_size)
@@ -91,8 +85,11 @@ static void buffer_size_add(struct persistent_ram_zone *prz, size_t a)
 	atomic_set(&prz->buffer->size, new);
 
 exit:
+#ifndef __PKVM_HYP__
 	if (!(prz->flags & PRZ_FLAG_NO_LOCK))
 		raw_spin_unlock_irqrestore(&prz->buffer_lock, flags);
+#endif
+	return;
 }
 
 static void notrace persistent_ram_encode_rs8(struct persistent_ram_zone *prz,
@@ -108,6 +105,7 @@ static void notrace persistent_ram_encode_rs8(struct persistent_ram_zone *prz,
 		ecc[i] = prz->ecc_info.par[i];
 }
 
+#ifndef __PKVM_HYP__
 static int persistent_ram_decode_rs8(struct persistent_ram_zone *prz,
 	void *data, size_t len, uint8_t *ecc)
 {
@@ -118,6 +116,7 @@ static int persistent_ram_decode_rs8(struct persistent_ram_zone *prz,
 	return decode_rs8(prz->rs_decoder, data, prz->ecc_info.par, len,
 				NULL, 0, NULL, 0, NULL);
 }
+#endif
 
 static void notrace persistent_ram_update_ecc(struct persistent_ram_zone *prz,
 	unsigned int start, unsigned int count)
@@ -156,6 +155,7 @@ static void persistent_ram_update_header_ecc(struct persistent_ram_zone *prz)
 				  prz->par_header);
 }
 
+#ifndef __PKVM_HYP__
 static void persistent_ram_ecc_old(struct persistent_ram_zone *prz)
 {
 	struct persistent_ram_buffer *buffer = prz->buffer;
@@ -184,38 +184,60 @@ static void persistent_ram_ecc_old(struct persistent_ram_zone *prz)
 		par += prz->ecc_info.ecc_size;
 	}
 }
+#endif
 
-static int persistent_ram_init_ecc(struct persistent_ram_zone *prz,
+int persistent_ram_init_ecc_layout(struct persistent_ram_zone *prz,
 				   struct persistent_ram_ecc_info *ecc_info)
 {
-	int numerr;
-	struct persistent_ram_buffer *buffer = prz->buffer;
+	struct persistent_ram_buffer *buffer;
 	size_t ecc_blocks;
 	size_t ecc_total;
+
+	if (!prz || !prz->buffer)
+		return -EINVAL;
 
 	if (!ecc_info || !ecc_info->ecc_size)
 		return 0;
 
+	buffer = prz->buffer;
 	prz->ecc_info.block_size = ecc_info->block_size ?: 128;
 	prz->ecc_info.ecc_size = ecc_info->ecc_size ?: 16;
 	prz->ecc_info.symsize = ecc_info->symsize ?: 8;
 	prz->ecc_info.poly = ecc_info->poly ?: 0x11d;
 
+	if (prz->buffer_size <= prz->ecc_info.ecc_size)
+		return -EINVAL;
+
 	ecc_blocks = DIV_ROUND_UP(prz->buffer_size - prz->ecc_info.ecc_size,
 				  prz->ecc_info.block_size +
 				  prz->ecc_info.ecc_size);
 	ecc_total = (ecc_blocks + 1) * prz->ecc_info.ecc_size;
-	if (ecc_total >= prz->buffer_size) {
-		pr_err("%s: invalid ecc_size %u (total %zu, buffer size %zu)\n",
-		       __func__, prz->ecc_info.ecc_size,
-		       ecc_total, prz->buffer_size);
+	if (ecc_total >= prz->buffer_size)
 		return -EINVAL;
-	}
 
 	prz->buffer_size -= ecc_total;
 	prz->par_buffer = buffer->data + prz->buffer_size;
 	prz->par_header = prz->par_buffer +
 			  ecc_blocks * prz->ecc_info.ecc_size;
+
+	return 0;
+}
+
+#ifndef __PKVM_HYP__
+static int persistent_ram_init_ecc(struct persistent_ram_zone *prz,
+				   struct persistent_ram_ecc_info *ecc_info)
+{
+	int numerr;
+	struct persistent_ram_buffer *buffer = prz->buffer;
+
+	if (!ecc_info || !ecc_info->ecc_size)
+		return 0;
+
+	if (persistent_ram_init_ecc_layout(prz, ecc_info)) {
+		pr_err("%s: invalid ecc_size %u (buffer size %zu)\n",
+		       __func__, prz->ecc_info.ecc_size, prz->buffer_size);
+		return -EINVAL;
+	}
 
 	/*
 	 * first consecutive root is 0
@@ -270,6 +292,7 @@ ssize_t persistent_ram_ecc_string(struct persistent_ram_zone *prz,
 
 	return ret;
 }
+#endif
 
 static void notrace persistent_ram_update(struct persistent_ram_zone *prz,
 	const void *s, unsigned int start, unsigned int count)
@@ -279,6 +302,7 @@ static void notrace persistent_ram_update(struct persistent_ram_zone *prz,
 	persistent_ram_update_ecc(prz, start, count);
 }
 
+#ifndef __PKVM_HYP__
 static int notrace persistent_ram_update_user(struct persistent_ram_zone *prz,
 	const void __user *s, unsigned int start, unsigned int count)
 {
@@ -322,6 +346,7 @@ void persistent_ram_save_old(struct persistent_ram_zone *prz)
 	memcpy_fromio(prz->old_log, &buffer->data[start], size - start);
 	memcpy_fromio(prz->old_log + size - start, &buffer->data[0], start);
 }
+#endif
 
 int notrace persistent_ram_write(struct persistent_ram_zone *prz,
 	const void *s, unsigned int count)
@@ -353,6 +378,7 @@ int notrace persistent_ram_write(struct persistent_ram_zone *prz,
 	return count;
 }
 
+#ifndef __PKVM_HYP__
 int notrace persistent_ram_write_user(struct persistent_ram_zone *prz,
 	const void __user *s, unsigned int count)
 {
@@ -642,3 +668,4 @@ err:
 	persistent_ram_free(&prz);
 	return ERR_PTR(ret);
 }
+#endif

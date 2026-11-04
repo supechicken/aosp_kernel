@@ -22,6 +22,7 @@ pkvm-hyp-y			+= $(pkvm-lib)/find_bit.o $(pkvm-lib)/printf.o
 kernel-x86-lib			:= ../../lib
 pkvm-hyp-y			+= $(kernel-x86-lib)/memset_64.o
 pkvm-hyp-y			+= $(kernel-x86-lib)/memcpy_64.o
+pkvm-hyp-y			+= $(kernel-x86-lib)/memmove_64.o
 pkvm-hyp-y			+= $(kernel-x86-lib)/hweight.o
 
 pkvm-hyp-$(CONFIG_MITIGATION_RETPOLINE)	+= retpoline.o
@@ -35,7 +36,8 @@ quiet_cmd_patch_retpoline = PATCH_RETPOLINE $@
 kernel-lib			:= ../../../../lib
 pkvm-hyp-y			+= $(kernel-lib)/sort.o $(kernel-lib)/bsearch.o \
 				   $(kernel-lib)/extable.o $(kernel-lib)/string.o \
-				   $(kernel-lib)/ctype.o
+				   $(kernel-lib)/ctype.o \
+				   $(kernel-lib)/reed_solomon/reed_solomon.o
 pkvm-hyp-$(CONFIG_LIST_HARDENED) += $(kernel-lib)/list_debug.o
 
 CFLAGS_REMOVE_$(kernel-lib)/string.pkvm.o := -D__NO_FORTIFY
@@ -55,12 +57,16 @@ $(obj)/$(kvm)/vmx/vmenter.pkvm.o: $(obj)/kvm-asm-offsets.h
 fpu				:= ../../kernel/fpu
 pkvm-hyp-y			+= $(fpu)/core.o $(fpu)/xstate.o
 
+pstore				:= ../../../../fs/pstore
+pkvm-hyp-y			+= $(pstore)/ram_core.o
+
 include $(srctree)/drivers/iommu/intel/pkvm/Makefile.pkvm
 
 pkvm-obj 			:= $(patsubst %.o,%.pkvm.o,$(pkvm-hyp-y))
 obj-$(CONFIG_PKVM_X86)		+= pkvm.o
 
 CFLAGS_fpu.pkvm.o		+= -iquote $(srctree)/arch/x86/kernel/fpu
+CFLAGS_panic.pkvm.o		+= -iquote $(srctree)/fs/pstore
 
 AFLAGS_vmx/host_vmentry.pkvm.o	+= -iquote $(srctree)/arch/x86/kvm/vmx
 AFLAGS_vmx/host_vmentry.pkvm.o	+= -iquote $(obj)/

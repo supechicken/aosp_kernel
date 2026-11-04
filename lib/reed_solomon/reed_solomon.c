@@ -37,6 +37,7 @@
 #include <linux/slab.h>
 #include <linux/mutex.h>
 
+#ifndef __PKVM_HYP__
 enum {
 	RS_DECODE_LAMBDA,
 	RS_DECODE_SYN,
@@ -311,6 +312,7 @@ struct rs_control *init_rs_non_canonical(int symsize, int (*gffunc)(int),
 				GFP_KERNEL);
 }
 EXPORT_SYMBOL_GPL(init_rs_non_canonical);
+#endif
 
 #ifdef CONFIG_REED_SOLOMON_ENC8
 /**
@@ -333,6 +335,7 @@ int encode_rs8(struct rs_control *rsc, uint8_t *data, int len, uint16_t *par,
 EXPORT_SYMBOL_GPL(encode_rs8);
 #endif
 
+#ifndef __PKVM_HYP__
 #ifdef CONFIG_REED_SOLOMON_DEC8
 /**
  *  decode_rs8 - Decode codeword (8bit data width)
@@ -421,4 +424,5 @@ EXPORT_SYMBOL_GPL(decode_rs16);
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("Reed Solomon encoder/decoder");
 MODULE_AUTHOR("Phil Karn, Thomas Gleixner");
+#endif
 

@@ -20,6 +20,23 @@
 #define PRZ_FLAG_ZAP_OLD	BIT(1)
 
 /**
+ * struct persistent_ram_buffer - persistent circular RAM buffer
+ *
+ * @sig: Signature to indicate header (PERSISTENT_RAM_SIG xor PRZ-type value)
+ * @start: First valid byte in the buffer.
+ * @size: Number of valid bytes in the buffer.
+ * @data: The contents of the buffer.
+ */
+struct persistent_ram_buffer {
+	uint32_t    sig;
+	atomic_t    start;
+	atomic_t    size;
+	uint8_t     data[];
+};
+
+#define PERSISTENT_RAM_SIG (0x43474244) /* DBGC */
+
+/**
  * struct persistent_ram_zone - Details of a persistent RAM zone (PRZ)
  *                              used as a pstore backend
  *
@@ -96,3 +113,6 @@ void *persistent_ram_old(struct persistent_ram_zone *prz);
 void persistent_ram_free_old(struct persistent_ram_zone *prz);
 ssize_t persistent_ram_ecc_string(struct persistent_ram_zone *prz,
 	char *str, size_t len);
+
+int persistent_ram_init_ecc_layout(struct persistent_ram_zone *prz,
+				   struct persistent_ram_ecc_info *ecc_info);

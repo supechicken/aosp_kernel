@@ -1,40 +1,92 @@
 // SPDX-License-Identifier: GPL-2.0
 #include <linux/kernel.h>
 #include <linux/atomic.h>
+#include <linux/list.h>
+#include <linux/rslib.h>
 #include <asm/io.h>
 #include <asm/apic.h>
 #include <asm/kvm_pkvm.h>
 #include <asm/msr.h>
 #include <asm-generic/bug.h>
 #include "debug.h"
+#include "ram_internal.h"
 #include "pkvm.h"
 #include "memory.h"
 
-/*
- * NOTE: Both PERSISTENT_RAM_SIG and persistent_ram_buffer definition copied
- * from fs/pstore/ram_core.c
- */
-#define PERSISTENT_RAM_SIG (0x43474244) /* DBGC */
+static struct persistent_ram_zone pkvm_ramoops_prz;
+static struct rs_control pkvm_ramoops_rs_decoder;
+static struct rs_codec pkvm_ramoops_rs_codec;
+static u16 pkvm_ramoops_rs_alpha_to[256];
+static u16 pkvm_ramoops_rs_index_of[256];
+static u16 pkvm_ramoops_rs_genpoly[PKVM_RAMOOPS_ECC_MAX_SIZE + 1];
+static u16 pkvm_ramoops_rs_par[PKVM_RAMOOPS_ECC_MAX_SIZE];
 
-struct persistent_ram_buffer {
-	uint32_t    sig;
-	atomic_t    start;
-	atomic_t    size;
-	uint8_t     data[];
-};
+int pkvm_ramoops_init_prz(phys_addr_t pa, size_t size, unsigned int ecc_size,
+			  const struct rs_codec *codec)
+{
+	struct persistent_ram_zone *prz = &pkvm_ramoops_prz;
+	struct persistent_ram_ecc_info ecc_info = {
+		.ecc_size = ecc_size,
+	};
+	int ret;
+
+	memset(prz, 0, sizeof(*prz));
+	if (size <= sizeof(struct persistent_ram_buffer))
+		return -EINVAL;
+
+	prz->paddr = pa;
+	prz->size = size;
+	prz->flags = PRZ_FLAG_NO_LOCK;
+	prz->buffer = __pkvm_va(pa);
+	prz->buffer_size = size - sizeof(struct persistent_ram_buffer);
+
+	if (!ecc_size)
+		return 0;
+
+	if (!codec || !codec->alpha_to || !codec->index_of || !codec->genpoly ||
+	    ecc_size > PKVM_RAMOOPS_ECC_MAX_SIZE ||
+	    codec->mm != 8 || codec->nn != 255 || codec->nroots != ecc_size)
+		goto err;
+
+	ret = persistent_ram_init_ecc_layout(prz, &ecc_info);
+	if (ret)
+		goto err;
+
+	pkvm_ramoops_rs_codec = *codec;
+	INIT_LIST_HEAD(&pkvm_ramoops_rs_codec.list);
+	memcpy(pkvm_ramoops_rs_alpha_to, codec->alpha_to,
+	       sizeof(pkvm_ramoops_rs_alpha_to));
+	memcpy(pkvm_ramoops_rs_index_of, codec->index_of,
+	       sizeof(pkvm_ramoops_rs_index_of));
+	memcpy(pkvm_ramoops_rs_genpoly, codec->genpoly,
+	       (ecc_size + 1) * sizeof(pkvm_ramoops_rs_genpoly[0]));
+
+	pkvm_ramoops_rs_codec.alpha_to = pkvm_ramoops_rs_alpha_to;
+	pkvm_ramoops_rs_codec.index_of = pkvm_ramoops_rs_index_of;
+	pkvm_ramoops_rs_codec.genpoly = pkvm_ramoops_rs_genpoly;
+
+	pkvm_ramoops_rs_decoder.codec = &pkvm_ramoops_rs_codec;
+	prz->rs_decoder = &pkvm_ramoops_rs_decoder;
+	prz->ecc_info.par = pkvm_ramoops_rs_par;
+
+	return 0;
+
+err:
+	memset(prz, 0, sizeof(*prz));
+	return -EINVAL;
+}
 
 static void pkvm_write_ramoops_console(const char *msg)
 {
-	struct persistent_ram_buffer *buffer;
+	struct persistent_ram_zone *prz = &pkvm_ramoops_prz;
+	struct persistent_ram_buffer *buffer = prz->buffer;
+	size_t capacity = prz->buffer_size;
 	size_t msg_len = strlen(msg);
-	size_t capacity;
 	u32 start, size;
 
 	/* Size check is sufficient; address validity is verified during init */
-	if (!pkvm_ramoops_console_size)
+	if (!buffer || !capacity || !msg_len)
 		return;
-
-	buffer = __pkvm_va(pkvm_ramoops_console_pa);
 
 	/*
 	 * Sanity check if writing to correct area by making sure it is valid
@@ -44,57 +96,31 @@ static void pkvm_write_ramoops_console(const char *msg)
 		return;
 
 	/*
-	 * The ramoops console uses the 'persistent_ram_buffer' ABI defined in
-	 * fs/pstore/ram_core.c. The buffer starts with a header:
-	 * [u32 sig] [u32 start] [u32 size] [raw data...]
-	 */
-	capacity = pkvm_ramoops_console_size - sizeof(struct persistent_ram_buffer);
-
-	/*
 	 * 'start' indicates where the host stopped logging. In the
 	 * persistent_ram_buffer ABI, this field is the "write pointer".
 	 *
 	 * By reading this value, the hypervisor knows where the host VM (which
 	 * is now frozen) left off, allowing the panic message to be appended
-	 * to the console log.
+	 * to the console log. Sanitize untrusted host ring-buffer pointers
+	 * before calling persistent_ram_write().
 	 */
 	start = atomic_read(&buffer->start);
 	size = atomic_read(&buffer->size);
 
 	if (start >= capacity)
 		start = 0;
+	if (size > capacity)
+		size = capacity;
+	else if (size < capacity)
+		size = start;
 
-	/* Circular append logic */
-	if (start + msg_len <= capacity) {
-		memcpy(&buffer->data[start], msg, msg_len);
-		start += msg_len;
-	} else {
-		size_t first_part = capacity - start;
-		size_t second_part = msg_len - first_part;
-
-		memcpy(&buffer->data[start], msg, first_part);
-		if (second_part > capacity)
-			second_part = capacity;
-		memcpy(&buffer->data[0], msg + first_part, second_part);
-		start = second_part;
-	}
-
-	if (start >= capacity)
-		start = 0;
-
-	/* Update total valid data size, capping at the buffer capacity */
-	if (size < capacity) {
-		size += msg_len;
-		if (size > capacity)
-			size = capacity;
-	}
-
-	/* Sync metadata so host pstore can find the new data after reboot */
 	atomic_set(&buffer->start, start);
 	atomic_set(&buffer->size, size);
 
+	persistent_ram_write(prz, msg, msg_len);
+
 	/* Ensure data is visible in physical RAM before the hardware reset */
-	clflush_cache_range(buffer, pkvm_ramoops_console_size);
+	clflush_cache_range(buffer, prz->size);
 }
 
 /*

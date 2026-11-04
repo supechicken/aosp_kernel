@@ -667,8 +667,14 @@ extern bool pkvm_sym(pvmfw_present);
 extern phys_addr_t pkvm_sym(pvmfw_base);
 extern phys_addr_t pkvm_sym(pvmfw_size);
 
+#define PKVM_RAMOOPS_ECC_MAX_SIZE	16
+
 extern phys_addr_t pkvm_sym(pkvm_ramoops_console_pa);
 extern size_t pkvm_sym(pkvm_ramoops_console_size);
+struct rs_codec;
+PKVM_DECLARE(int, pkvm_ramoops_init_prz, (phys_addr_t pa, size_t size,
+					  unsigned int ecc_size,
+					  const struct rs_codec *codec));
 
 extern bool pkvm_sym(gsmi_present);
 extern u16 pkvm_sym(smi_command_port);

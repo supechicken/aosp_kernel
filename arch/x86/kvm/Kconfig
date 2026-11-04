@@ -123,6 +123,8 @@ config PKVM_X86
 	bool
 	depends on X86_64
 	depends on X86_X2APIC
+	select REED_SOLOMON
+	select REED_SOLOMON_ENC8
 
 	help
 	  Provides pKVM x86 generic support.
