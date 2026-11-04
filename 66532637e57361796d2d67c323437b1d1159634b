@@ -1,0 +1,97 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0a75391_2e2264c4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-04T17:49:24Z",
+      "side": 1,
+      "message": "\u003e For iommu.strict\u003d0, this\n\u003e further reduces overhead as batched flushes result in far fewer flush\n\u003e hypercalls compared to flushing on every unmap.\n\nNot quite yet?",
+      "range": {
+        "startLine": 13,
+        "startChar": 41,
+        "endLine": 15,
+        "endChar": 46
+      },
+      "revId": "66532637e57361796d2d67c323437b1d1159634b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efe80f5b_9650f274",
+        "filename": "drivers/iommu/intel/iommu.c",
+        "patchSetId": 16
+      },
+      "lineNbr": 3767,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-04T17:49:24Z",
+      "side": 1,
+      "message": "`domain-\u003epkvm_nested` may get enabled even if pKVM is disabled? Add a `pkvm_enabled()` check here, and then no need to explicitly check it below in `intel_iommu_map()`, `intel_iommu_unmap()`, and `intel_iommu_tlb_sync()`?",
+      "fixSuggestions": [
+        {
+          "fixId": "bc82be88_487e3c35",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "drivers/iommu/intel/iommu.c",
+              "range": {
+                "startLine": 3766,
+                "startChar": 0,
+                "endLine": 3767,
+                "endChar": 0
+              },
+              "replacement": "\tif (pkvm_enabled() \u0026\u0026 pkvm_nested_enabled(iommu) \u0026\u0026 first_stage)\n"
+            }
+          ]
+        }
+      ],
+      "revId": "66532637e57361796d2d67c323437b1d1159634b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30245407_d905ee07",
+        "filename": "drivers/iommu/intel/iommu.c",
+        "patchSetId": 16
+      },
+      "lineNbr": 4589,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-04T17:49:24Z",
+      "side": 1,
+      "message": "This will not compile with CONFIG_PKVM_INTEL\u003dn, as `pkvm_nested` is not defined?",
+      "fixSuggestions": [
+        {
+          "fixId": "a10ae8a9_6c1d5f35",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "drivers/iommu/intel/iommu.c",
+              "range": {
+                "startLine": 4589,
+                "startChar": 0,
+                "endLine": 4590,
+                "endChar": 0
+              },
+              "replacement": "\tBUG_ON(pkvm_enabled() \u0026\u0026 domain_pkvm_nested(dmar_domain) \u0026\u0026 dmar_domain-\u003eiotlb_sync_map);\n"
+            }
+          ]
+        }
+      ],
+      "revId": "66532637e57361796d2d67c323437b1d1159634b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
