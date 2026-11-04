@@ -1,0 +1,49 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1d7301b_3d36b381",
+        "filename": "drivers/iommu/intel/pkvm/domain.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-04T16:19:35Z",
+      "side": 1,
+      "message": "Why noref? The flush request comes straight from the host, we have no idea if the refcount is \u003e1 or not (and even if it is, there is no guarantee it will stay \u003e1 while we are executing `cache_tag_flush_range()`), right?",
+      "fixSuggestions": [
+        {
+          "fixId": "fed59602_d491e685",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "drivers/iommu/intel/pkvm/domain.c",
+              "range": {
+                "startLine": 368,
+                "startChar": 0,
+                "endLine": 369,
+                "endChar": 0
+              },
+              "replacement": "\tdomain \u003d __pkvm_get_iommu_domain(pkvm_host_gpa_to_virt(pgd_gpa));\n"
+            },
+            {
+              "path": "drivers/iommu/intel/pkvm/domain.c",
+              "range": {
+                "startLine": 1,
+                "startChar": 0,
+                "endLine": 1,
+                "endChar": 0
+              },
+              "replacement": "\tpkvm_put_iommu_domain(domain);\n"
+            }
+          ]
+        }
+      ],
+      "revId": "b5c674410787283f5f165028e328b7e0c327ac69",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
