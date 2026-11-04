@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1017cfad_97d381ed",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-04T16:32:58Z",
+      "side": 1,
+      "message": "\u003e We avoid the security risk of a malicious host\n\u003e not flushing the caches by making sure that IOMMU caches are flushed\n\u003e before any donation request from the host.\n\nWe don\u0027t do that in this series? We need to add aosp/4017986 back to this series?",
+      "range": {
+        "startLine": 13,
+        "startChar": 24,
+        "endLine": 15,
+        "endChar": 42
+      },
+      "revId": "31badcf3e85a8f987e9fd772a2393101cea3479b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
