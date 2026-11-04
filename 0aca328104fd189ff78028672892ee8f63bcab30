@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4412451e_458a8e55",
+        "filename": "fs/f2fs/file.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 5325,
+      "author": {
+        "id": 1651802
+      },
+      "writtenOn": "2026-11-04T22:16:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e1a612d_e0d19820",
+      "range": {
+        "startLine": 5325,
+        "startChar": 7,
+        "endLine": 5325,
+        "endChar": 26
+      },
+      "revId": "0aca328104fd189ff78028672892ee8f63bcab30",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6609f451_5c98e3a0",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-11-04T02:12:30Z",
       "side": 1,
       "message": "So what happens if the dma_buf is uncached, like Android\u0027s `system-uncached` heap?  Doesn\u0027t this ioctl potentially return the wrong data in that case, due to the cache not being coherent?  If so, shouldn\u0027t it return an error instead?",
+      "range": {
+        "startLine": 5336,
+        "startChar": 53,
+        "endLine": 5338,
+        "endChar": 17
+      },
+      "revId": "0aca328104fd189ff78028672892ee8f63bcab30",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0900b685_6733fc69",
+        "filename": "fs/f2fs/file.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 5338,
+      "author": {
+        "id": 1651802
+      },
+      "writtenOn": "2026-11-04T22:16:12Z",
+      "side": 1,
+      "message": "Only blk-crypto-fallback actually breaks for the case, so, it should return an error.",
+      "parentUuid": "6609f451_5c98e3a0",
       "range": {
         "startLine": 5336,
         "startChar": 53,
@@ -72,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5c44d2d1_a3f9e571",
+        "filename": "fs/f2fs/file.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 5345,
+      "author": {
+        "id": 1651802
+      },
+      "writtenOn": "2026-11-04T22:16:12Z",
+      "side": 1,
+      "message": "Yes. The first version only accepted block aligned requests, and the callers had to fall back to preadv2() otherwise. The AICore/LiteRT team asked for unaligned support: their offsets and lengths are almost never block aligned, and they don\u0027t want to fix every load path in the applications. wrapfd handles this with bounce buffers for the same reason, so this follows it.",
+      "parentUuid": "d9322c07_83b9ee20",
+      "range": {
+        "startLine": 5340,
+        "startChar": 3,
+        "endLine": 5345,
+        "endChar": 37
+      },
+      "revId": "0aca328104fd189ff78028672892ee8f63bcab30",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "48e5c45e_7016eedd",
         "filename": "fs/f2fs/file.c",
         "patchSetId": 1
@@ -83,6 +155,30 @@
       "writtenOn": "2026-11-04T02:12:30Z",
       "side": 1,
       "message": "The proposed sepolicy CL http://ag/43496624 allows this ioctl to **all domains**, so it seems the only meaningful safeguard would be the ability to get a dma_buf file descriptor.  Don\u0027t all Android apps already have access to a number of such file descriptors, though?  Graphics, camera, etc.",
+      "range": {
+        "startLine": 5380,
+        "startChar": 10,
+        "endLine": 5380,
+        "endChar": 37
+      },
+      "revId": "0aca328104fd189ff78028672892ee8f63bcab30",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "296df385_6533b027",
+        "filename": "fs/f2fs/file.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 5380,
+      "author": {
+        "id": 1651802
+      },
+      "writtenOn": "2026-11-04T22:16:12Z",
+      "side": 1,
+      "message": "we\u0027ll look into restricting the sepolicy to the domains that actually need it. Thanks.",
+      "parentUuid": "48e5c45e_7016eedd",
       "range": {
         "startLine": 5380,
         "startChar": 10,
@@ -118,6 +214,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9f82a183_3816a619",
+        "filename": "fs/f2fs/file.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 5422,
+      "author": {
+        "id": 1651802
+      },
+      "writtenOn": "2026-11-04T22:16:12Z",
+      "side": 1,
+      "message": "I\u0027ll add MODULE_IMPORT_NS(\"DMA_BUF\") and handle CONFIG_DMA_SHARED_BUFFER.",
+      "parentUuid": "2d08da94_61feb27c",
+      "range": {
+        "startLine": 5422,
+        "startChar": 7,
+        "endLine": 5422,
+        "endChar": 31
+      },
+      "revId": "0aca328104fd189ff78028672892ee8f63bcab30",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a2d00749_15257d7d",
         "filename": "fs/f2fs/file.c",
         "patchSetId": 1
@@ -141,6 +261,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6c9d4d62_cd02c0ff",
+        "filename": "fs/f2fs/file.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 5429,
+      "author": {
+        "id": 1651802
+      },
+      "writtenOn": "2026-11-04T22:16:12Z",
+      "side": 1,
+      "message": "I\u0027ll build a bvec array from the vmap by walking it page by page and reject the dma_buf if any page is not backed by a valid struct page, instead of relying on vmalloc_to_page() inside the kvec iterator.",
+      "parentUuid": "a2d00749_15257d7d",
+      "range": {
+        "startLine": 5429,
+        "startChar": 5,
+        "endLine": 5429,
+        "endChar": 17
+      },
+      "revId": "0aca328104fd189ff78028672892ee8f63bcab30",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f344a48c_5a74cfb4",
         "filename": "fs/f2fs/file.c",
         "patchSetId": 1
@@ -152,6 +296,30 @@
       "writtenOn": "2026-11-04T02:12:30Z",
       "side": 1,
       "message": "Should this ioctl be interruptible?  As-is, gigabytes can be read and the process will ignore SIGKILL.",
+      "range": {
+        "startLine": 5466,
+        "startChar": 2,
+        "endLine": 5466,
+        "endChar": 21
+      },
+      "revId": "0aca328104fd189ff78028672892ee8f63bcab30",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf86ad70_33056a5c",
+        "filename": "fs/f2fs/file.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 5466,
+      "author": {
+        "id": 1651802
+      },
+      "writtenOn": "2026-11-04T22:16:12Z",
+      "side": 1,
+      "message": "Agreed. I\u0027ll check fatal_signal_pending() before issuing each chunk, stop issuing and drain the in-flight chunks (at most depth x 4MB) before unmapping, and return -EINTR.",
+      "parentUuid": "f344a48c_5a74cfb4",
       "range": {
         "startLine": 5466,
         "startChar": 2,
