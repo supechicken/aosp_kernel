@@ -52,6 +52,24 @@
       "parentUuid": "7be886e2_b16af586",
       "revId": "b434937b3e245a1115eb4672340ba25f266054b0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d75ae13_a919ffd7",
+        "filename": "arch/x86/kvm/pkvm/pgtable.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-04T19:57:08Z",
+      "side": 1,
+      "message": "\u003e Hmm... then maybe just remove that BUG() instead, making hyp_mmu_flush_tlb() a successful no-op for now (with a comment explaining why exactly it is so)?\n\nAh, no, coalescing _actually_ requires TLB flushing in any case...",
+      "parentUuid": "525f5a29_8cde4a5f",
+      "revId": "b434937b3e245a1115eb4672340ba25f266054b0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
