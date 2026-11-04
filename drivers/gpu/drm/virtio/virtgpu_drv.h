@@ -151,6 +151,9 @@ struct virtio_gpu_fence {
 	uint64_t fence_id;
 	bool emit_fence_info;
 	struct virtio_gpu_fence_event *e;
+	struct dma_fence_cb vblank_cb;
+	struct drm_crtc *crtc;
+	struct drm_pending_vblank_event *event;
 	struct virtio_gpu_fence_driver *drv;
 	struct list_head node;
 };
@@ -184,6 +187,7 @@ struct virtio_gpu_output {
 	int cur_x;
 	int cur_y;
 	bool needs_modeset;
+	uint64_t fence_ctx;
 };
 #define drm_crtc_to_virtio_gpu_output(x) \
 	container_of(x, struct virtio_gpu_output, crtc)

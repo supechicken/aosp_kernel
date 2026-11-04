@@ -32,6 +32,7 @@
 #include <drm/drm_gem_framebuffer_helper.h>
 #include <drm/drm_probe_helper.h>
 #include <drm/drm_simple_kms_helper.h>
+#include <drm/drm_vblank.h>
 
 #include "virtgpu_drv.h"
 
@@ -118,12 +119,29 @@ static int virtio_gpu_crtc_atomic_check(struct drm_crtc *crtc,
 	return 0;
 }
 
+static void virtio_gpu_fence_vblank_cb(struct dma_fence *f,
+				       struct dma_fence_cb *cb)
+{
+	struct virtio_gpu_fence *vgfence =
+		container_of(cb, struct virtio_gpu_fence, vblank_cb);
+	struct drm_crtc *crtc = vgfence->crtc;
+	struct drm_device *dev = crtc->dev;
+	unsigned long flags;
+
+	spin_lock_irqsave(&dev->event_lock, flags);
+	drm_crtc_send_vblank_event(crtc, vgfence->event);
+	spin_unlock_irqrestore(&dev->event_lock, flags);
+}
+
 static void virtio_gpu_crtc_atomic_flush(struct drm_crtc *crtc,
 					 struct drm_atomic_state *state)
 {
 	struct drm_crtc_state *crtc_state = drm_atomic_get_new_crtc_state(state,
 									  crtc);
 	struct virtio_gpu_output *output = drm_crtc_to_virtio_gpu_output(crtc);
+	struct drm_plane_state *plane_state;
+	struct virtio_gpu_plane_state *vgplane_st;
+	struct virtio_gpu_fence *vgfence;
 
 	/*
 	 * virtio-gpu can't do modeset and plane update operations
@@ -133,6 +151,35 @@ static void virtio_gpu_crtc_atomic_flush(struct drm_crtc *crtc,
 	 */
 	if (drm_atomic_crtc_needs_modeset(crtc_state))
 		output->needs_modeset = true;
+
+	plane_state = drm_atomic_get_new_plane_state(state, crtc->primary);
+	if (!plane_state)
+		return;
+
+	vgplane_st = to_virtio_gpu_plane_state(plane_state);
+	vgfence = vgplane_st->fence;
+	vgplane_st->fence = NULL;
+	if (!vgfence)
+		return;
+
+	/* Only defer vblank event if the fence was actually emitted (seqno != 0). */
+	if (crtc_state->event && READ_ONCE(vgfence->f.seqno) != 0) {
+		unsigned long flags;
+
+		spin_lock_irqsave(&crtc->dev->event_lock, flags);
+		vgfence->crtc = crtc;
+		vgfence->event = crtc_state->event;
+		crtc_state->event = NULL;
+		spin_unlock_irqrestore(&crtc->dev->event_lock, flags);
+
+		if (dma_fence_add_callback(&vgfence->f, &vgfence->vblank_cb,
+					   virtio_gpu_fence_vblank_cb)) {
+			virtio_gpu_fence_vblank_cb(&vgfence->f,
+						   &vgfence->vblank_cb);
+		}
+	}
+
+	dma_fence_put(&vgfence->f);
 }
 
 static const struct drm_crtc_helper_funcs virtio_gpu_crtc_helper_funcs = {
@@ -259,6 +306,7 @@ static int vgdev_output_init(struct virtio_gpu_device *vgdev, int index)
 	struct drm_plane *primary, *cursor;
 
 	output->index = index;
+	output->fence_ctx = dma_fence_context_alloc(1);
 	if (index == 0) {
 		output->info.enabled = cpu_to_le32(true);
 		output->info.r.width = cpu_to_le32(XRES_DEF);
@@ -321,6 +369,29 @@ virtio_gpu_user_framebuffer_create(struct drm_device *dev,
 	return &virtio_gpu_fb->base;
 }
 
+static void virtio_gpu_atomic_commit_tail(struct drm_atomic_state *state)
+{
+	struct drm_device *dev = state->dev;
+
+	drm_atomic_helper_commit_modeset_disables(dev, state);
+
+	drm_atomic_helper_commit_planes(dev, state, 0);
+
+	drm_atomic_helper_commit_modeset_enables(dev, state);
+
+	drm_atomic_helper_fake_vblank(state);
+
+	drm_atomic_helper_commit_hw_done(state);
+
+	drm_atomic_helper_wait_for_flip_done(dev, state);
+
+	drm_atomic_helper_cleanup_planes(dev, state);
+}
+
+static const struct drm_mode_config_helper_funcs virtio_gpu_mode_helper_funcs = {
+	.atomic_commit_tail = virtio_gpu_atomic_commit_tail,
+};
+
 static const struct drm_mode_config_funcs virtio_gpu_mode_funcs = {
 	.fb_create = virtio_gpu_user_framebuffer_create,
 	.atomic_check = drm_atomic_helper_check,
@@ -339,6 +410,7 @@ int virtio_gpu_modeset_init(struct virtio_gpu_device *vgdev)
 		return ret;
 
 	vgdev->ddev->mode_config.funcs = &virtio_gpu_mode_funcs;
+	vgdev->ddev->mode_config.helper_private = &virtio_gpu_mode_helper_funcs;
 
 	/* modes will be validated against the framebuffer size */
 	vgdev->ddev->mode_config.min_width = XRES_MIN;

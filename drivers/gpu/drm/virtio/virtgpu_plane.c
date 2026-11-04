@@ -268,8 +268,6 @@ static void virtio_gpu_resource_flush(struct drm_plane *plane,
 					      width, height, objs,
 					      vgplane_st->fence);
 		virtio_gpu_notify(vgdev);
-		dma_fence_wait_timeout(&vgplane_st->fence->f, true,
-				       msecs_to_jiffies(50));
 	} else {
 		virtio_gpu_cmd_resource_flush(vgdev, bo->hw_res_handle, x, y,
 					      width, height, NULL, NULL);
@@ -411,11 +409,21 @@ static int virtio_gpu_plane_prepare_fb(struct drm_plane *plane,
 
 	drm_gem_plane_helper_prepare_fb(plane, new_state);
 
-	if (!bo || (plane->type == DRM_PLANE_TYPE_PRIMARY && !bo->guest_blob))
+	if (!bo)
 		return 0;
 
 	obj = new_state->fb->obj[0];
-	if (bo->dumb || drm_gem_is_imported(obj)) {
+	if (plane->type == DRM_PLANE_TYPE_PRIMARY && new_state->crtc) {
+		struct virtio_gpu_output *output =
+			drm_crtc_to_virtio_gpu_output(new_state->crtc);
+
+		vgplane_st->fence = virtio_gpu_fence_alloc(vgdev,
+						     output->fence_ctx,
+						     0);
+		if (!vgplane_st->fence)
+			return -ENOMEM;
+		vgplane_st->fence->emit_fence_info = false;
+	} else if (bo->dumb || drm_gem_is_imported(obj)) {
 		vgplane_st->fence = virtio_gpu_fence_alloc(vgdev,
 						     vgdev->fence_drv.context,
 						     0);
