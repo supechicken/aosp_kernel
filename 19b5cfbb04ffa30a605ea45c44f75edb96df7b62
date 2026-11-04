@@ -40,6 +40,25 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "979cfae0_09a19fc8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 39
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1499410
+      },
+      "writtenOn": "2026-11-04T17:30:33Z",
+      "side": 1,
+      "message": "The subject looks right now, thanks. I think the second paragraph of the body still describes the change against patch set 39 rather than against its parent, though. The parent already uses `vmg-\u003eslice_off` on both sides, and `mremap()` growth only returned `ENOMEM` with the address-based slice of patch set 39, so neither sentence matches what this patch changes.\n\nWhat the parent gets wrong is that the prev check skips the slice of these mappings and the next check counts them in 4KB pages. The third paragraph covers the latter, but the body doesn\u0027t say yet what goes wrong because of the former.\n\nWould something like this work for the second and third paragraphs? It also avoids the 73-column line about folio indices:\n\n```\nvmg_can_merge_offsets() treats them as anonymous memory. The prev check\nskips their slice, so an mprotect(), madvise() or mremap() merge can\njoin ranges whose slices don\u0027t line up and leave existing pages at the\nwrong slice. The next check counts their vm_pgoff in 4KB pages, so\ndiscontiguous ranges can merge. The rmap walk then looks for their\nfolios outside the merged VMA, and reclaim and migration can\u0027t unmap\nthem.\n\nCompare the slice whenever the range has a file. Count 4KB pages only\nfor VMAs with neither vm_ops nor vm_file, as vma_linear_page_index()\ndoes.\n```",
+      "parentUuid": "a571ef50_35634805",
+      "isAi": true,
+      "revId": "19b5cfbb04ffa30a605ea45c44f75edb96df7b62",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "628b85bb_869c5944",
         "filename": "mm/p3s.c",
         "patchSetId": 39
