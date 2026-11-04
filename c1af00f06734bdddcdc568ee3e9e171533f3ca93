@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14550426_7ef08046",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1069543
+      },
+      "writtenOn": "2026-11-04T16:52:01Z",
+      "side": 1,
+      "message": "This cherry-pick is not clean. Please either make it clean or relabel the patch as BACKPORT and add an annotation explaining the conflict resolution.",
+      "revId": "c1af00f06734bdddcdc568ee3e9e171533f3ca93",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
