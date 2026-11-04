@@ -16,6 +16,24 @@
       "message": "You should make sure that this computation doesn\u0027t overflow.",
       "revId": "4f89cba389563d156f55da6d344d5d9a16055d33",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24af1da4_892cc613",
+        "filename": "fs/f2fs/file.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 4991,
+      "author": {
+        "id": 1651802
+      },
+      "writtenOn": "2026-11-04T22:14:52Z",
+      "side": 1,
+      "message": "This can\u0027t overflow. Before this check, len is limited to MAX_RW_COUNT and file_offset to less than s_maxbytes, so file_offset + len stays far below U64_MAX.",
+      "parentUuid": "ed75d832_41a43b06",
+      "revId": "4f89cba389563d156f55da6d344d5d9a16055d33",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
