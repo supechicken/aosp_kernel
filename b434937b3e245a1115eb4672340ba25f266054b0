@@ -124,6 +124,24 @@
       "parentUuid": "0df1e83e_e54d0479",
       "revId": "b434937b3e245a1115eb4672340ba25f266054b0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a834b38c_4d998248",
+        "filename": "arch/x86/kvm/pkvm/pgtable.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-04T21:30:22Z",
+      "side": 1,
+      "message": "\u003e From reading the code, I think we create all hyp mappings during pKVM initialization and do not perform any unmap and later maps. Only other runtime hyp_mmu change is pkvm_host_donate_hyp_mmio calls pkvm_hyp_mmu_map during IOMMU initialization and I don\u0027t think it can trigger a coalesce.\n\nTheoretically it can, e.g. a simple example: when creating hyp mappings, we map a 2MB-aligned 1MB virtual range to a physical 1MB range (creating 256 4K mappings), and then map the 1MB range next to it, correspondingly, to the physical 1MB range next to it (creating 256 4K mappings), so we have 512 contiguous mappings and thus we can immediately coalesce them into a 2MB mapping? A previous unmap is not required for that, right?\n\n...BTW just a note: IIRC, pKVM-ARM deliberately avoids coalescing during initialization (but I\u0027m not sure for what reason exactly)...",
+      "parentUuid": "d1707822_716799f3",
+      "revId": "b434937b3e245a1115eb4672340ba25f266054b0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
