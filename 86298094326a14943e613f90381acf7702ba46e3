@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4773ca1e_cc9b6778",
+        "filename": "drivers/iommu/intel/iommu.c",
+        "patchSetId": 21
+      },
+      "lineNbr": 4199,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-05T18:25:30Z",
+      "side": 1,
+      "message": "Why exactly need to check `gather-\u003estart \u003c\u003d gather-\u003eend` here?",
+      "revId": "86298094326a14943e613f90381acf7702ba46e3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2eb42a3f_603f1cd1",
+        "filename": "drivers/iommu/intel/pkvm/iommu_hc.c",
+        "patchSetId": 21
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-05T18:25:30Z",
+      "side": 1,
+      "message": "nit: we can also move the `flags` declaration into this `else` block now?",
+      "revId": "86298094326a14943e613f90381acf7702ba46e3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
