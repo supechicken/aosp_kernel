@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fa26bad_f691b176",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1137063
+      },
+      "writtenOn": "2026-11-05T21:12:02Z",
+      "side": 1,
+      "message": "Commit message is very different from on android17-6.18.",
+      "revId": "101978ca530a17a5b46909e9c4d02dcd05e87def",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
