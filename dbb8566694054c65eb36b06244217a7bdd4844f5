@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dd47b2bf_e3aa8e4c",
+        "filename": "drivers/block/zram/zram_drv.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 1182,
+      "author": {
+        "id": 1894539
+      },
+      "writtenOn": "2026-11-05T06:34:16Z",
+      "side": 1,
+      "message": "I have found it once on 6.6 kernel when doing stress testing. I also have a proposed fix before (pa/4044258). But I couldn\u0027t reproduce it anymore on 6.12.\nI can upload the fix in the following commit to review.",
+      "parentUuid": "1922e338_bb355114",
+      "revId": "dbb8566694054c65eb36b06244217a7bdd4844f5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "18248d4b_5313a4bd",
         "filename": "include/uapi/linux/zram_ioctl.h",
         "patchSetId": 3
@@ -142,6 +160,24 @@
       "side": 1,
       "message": "\u003e It might also be worth adding a flags/reserved field\n\nI had a similar thought - MS usually adds something like `u32 reserved[4];` to uAPI.",
       "parentUuid": "18248d4b_5313a4bd",
+      "revId": "dbb8566694054c65eb36b06244217a7bdd4844f5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6df4b75_003f4dbc",
+        "filename": "include/uapi/linux/zram_ioctl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1894539
+      },
+      "writtenOn": "2026-11-05T06:34:16Z",
+      "side": 1,
+      "message": "SGTM, let me refine the API based on the suggestion.",
+      "parentUuid": "deb6acdc_f10132b4",
       "revId": "dbb8566694054c65eb36b06244217a7bdd4844f5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
