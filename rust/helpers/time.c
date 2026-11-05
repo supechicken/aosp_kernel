@@ -2,6 +2,7 @@
 
 #include <linux/delay.h>
 #include <linux/ktime.h>
+#include <linux/time_namespace.h>
 #include <linux/timekeeping.h>
 
 __rust_helper void rust_helper_fsleep(unsigned long usecs)
@@ -32,4 +33,9 @@ __rust_helper s64 rust_helper_ktime_to_us(const ktime_t kt)
 __rust_helper s64 rust_helper_ktime_to_ms(const ktime_t kt)
 {
 	return ktime_to_ms(kt);
+}
+
+__rust_helper ktime_t rust_helper_timens_ktime_to_host(clockid_t clockid, ktime_t tim)
+{
+	return timens_ktime_to_host(clockid, tim);
 }
