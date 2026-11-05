@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2024-2025, OpenVPN Inc.
 #
-
+---
 name: ovpn
 
 protocol: genetlink
@@ -19,7 +19,7 @@ definitions:
   -
     type: enum
     name: cipher-alg
-    entries: [ none, aes-gcm, chacha20-poly1305 ]
+    entries: [none, aes-gcm, chacha20-poly1305]
   -
     type: enum
     name: del-peer-reason
@@ -32,7 +32,7 @@ definitions:
   -
     type: enum
     name: key-slot
-    entries: [ primary, secondary ]
+    entries: [primary, secondary]
 
 attribute-sets:
   -
@@ -42,8 +42,8 @@ attribute-sets:
         name: id
         type: u32
         doc: >-
-          The unique ID of the peer in the device context. To be used to identify
-          peers during operations for a specific device
+          The unique ID of the peer in the device context. To be used to
+          identify peers during operations for a specific device
         checks:
           max: 0xFFFFFF
       -
@@ -381,8 +381,16 @@ operations:
   list:
     -
       name: peer-new
+<<<<<<< HEAD   (bab9503cd866c13908014f2137bf4fda4699bcfb ANDROID: GKI: Enable binder_alloc kunit tests)
       attribute-set: ovpn-peer-new-input
       flags: [ admin-perm ]
+||||||| BASE   (computed base)
+      attribute-set: ovpn
+      flags: [ admin-perm ]
+=======
+      attribute-set: ovpn
+      flags: [admin-perm]
+>>>>>>> BRANCH (5e9184ae7207c828d3721e9fdaeeb61da0994995 wifi: rtw89: 8852bx: Accept USB devices and load their MAC a)
       doc: Add a remote peer
       do:
         pre: ovpn-nl-pre-doit
@@ -393,8 +401,16 @@ operations:
             - peer
     -
       name: peer-set
+<<<<<<< HEAD   (bab9503cd866c13908014f2137bf4fda4699bcfb ANDROID: GKI: Enable binder_alloc kunit tests)
       attribute-set: ovpn-peer-set-input
       flags: [ admin-perm ]
+||||||| BASE   (computed base)
+      attribute-set: ovpn
+      flags: [ admin-perm ]
+=======
+      attribute-set: ovpn
+      flags: [admin-perm]
+>>>>>>> BRANCH (5e9184ae7207c828d3721e9fdaeeb61da0994995 wifi: rtw89: 8852bx: Accept USB devices and load their MAC a)
       doc: modify a remote peer
       do:
         pre: ovpn-nl-pre-doit
@@ -406,7 +422,7 @@ operations:
     -
       name: peer-get
       attribute-set: ovpn
-      flags: [ admin-perm ]
+      flags: [admin-perm]
       doc: Retrieve data about existing remote peers (or a specific one)
       do:
         pre: ovpn-nl-pre-doit
@@ -427,8 +443,16 @@ operations:
             - peer
     -
       name: peer-del
+<<<<<<< HEAD   (bab9503cd866c13908014f2137bf4fda4699bcfb ANDROID: GKI: Enable binder_alloc kunit tests)
       attribute-set: ovpn-peer-del-input
       flags: [ admin-perm ]
+||||||| BASE   (computed base)
+      attribute-set: ovpn
+      flags: [ admin-perm ]
+=======
+      attribute-set: ovpn
+      flags: [admin-perm]
+>>>>>>> BRANCH (5e9184ae7207c828d3721e9fdaeeb61da0994995 wifi: rtw89: 8852bx: Accept USB devices and load their MAC a)
       doc: Delete existing remote peer
       do:
         pre: ovpn-nl-pre-doit
@@ -446,7 +470,7 @@ operations:
     -
       name: key-new
       attribute-set: ovpn
-      flags: [ admin-perm ]
+      flags: [admin-perm]
       doc: Add a cipher key for a specific peer
       do:
         pre: ovpn-nl-pre-doit
@@ -457,8 +481,16 @@ operations:
             - keyconf
     -
       name: key-get
+<<<<<<< HEAD   (bab9503cd866c13908014f2137bf4fda4699bcfb ANDROID: GKI: Enable binder_alloc kunit tests)
       attribute-set: ovpn-keyconf-get
       flags: [ admin-perm ]
+||||||| BASE   (computed base)
+      attribute-set: ovpn
+      flags: [ admin-perm ]
+=======
+      attribute-set: ovpn
+      flags: [admin-perm]
+>>>>>>> BRANCH (5e9184ae7207c828d3721e9fdaeeb61da0994995 wifi: rtw89: 8852bx: Accept USB devices and load their MAC a)
       doc: Retrieve non-sensitive data about peer key and cipher
       do:
         pre: ovpn-nl-pre-doit
@@ -472,8 +504,16 @@ operations:
             - keyconf
     -
       name: key-swap
+<<<<<<< HEAD   (bab9503cd866c13908014f2137bf4fda4699bcfb ANDROID: GKI: Enable binder_alloc kunit tests)
       attribute-set: ovpn-keyconf-swap-input
       flags: [ admin-perm ]
+||||||| BASE   (computed base)
+      attribute-set: ovpn
+      flags: [ admin-perm ]
+=======
+      attribute-set: ovpn
+      flags: [admin-perm]
+>>>>>>> BRANCH (5e9184ae7207c828d3721e9fdaeeb61da0994995 wifi: rtw89: 8852bx: Accept USB devices and load their MAC a)
       doc: Swap primary and secondary session keys for a specific peer
       do:
         pre: ovpn-nl-pre-doit
@@ -491,8 +531,16 @@ operations:
       mcgrp: peers
     -
       name: key-del
+<<<<<<< HEAD   (bab9503cd866c13908014f2137bf4fda4699bcfb ANDROID: GKI: Enable binder_alloc kunit tests)
       attribute-set: ovpn-keyconf-del-input
       flags: [ admin-perm ]
+||||||| BASE   (computed base)
+      attribute-set: ovpn
+      flags: [ admin-perm ]
+=======
+      attribute-set: ovpn
+      flags: [admin-perm]
+>>>>>>> BRANCH (5e9184ae7207c828d3721e9fdaeeb61da0994995 wifi: rtw89: 8852bx: Accept USB devices and load their MAC a)
       doc: Delete cipher key for a specific peer
       do:
         pre: ovpn-nl-pre-doit
