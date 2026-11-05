@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9eb33d79_596ab6db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1074825
+      },
+      "writtenOn": "2026-11-05T06:49:02Z",
+      "side": 1,
+      "message": "I\u0027m not a big fan of further extending this hacky solution for pKVM logging. The kernel doesn\u0027t provide any stability guarantees for the pstore buffer layout, so this code relies on kernel implementation details.\n\nAs we\u0027re planning to further extend the kernel pstore capabilities, e.g. with boot ID tagging, this is going to become even more fragile.",
+      "revId": "4478e6fb3a5737deb51498b662b6dfc7acbb7ab1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
