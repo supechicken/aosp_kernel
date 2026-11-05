@@ -45,6 +45,7 @@ load(
     "get_kunit_modules_list",
     "get_kunit_modules_superset",
 )
+load(":bazel/p3s_kselftest.bzl", "define_p3s_kselftests")
 
 package(
     default_visibility = [
@@ -2550,6 +2551,12 @@ cc_binary_with_abi(
     ],
 )
 
+define_p3s_kselftests(
+    name = "kselftest_mm_p3s",
+    kselftest_copts = _KSELFTEST_COPTS,
+    kselftest_dir = _KSELFTEST_DIR,
+)
+
 cc_binary_with_abi(
     name = "kselftest_size_test_get_size",
     srcs = ["tools/testing/selftests/size/get_size.c"],
@@ -3370,6 +3377,7 @@ pkg_filegroup(
         ":kselftest_mm_mremap_dontunmap_arm64",
         ":kselftest_mm_mremap_test_arm64",
         ":kselftest_mm_on_fault_limit_arm64",
+        ":kselftest_mm_p3s_arm64",
         ":kselftest_mm_thuge_gen_arm64",
         ":kselftest_mm_transhuge_stress_arm64",
         ":kselftest_mm_uffd_unit_tests_arm64",

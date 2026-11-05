@@ -42,6 +42,195 @@ SPDX-License-Identifier: GPL-2.0 OR Apache-2.0
         <option name="test-command-line" key="kselftest_mm_mremap_dontunmap" value="cd &ktest_dir;; ./kselftest_mm_mremap_dontunmap" />
         <option name="test-command-line" key="kselftest_mm_mremap_test" value="cd &ktest_dir;; ./kselftest_mm_mremap_test" />
         <option name="test-command-line" key="kselftest_mm_uffd_unit_tests" value="cd &ktest_dir;; ./kselftest_mm_uffd_unit_tests" />
+        <option name="test-command-line" key="kselftest_mm_p3s_mglru_folded_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; mounted=0; if ! mountpoint -q /sys/kernel/debug; then mount -t debugfs debugfs /sys/kernel/debug 2>/dev/null &amp;&amp; mounted=1; fi; ./mglru_folded_p3s; rc=$?; [ &quot;$mounted&quot; = 1 ] &amp;&amp; umount /sys/kernel/debug 2>/dev/null; exit $rc" />
+        <option name="test-command-line" key="kselftest_mm_p3s_elf_4k_align_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./elf_4k_align_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_elf_core_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./elf_core_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_taskstats_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./taskstats_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_rusage_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./rusage_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_oom_anon_score_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./oom_anon_score_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_sysv_shm_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./sysv_shm_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_sysv_shm_lock_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./sysv_shm_lock_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_io_uring_mmap_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./io_uring_mmap_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_aio_ring_p3s_native" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./aio_ring_p3s --native" />
+        <option name="test-command-line" key="kselftest_mm_p3s_aio_ring_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./aio_ring_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_stack_guard_gap_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./stack_guard_gap_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_mglru_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; mounted=0; if ! mountpoint -q /sys/kernel/debug; then mount -t debugfs debugfs /sys/kernel/debug 2>/dev/null &amp;&amp; mounted=1; fi; ./mglru_p3s; rc=$?; [ &quot;$mounted&quot; = 1 ] &amp;&amp; umount /sys/kernel/debug 2>/dev/null; exit $rc" />
+        <option name="test-command-line" key="kselftest_mm_p3s_mmu_notifier_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./mmu_notifier_p3s.sh" />
+        <option name="test-command-line" key="kselftest_mm_p3s_cow_notifier_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./cow_notifier_p3s.sh" />
+        <option name="test-command-line" key="kselftest_mm_p3s_anon_pageout_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./anon_pageout_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_madvise_free_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./madvise_free_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_madvise_free_holes_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./madvise_free_holes_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_madvise_free_holes_p3s_native" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./madvise_free_holes_p3s --native" />
+        <option name="test-command-line" key="kselftest_mm_p3s_madvise_guard_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./madvise_guard_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_thp_mmap_offset_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./thp_mmap_offset_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_mthp_native_anon_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./mthp_native_anon_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_devzero_mthp_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./devzero_mthp_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_shmem_mmap_offset_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./shmem_mmap_offset_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_memfd_eof_p3s_secretmem" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./memfd_eof_p3s secretmem" />
+        <option name="test-command-line" key="kselftest_mm_p3s_memfd_eof_p3s_shmem" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./memfd_eof_p3s shmem" />
+        <option name="test-command-line" key="kselftest_mm_p3s_mincore_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./mincore_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_mincore_p3s_native" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./mincore_p3s --native" />
+        <option name="test-command-line" key="kselftest_mm_p3s_mmap_action_cleanup_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./p3s_run_module.sh p3s_modules/gup_retry_p3s_module.ko /dev/gup_retry_p3s -- ./mmap_action_cleanup_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_selinux_status_mmap_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./selinux_status_mmap_p3s.sh" />
+        <option name="test-command-line" key="kselftest_mm_p3s_vm_iomap_memory_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./p3s_run_module.sh p3s_modules/vm_iomap_memory_p3s_module.ko /dev/vm_iomap_memory_p3s -- sh ./p3s_run_module.sh p3s_modules/vm_iomap_unaligned_p3s_module.ko /dev/vm_iomap_unaligned_p3s -- ./vm_iomap_memory_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_vm_iomap_memory_p3s_native" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./p3s_run_module.sh p3s_modules/vm_iomap_memory_p3s_module.ko /dev/vm_iomap_memory_p3s -- sh ./p3s_run_module.sh p3s_modules/vm_iomap_unaligned_p3s_module.ko /dev/vm_iomap_unaligned_p3s -- ./vm_iomap_memory_p3s --native" />
+        <option name="test-command-line" key="kselftest_mm_p3s_dma_heap_p3s_native" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./dma_heap_p3s --native" />
+        <option name="test-command-line" key="kselftest_mm_p3s_dma_heap_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./dma_heap_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_remap_pfn_cow_p3s_native" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./p3s_run_module.sh p3s_modules/remap_pfn_cow_p3s_module.ko /dev/remap_pfn_cow_p3s -- ./remap_pfn_cow_p3s --native" />
+        <option name="test-command-line" key="kselftest_mm_p3s_remap_pfn_cow_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./p3s_run_module.sh p3s_modules/remap_pfn_cow_p3s_module.ko /dev/remap_pfn_cow_p3s -- ./remap_pfn_cow_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_pfn_insert_p3s_native" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./p3s_run_module.sh p3s_modules/pfn_insert_p3s_module.ko /dev/pfn_insert_p3s -- ./pfn_insert_p3s --native" />
+        <option name="test-command-line" key="kselftest_mm_p3s_pfn_insert_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./p3s_run_module.sh p3s_modules/pfn_insert_p3s_module.ko /dev/pfn_insert_p3s -- ./pfn_insert_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_dma_mmap_p3s_attrs" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./p3s_run_module.sh p3s_modules/dma_mmap_attrs_p3s_module.ko /dev/dma_mmap_attrs_p3s -- ./dma_mmap_p3s attrs" />
+        <option name="test-command-line" key="kselftest_mm_p3s_dma_mmap_p3s_pages" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./p3s_run_module.sh p3s_modules/dma_mmap_pages_p3s_module.ko /dev/dma_mmap_pages_p3s -- ./dma_mmap_p3s pages" />
+        <option name="test-command-line" key="kselftest_mm_p3s_dma_mmap_full_p3s_attrs" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./p3s_run_module.sh p3s_modules/dma_mmap_attrs_p3s_module.ko /dev/dma_mmap_attrs_p3s -- ./dma_mmap_full_p3s attrs" />
+        <option name="test-command-line" key="kselftest_mm_p3s_dma_mmap_full_p3s_pages" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./p3s_run_module.sh p3s_modules/dma_mmap_pages_p3s_module.ko /dev/dma_mmap_pages_p3s -- ./dma_mmap_full_p3s pages" />
+        <option name="test-command-line" key="kselftest_mm_p3s_dma_mmap_bounds_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./p3s_run_module.sh p3s_modules/dma_mmap_bounds_p3s_module.ko /dev/dma_mmap_bounds_p3s -- ./dma_mmap_bounds_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_dma_mmap_bounds_p3s_native" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./p3s_run_module.sh p3s_modules/dma_mmap_bounds_p3s_module.ko /dev/dma_mmap_bounds_p3s -- ./dma_mmap_bounds_p3s --native" />
+        <option name="test-command-line" key="kselftest_mm_p3s_iommu_dma_mmap_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./iommu_dma_mmap_p3s.sh" />
+        <option name="test-command-line" key="kselftest_mm_p3s_v9fs_mmap_close_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./v9fs_mmap_close_p3s.sh" />
+        <option name="test-command-line" key="kselftest_mm_p3s_vm_map_pages_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./p3s_run_module.sh p3s_modules/vm_map_pages_p3s_module.ko /dev/vm_map_pages_p3s -- ./vm_map_pages_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_vb2_mmap_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./p3s_run_module.sh p3s_modules/vb2_mmap_p3s_module.ko /dev/vb2_mmap_p3s -- sh -c './vb2_mmap_p3s --native &amp;&amp; exec ./vb2_mmap_p3s'" />
+        <option name="test-command-line" key="kselftest_mm_p3s_drm_gem_slice_p3s_native" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./drm_gem_slice_p3s --native" />
+        <option name="test-command-line" key="kselftest_mm_p3s_drm_gem_slice_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./drm_gem_slice_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_mmap_hint_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./mmap_hint_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_brk_aslr_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./brk_aslr_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_mmap_aslr_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./mmap_aslr_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_exec_aslr_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./exec_aslr_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_shmem_thp_mmap_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./shmem_thp_mmap_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_smaps_page_size_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./smaps_page_size_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_fork_page_size_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./fork_page_size_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_mmap_page_zero_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./mmap_page_zero_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_exec_stack_random_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./exec_stack_random_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_vma_range_slice_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./vma_range_slice_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_vma_merge_next_pgoff_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./vma_merge_next_pgoff_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_vma_merge_file_slice_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./vma_merge_file_slice_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_vma_merge_devzero_p3s_native" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./vma_merge_devzero_p3s --native" />
+        <option name="test-command-line" key="kselftest_mm_p3s_vma_merge_devzero_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./vma_merge_devzero_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_stack_aslr_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./stack_aslr_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_perf_mmap_offset_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./perf_mmap_offset_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_perf_phys_addr_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./perf_phys_addr_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_rss_stat_trace_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./rss_stat_trace_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_statm_cross_geometry_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./statm_cross_geometry_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_pci_mmap_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./pci_mmap_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_anon_vma_name_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./anon_vma_name_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_print_vma_addr_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./print_vma_addr_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_pagewalk_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./p3s_run_module.sh p3s_modules/pagewalk_p3s_module.ko /dev/pagewalk_p3s -- ./pagewalk_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_folio_within_range_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./p3s_run_module.sh p3s_modules/folio_within_range_p3s_module.ko /dev/folio_within_range_p3s -- ./folio_within_range_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_remap_file_pages_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./remap_file_pages_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_shmem_swap_usage_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./shmem_swap_usage_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_swap_header_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./swap_header_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_swap_header_badpages_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./swap_header_badpages_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_swapoff_shared_slice_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./swapoff_shared_slice_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_swap_pss_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./swap_pss_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_anon_rmap_split_window_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./anon_rmap_split_window_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_fork_dontfork_slice_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./fork_dontfork_slice_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_trace_ring_buffer_mmap_p3s_native" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./trace_ring_buffer_mmap_p3s --native" />
+        <option name="test-command-line" key="kselftest_mm_p3s_trace_ring_buffer_mmap_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./trace_ring_buffer_mmap_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_truncate_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./truncate_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_gup_retry_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./p3s_run_module.sh p3s_modules/gup_retry_p3s_module.ko /dev/gup_retry_p3s -- ./gup_retry_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_iov_iter_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./p3s_run_module.sh p3s_modules/iov_iter_p3s_module.ko /dev/iov_iter_p3s -- ./iov_iter_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_iov_range_retry_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./p3s_run_module.sh p3s_modules/iov_range_retry_p3s_module.ko /dev/iov_range_retry_p3s -- ./iov_range_retry_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_iov_range_retry_p3s_native" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./p3s_run_module.sh p3s_modules/iov_range_retry_p3s_module.ko /dev/iov_range_retry_p3s -- ./iov_range_retry_p3s --native" />
+        <option name="test-command-line" key="kselftest_mm_p3s_page_range_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./p3s_run_module.sh p3s_modules/iov_iter_p3s_module.ko /dev/iov_iter_p3s -- ./page_range_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_page_range_p3s_native" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./p3s_run_module.sh p3s_modules/iov_iter_p3s_module.ko /dev/iov_iter_p3s -- ./page_range_p3s --native" />
+        <option name="test-command-line" key="kselftest_mm_p3s_fault_in_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./p3s_run_module.sh p3s_modules/fault_in_p3s_module.ko /dev/fault_in_p3s -- ./fault_in_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_vmsplice_slice_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./vmsplice_slice_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_futex_shared_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./futex_shared_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_futex_uffd_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./futex_uffd_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_futex_uffd_p3s_native" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./futex_uffd_p3s --native" />
+        <option name="test-command-line" key="kselftest_mm_p3s_xdp_umem_p3s_native" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./xdp_umem_p3s --native" />
+        <option name="test-command-line" key="kselftest_mm_p3s_xdp_umem_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./xdp_umem_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_tcp_zerocopy_align_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./tcp_zerocopy_align_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_userfaultfd_mixed_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./userfaultfd_mixed_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_userfaultfd_remap_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./userfaultfd_remap_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_userfaultfd_shmem_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./userfaultfd_shmem_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_uffd_move_swapped_slice_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./uffd_move_swapped_slice_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_uffd_move_swapcache_lock_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./uffd_move_swapcache_lock_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_uffd_move_policy_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./uffd_move_policy_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_mbind_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./mbind_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_mlock_onfault_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./mlock_onfault_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_zero_sibling_mlock_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./zero_sibling_mlock_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_mlock_onfault_p3s_native" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./mlock_onfault_p3s --native" />
+        <option name="test-command-line" key="kselftest_mm_p3s_mlock_large_file_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./mlock_large_file_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_mlock_file_slices_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./mlock_file_slices_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_mlock_file_slices_p3s_native" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./mlock_file_slices_p3s --native" />
+        <option name="test-command-line" key="kselftest_mm_p3s_mlock_partial_file_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./mlock_partial_file_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_mlock_reclaim_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./mlock_reclaim_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_mremap_rlimit_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./mremap_rlimit_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_mremap_commit_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./mremap_commit_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_mremap_hint_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./mremap_hint_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_mremap_pgoff_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./p3s_run_module.sh p3s_modules/mremap_pgoff_p3s_module.ko /dev/mremap_pgoff_p3s -- ./mremap_pgoff_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_msync_offset_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./msync_offset_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_bpf_map_mmap_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./bpf_map_mmap_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_bpf_map_mmap_p3s_native" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./bpf_map_mmap_p3s --native" />
+        <option name="test-command-line" key="kselftest_mm_p3s_bpf_remote_access_p3s_native" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./bpf_remote_access_p3s --native" />
+        <option name="test-command-line" key="kselftest_mm_p3s_fork_filemap_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./fork_filemap_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_munmap_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./munmap_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_bpf_stack_build_id_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./bpf_stack_build_id_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_madvise_remove_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./madvise_remove_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_partial_anon_reclaim_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./partial_anon_reclaim_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_madvise_willneed_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./madvise_willneed_p3s $TMPDIR/madvise-willneed-p3s.bin" />
+        <option name="test-command-line" key="kselftest_mm_p3s_process_madvise_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./process_madvise_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_process_vm_access_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./process_vm_access_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_remote_write_dontneed_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./remote_write_dontneed_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_mixed_context_switch_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./mixed_context_switch_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_mixed_mm_access_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./mixed_mm_access_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_pagemap_ioctl_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./pagemap_ioctl_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_pagemap_scan_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./pagemap_scan_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_procfs_native_rmap_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./procfs_native_rmap_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_remap_pfn_range_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./remap_pfn_range_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_btf_vmlinux_mmap_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./btf_vmlinux_mmap_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_alsa_pcm_mmap_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./alsa_pcm_mmap_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_access_phys_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./access_phys_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_devzero_slice_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./devzero_slice_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_uprobe_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./uprobe_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_perf_page_size_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./perf_page_size_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_pagemap_exclusive_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./pagemap_exclusive_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_smaps_pss_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./smaps_pss_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_uffd_move_swap_window_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./uffd_move_swap_window_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_uffd_move_swap_window_p3s_native" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./uffd_move_swap_window_p3s --native" />
+        <option name="test-command-line" key="kselftest_mm_p3s_ashmem_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./ashmem_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_dontneed_refault_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./dontneed_refault_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_exec_env_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./exec_env_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_exec_stack_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./exec_stack_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_mte_anon_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./mte_anon_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_exec_user_args_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./exec_user_args_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_fadvise_dontneed_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./fadvise_dontneed_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_file_cow_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./file_cow_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_file_cow_refs_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./p3s_run_module.sh p3s_modules/iov_iter_p3s_module.ko /dev/iov_iter_p3s -- ./file_cow_refs_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_filemap_eof_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./filemap_eof_p3s $TMPDIR" />
+        <option name="test-command-line" key="kselftest_mm_p3s_hole_anon_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./hole_anon_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_kcov_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./kcov_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_madv_cold_large_file_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./madv_cold_large_file_p3s $TMPDIR/madv-cold-p3s.bin" />
+        <option name="test-command-line" key="kselftest_mm_p3s_memory_failure_anon_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./p3s_run_module.sh p3s_modules/anon_exclusive_probe_p3s_module.ko /dev/anon_exclusive_probe_p3s -- ./memory_failure_anon_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_mremap_file_slice_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./mremap_file_slice_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_mremap_slice_cow_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./mremap_slice_cow_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_mremap_split_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./mremap_split_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_oom_score_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./oom_score_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_oom_trace_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./oom_trace_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_packed_anon_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./packed_anon_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_packed_swap_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./packed_swap_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_proc_pagewalk_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./proc_pagewalk_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_process_mrelease_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./process_mrelease_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_rmap_file_referenced_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./rmap_file_referenced_p3s $TMPDIR/rmap-file-p3s.bin" />
+        <option name="test-command-line" key="kselftest_mm_p3s_smaps_native_fallback_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./smaps_native_fallback_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_swap_badpages_loop_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./swap_badpages_loop_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_swap_slice_mremap_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./swap_slice_mremap_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_swap_vma_readahead_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./swap_vma_readahead_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_swapoff_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./p3s_run_module.sh p3s_modules/anon_exclusive_probe_p3s_module.ko /dev/anon_exclusive_probe_p3s -- ./swapoff_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_tcp_zerocopy_reject_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./tcp_zerocopy_reject_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_truncate_remote_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./truncate_remote_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_truncate_tail_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./truncate_tail_p3s $TMPDIR" />
+        <option name="test-command-line" key="kselftest_mm_p3s_uffd_copy_tuple_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./uffd_copy_tuple_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_uffd_sigbus_anon_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./uffd_sigbus_anon_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_userfaultfd_poison_remote_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./userfaultfd_poison_remote_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_userfaultfd_remote_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./userfaultfd_remote_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_userfaultfd_unregister_remote_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./userfaultfd_unregister_remote_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_userfaultfd_wp_remote_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./userfaultfd_wp_remote_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_vb2_userptr_reject_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./p3s_run_module.sh p3s_modules/vb2_userptr_reject_p3s_module.ko /dev/vb2_userptr_reject_p3s -- ./vb2_userptr_reject_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_vhost_dirty_log_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./vhost_dirty_log_p3s" />
+        <option name="test-command-line" key="kselftest_mm_p3s_vmalloc_align_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; sh ./vmalloc_align_p3s.sh" />
+        <option name="test-command-line" key="kselftest_mm_p3s_binder_alloc_p3s" value="cd &ktest_dir;/mm/p3s; export TMPDIR=/data/local/tmp; ./binder_alloc_p3s" />
         <option name="test-command-line" key="kselftest_net_socket" value="cd &ktest_dir;; ./kselftest_net_socket" />
         <option name="test-command-line" key="kselftest_net_psock_tpacket" value="cd &ktest_dir;; ./kselftest_net_psock_tpacket" />
         <option name="test-command-line" key="kselftest_net_reuseaddr_conflict" value="cd &ktest_dir;; ./kselftest_net_reuseaddr_conflict" />
