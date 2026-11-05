@@ -8,7 +8,9 @@
 #include "core.h"
 #include "reg.h"
 
-#define MAC_MEM_DUMP_PAGE_SIZE 0x40000
+#define MAC_MEM_DUMP_PAGE_SIZE_AX 0x40000
+#define MAC_MEM_DUMP_PAGE_SIZE_BE 0x80000
+
 #define ADDR_CAM_ENT_SIZE  0x40
 #define ADDR_CAM_ENT_SHORT_SIZE 0x20
 #define BSSID_CAM_ENT_SIZE 0x08
@@ -469,6 +471,7 @@ enum rtw89_mac_c2h_class {
 	RTW89_MAC_C2H_CLASS_MLO = 0xc,
 	RTW89_MAC_C2H_CLASS_MRC = 0xe,
 	RTW89_MAC_C2H_CLASS_AP = 0x18,
+	RTW89_MAC_C2H_CLASS_ROLE = 0x1b,
 	RTW89_MAC_C2H_CLASS_MAX,
 };
 
@@ -921,6 +924,7 @@ struct rtw89_mac_size_set {
 	const struct rtw89_dle_size wde_size18;
 	const struct rtw89_dle_size wde_size19;
 	const struct rtw89_dle_size wde_size23;
+	const struct rtw89_dle_size wde_size25;
 	const struct rtw89_dle_size ple_size0;
 	const struct rtw89_dle_size ple_size0_v1;
 	const struct rtw89_dle_size ple_size3_v1;
@@ -930,6 +934,8 @@ struct rtw89_mac_size_set {
 	const struct rtw89_dle_size ple_size9;
 	const struct rtw89_dle_size ple_size18;
 	const struct rtw89_dle_size ple_size19;
+	const struct rtw89_dle_size ple_size32;
+	const struct rtw89_dle_size ple_size33;
 	const struct rtw89_wde_quota wde_qt0;
 	const struct rtw89_wde_quota wde_qt0_v1;
 	const struct rtw89_wde_quota wde_qt4;
@@ -938,6 +944,7 @@ struct rtw89_mac_size_set {
 	const struct rtw89_wde_quota wde_qt17;
 	const struct rtw89_wde_quota wde_qt18;
 	const struct rtw89_wde_quota wde_qt23;
+	const struct rtw89_wde_quota wde_qt25;
 	const struct rtw89_ple_quota ple_qt0;
 	const struct rtw89_ple_quota ple_qt1;
 	const struct rtw89_ple_quota ple_qt4;
@@ -952,6 +959,10 @@ struct rtw89_mac_size_set {
 	const struct rtw89_ple_quota ple_qt57;
 	const struct rtw89_ple_quota ple_qt58;
 	const struct rtw89_ple_quota ple_qt59;
+	const struct rtw89_ple_quota ple_qt72;
+	const struct rtw89_ple_quota ple_qt73;
+	const struct rtw89_ple_quota ple_qt74;
+	const struct rtw89_ple_quota ple_qt75;
 	const struct rtw89_ple_quota ple_qt_52a_wow;
 	const struct rtw89_ple_quota ple_qt_52b_wow;
 	const struct rtw89_ple_quota ple_qt_52bt_wow;
@@ -969,6 +980,7 @@ struct rtw89_mac_gen_def {
 	u32 filter_model_addr;
 	u32 indir_access_addr;
 	const u32 *mem_base_addrs;
+	u32 mem_page_size;
 	u32 rx_fltr;
 	const struct rtw89_port_reg *port_base;
 	u32 agg_len_ht;
