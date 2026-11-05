@@ -22,6 +22,30 @@
       },
       "revId": "80169e6d13b011aa5c07ef8768d0993f4142d7ae",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9092fe9d_07691ebd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1934715
+      },
+      "writtenOn": "2026-11-05T17:18:18Z",
+      "side": 1,
+      "message": "I believe it\u0027s because this commit wasn\u0027t present on earlier branches: https://cs.android.com/android/_/android/kernel/common/+/327d44754c54060baf9679ac073a21839912be16",
+      "parentUuid": "25ed8986_52681473",
+      "range": {
+        "startLine": 15,
+        "startChar": 16,
+        "endLine": 15,
+        "endChar": 25
+      },
+      "revId": "80169e6d13b011aa5c07ef8768d0993f4142d7ae",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
