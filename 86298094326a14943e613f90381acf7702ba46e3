@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "97d42f2f_1e6a52cb",
+        "filename": "drivers/iommu/intel/debugfs.c",
+        "patchSetId": 21
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 3494485
+      },
+      "writtenOn": "2026-11-05T20:54:15Z",
+      "side": 1,
+      "message": "val[0] bits 4:2 (AW) stores the stage-2 paging depth, while stage-1\u0027s paging depth is stored in val[2] bits 3:2 (FLPM: 0 \u003d 4-level / agaw 2, 1 \u003d 5-level / agaw 3):\n\n- For SL_ONLY and non-pKVM NESTED, debugfs walks the S2 table in val[0] (SLPTPTR), so AW in val[0] matches it.\n- For FL_ONLY, debugfs walks the S1 table in val[2] (FLPTPTR), so strictly speaking it should read FLPM too - line 432 only works for FL DMA domains by coincidence because pasid_pte_config_first_level() writes iommu-\u003eagaw into AW, which happens to match domain-\u003eagaw (for SVA it can actually mismatch, e.g. 4-level CPU paging on a 5-level IOMMU).\n- For pKVM NESTED, debugfs walks the host\u0027s S1 table in val[2] (since S2 is pKVM\u0027s inaccessible host EPT), while pasid_pte_config_nestd() sets AW in val[0] to pt_domain.agaw (from pkvm_host_ept_level()). Since the host EPT level can differ from S1\u0027s level (iommu-\u003eagaw), we need to read FLPM from val[2] here.",
+      "parentUuid": "96bfc6b4_2958dc0e",
+      "revId": "86298094326a14943e613f90381acf7702ba46e3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4773ca1e_cc9b6778",
         "filename": "drivers/iommu/intel/iommu.c",
         "patchSetId": 21
@@ -31,6 +49,24 @@
       "writtenOn": "2026-11-05T18:25:30Z",
       "side": 1,
       "message": "Why exactly need to check `gather-\u003estart \u003c\u003d gather-\u003eend` here?",
+      "revId": "86298094326a14943e613f90381acf7702ba46e3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "421278b8_68f9288e",
+        "filename": "drivers/iommu/intel/iommu.c",
+        "patchSetId": 21
+      },
+      "lineNbr": 4199,
+      "author": {
+        "id": 3494485
+      },
+      "writtenOn": "2026-11-05T20:54:15Z",
+      "side": 1,
+      "message": "`iommu_iotlb_gather_init()` initializes an empty gather to `start \u003d ULONG_MAX, end \u003d 0`, and in 6.18 `iommu_iotlb_sync()` still calls `-\u003eiotlb_sync()` unconditionally on empty gathers (e.g. if iommu_unmap() hits a non-present PTE and unmaps 0 bytes, or on 0-size error unwinds in `iommu_map`), which would pass `[ULONG_MAX, 0]` to `pkvm_domain_flush()` and hit -EINVAL.\n\nUpstream fixed this generically in iommu_iotlb_sync() in `commit 90c5def10bea (\"iommu: Do not call drivers for empty gathers\")`, which now I have backported in this series as aosp/4420121",
+      "parentUuid": "4773ca1e_cc9b6778",
       "revId": "86298094326a14943e613f90381acf7702ba46e3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
@@ -48,6 +84,24 @@
       "writtenOn": "2026-11-05T18:25:30Z",
       "side": 1,
       "message": "nit: we can also move the `flags` declaration into this `else` block now?",
+      "revId": "86298094326a14943e613f90381acf7702ba46e3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6ee0c2c_a53153c9",
+        "filename": "drivers/iommu/intel/pkvm/iommu_hc.c",
+        "patchSetId": 21
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 3494485
+      },
+      "writtenOn": "2026-11-05T20:54:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2eb42a3f_603f1cd1",
       "revId": "86298094326a14943e613f90381acf7702ba46e3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
