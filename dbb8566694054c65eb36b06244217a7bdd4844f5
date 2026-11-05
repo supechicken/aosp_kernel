@@ -126,6 +126,24 @@
       ],
       "revId": "dbb8566694054c65eb36b06244217a7bdd4844f5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "deb6acdc_f10132b4",
+        "filename": "include/uapi/linux/zram_ioctl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 3489357
+      },
+      "writtenOn": "2026-11-05T06:03:08Z",
+      "side": 1,
+      "message": "\u003e It might also be worth adding a flags/reserved field\n\nI had a similar thought - MS usually adds something like `u32 reserved[4];` to uAPI.",
+      "parentUuid": "18248d4b_5313a4bd",
+      "revId": "dbb8566694054c65eb36b06244217a7bdd4844f5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
