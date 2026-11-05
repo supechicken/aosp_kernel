@@ -48,10 +48,12 @@ const PROT_EXEC: usize = bindings::PROT_EXEC as usize;
 const PROT_WRITE: usize = bindings::PROT_WRITE as usize;
 const PROT_MASK: usize = PROT_EXEC | PROT_READ | PROT_WRITE;
 
-/// Keep shared range indices in the smallest page unit supported by P3S.
-///
-/// A native process and a 4KB process can share an ashmem fd and its range tree.
+/// A native process and a 4KB process can share an ashmem fd and its range tree,
+/// so P3S uses 4KB indices. Without P3S, count ranges in native pages.
+#[cfg(CONFIG_ARM64_PER_PROCESS_PAGE_SIZE)]
 pub(crate) const ASHMEM_RANGE_PAGE_SHIFT: usize = bindings::PAGE_SHIFT_4KB as usize;
+#[cfg(not(CONFIG_ARM64_PER_PROCESS_PAGE_SIZE))]
+pub(crate) const ASHMEM_RANGE_PAGE_SHIFT: usize = bindings::PAGE_SHIFT as usize;
 pub(crate) const ASHMEM_RANGE_PAGE_SIZE: usize = 1usize << ASHMEM_RANGE_PAGE_SHIFT;
 
 mod ashmem_shrinker;
@@ -515,7 +517,7 @@ impl Ashmem {
         let current = current!();
         let mm = current.mm().ok_or(EINVAL)?;
 
-        // Shared range indices use fixed 4KB units, not the caller's process-page size.
+        // P3S range indices use 4KB units, not the caller's process-page size.
         let pages_per_process_page = mm.page_size() / ASHMEM_RANGE_PAGE_SIZE;
         let mut guard = AshmemGuard(ASHMEM_MUTEX.lock());
         let total_num_range_pages = LRU_COUNT.load(Ordering::Relaxed);
