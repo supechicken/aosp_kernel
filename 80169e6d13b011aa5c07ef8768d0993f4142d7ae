@@ -46,6 +46,30 @@
       },
       "revId": "80169e6d13b011aa5c07ef8768d0993f4142d7ae",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be86c62c_2cd6576e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1934715
+      },
+      "writtenOn": "2026-11-05T17:33:21Z",
+      "side": 1,
+      "message": "I went ahead and documented it in the commit message. Feel free to close this out if no further quesitons.",
+      "parentUuid": "9092fe9d_07691ebd",
+      "range": {
+        "startLine": 15,
+        "startChar": 16,
+        "endLine": 15,
+        "endChar": 25
+      },
+      "revId": "80169e6d13b011aa5c07ef8768d0993f4142d7ae",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
