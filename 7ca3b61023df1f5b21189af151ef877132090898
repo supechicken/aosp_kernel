@@ -16,6 +16,24 @@
       "message": "There are some serious issues with this backport. See the comment in the bug.",
       "revId": "7ca3b61023df1f5b21189af151ef877132090898",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06d6d6e8_7efecee7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1069543
+      },
+      "writtenOn": "2026-11-05T21:33:57Z",
+      "side": 1,
+      "message": "b/581521990#comment8",
+      "parentUuid": "c04506c9_1b2039cf",
+      "revId": "7ca3b61023df1f5b21189af151ef877132090898",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
