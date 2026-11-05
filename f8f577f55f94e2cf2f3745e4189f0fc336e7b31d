@@ -18,6 +18,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ef82d15_8f6f6e9c",
+        "filename": "arch/x86/include/asm/kvm_pkvm.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 3494485
+      },
+      "writtenOn": "2026-11-05T20:51:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4238e950_28e3519c",
+      "revId": "f8f577f55f94e2cf2f3745e4189f0fc336e7b31d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bf67f7f1_acb54667",
@@ -35,6 +53,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd7ac20f_b5dbdbb6",
+        "filename": "drivers/iommu/intel/pkvm/iommu_hc.c",
+        "patchSetId": 20
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 3494485
+      },
+      "writtenOn": "2026-11-05T20:51:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf67f7f1_acb54667",
+      "revId": "f8f577f55f94e2cf2f3745e4189f0fc336e7b31d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "44965429_8e1a8bcb",
@@ -48,6 +84,24 @@
       "writtenOn": "2026-11-05T18:17:00Z",
       "side": 1,
       "message": "nit: move this check above line 302, together with other sanity checks?",
+      "revId": "f8f577f55f94e2cf2f3745e4189f0fc336e7b31d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49b2e3d6_e8976d92",
+        "filename": "drivers/iommu/intel/pkvm/iommu_hc.c",
+        "patchSetId": 20
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 3494485
+      },
+      "writtenOn": "2026-11-05T20:51:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44965429_8e1a8bcb",
       "revId": "f8f577f55f94e2cf2f3745e4189f0fc336e7b31d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
