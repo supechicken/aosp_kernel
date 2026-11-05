@@ -44,8 +44,9 @@ static void dentry_release(struct dentry *d);
 static int iterate_incfs_dir(struct file *file, struct dir_context *ctx);
 static struct dentry *dir_lookup(struct inode *dir_inode,
 		struct dentry *dentry, unsigned int flags);
-static struct dentry *dir_mkdir(struct mnt_idmap *idmap, struct inode *dir,
-		     struct dentry *dentry, umode_t mode);
+static struct dentry *dir_mkdir(const struct mnt_idmap *idmap,
+				struct inode *dir, struct dentry *dentry,
+				umode_t mode);
 static int dir_unlink(struct inode *dir, struct dentry *dentry);
 static int dir_link(struct dentry *old_dentry, struct inode *dir,
 			 struct dentry *new_dentry);
@@ -68,14 +69,14 @@ static struct inode *incfs_alloc_inode(struct super_block *sb);
 static void incfs_free_inode(struct inode *inode);
 static void incfs_evict_inode(struct inode *inode);
 
-static int incfs_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
+static int incfs_setattr(const struct mnt_idmap *idmap, struct dentry *dentry,
 			 struct iattr *ia);
-static int incfs_getattr(struct mnt_idmap *idmap, const struct path *path,
+static int incfs_getattr(const struct mnt_idmap *idmap, const struct path *path,
 			 struct kstat *stat, u32 request_mask,
 			 unsigned int query_flags);
 static ssize_t incfs_getxattr(struct dentry *d, const char *name,
 			void *value, size_t size);
-static ssize_t incfs_setxattr(struct mnt_idmap *idmap, struct dentry *d,
+static ssize_t incfs_setxattr(const struct mnt_idmap *idmap, struct dentry *d,
 			      const char *name, void *value, size_t size,
 			      int flags);
 static ssize_t incfs_listxattr(struct dentry *d, char *list, size_t size);
@@ -98,7 +99,7 @@ static const struct fs_context_operations incfs_context_ops = {
 	.dup		= incfs_fc_dup,
 };
 
-static int dir_rename_wrap(struct mnt_idmap *idmap, struct inode *old_dir,
+static int dir_rename_wrap(const struct mnt_idmap *idmap, struct inode *old_dir,
 			   struct dentry *old_dentry, struct inode *new_dir,
 			   struct dentry *new_dentry, unsigned int flags)
 {
@@ -207,7 +208,7 @@ static int incfs_handler_getxattr(const struct xattr_handler *xh,
 }
 
 static int incfs_handler_setxattr(const struct xattr_handler *xh,
-				  struct mnt_idmap *idmap,
+				  const struct mnt_idmap *idmap,
 				  struct dentry *d, struct inode *inode,
 				  const char *name, const void *buffer,
 				  size_t size, int flags)
@@ -1038,7 +1039,9 @@ out:
 	return ERR_PTR(err);
 }
 
-static struct dentry *dir_mkdir(struct mnt_idmap *idmap, struct inode *dir, struct dentry *dentry, umode_t mode)
+static struct dentry *dir_mkdir(const struct mnt_idmap *idmap,
+				struct inode *dir, struct dentry *dentry,
+				umode_t mode)
 {
 	struct mount_info *mi = get_mount_info(dir->i_sb);
 	struct inode_info *dir_node = get_incfs_node(dir);
@@ -1592,7 +1595,7 @@ static void incfs_evict_inode(struct inode *inode)
 	clear_inode(inode);
 }
 
-static int incfs_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
+static int incfs_setattr(const struct mnt_idmap *idmap, struct dentry *dentry,
 			 struct iattr *ia)
 {
 	struct dentry_info *di = get_incfs_dentry(dentry);
@@ -1637,7 +1640,7 @@ static int incfs_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
 }
 
 
-static int incfs_getattr(struct mnt_idmap *idmap, const struct path *path,
+static int incfs_getattr(const struct mnt_idmap *idmap, const struct path *path,
 			 struct kstat *stat, u32 request_mask,
 			 unsigned int query_flags)
 {
@@ -1707,7 +1710,7 @@ static ssize_t incfs_getxattr(struct dentry *d, const char *name,
 }
 
 
-static ssize_t incfs_setxattr(struct mnt_idmap *idmap, struct dentry *d,
+static ssize_t incfs_setxattr(const struct mnt_idmap *idmap, struct dentry *d,
 			      const char *name, void *value, size_t size,
 			      int flags)
 {
