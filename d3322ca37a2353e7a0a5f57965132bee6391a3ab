@@ -34,6 +34,24 @@
       "parentUuid": "b18e89e6_8b2ba8bc",
       "revId": "d3322ca37a2353e7a0a5f57965132bee6391a3ab",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d80da44_ad45019c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3093381
+      },
+      "writtenOn": "2026-11-05T03:25:56Z",
+      "side": 1,
+      "message": "Got it. Don\u0027t cherry-pick to mainline. Cherry-pick directly to androidX-Y.Z.",
+      "parentUuid": "237048fa_ef62d1eb",
+      "revId": "d3322ca37a2353e7a0a5f57965132bee6391a3ab",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
