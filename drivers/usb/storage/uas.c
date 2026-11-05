@@ -317,6 +317,26 @@ static void uas_stat_cmplt(struct urb *urb)
 	if (status) {
 		if (status != -ENOENT && status != -ECONNRESET && status != -ESHUTDOWN)
 			dev_err(&urb->dev->dev, "stat urb: status %d\n", status);
+
+		/*
+		 * If the status URB completed with an unrecoverable error
+		 * (e.g. -EPROTO, -EILSEQ, -ETIME) while a command was inflight,
+		 * don't leave the command orphaned waiting for a 60s request timeout.
+		 * Complete it with DID_NO_CONNECT immediately.
+		 */
+		for (idx = 0; idx < devinfo->qdepth; idx++) {
+			cmnd = devinfo->cmnd[idx];
+			if (!cmnd)
+				continue;
+			cmdinfo = scsi_cmd_priv(cmnd);
+			if (cmdinfo->state & COMMAND_INFLIGHT) {
+				data_in_urb = usb_get_urb(cmdinfo->data_in_urb);
+				data_out_urb = usb_get_urb(cmdinfo->data_out_urb);
+				cmdinfo->state &= ~COMMAND_INFLIGHT;
+				set_host_byte(cmnd, DID_NO_CONNECT);
+				uas_try_complete(cmnd, __func__);
+			}
+		}
 		goto out;
 	}
 
@@ -697,7 +717,8 @@ static int uas_queuecommand_lck(struct scsi_cmnd *cmnd)
 	 * a command that has finished is a success for the purpose
 	 * of queueing, no matter how fatal the error
 	 */
-	if (err == -ENODEV) {
+	if (err == -ENODEV || err == -ESHUTDOWN || err == -ECONNRESET ||
+	    err == -EPIPE || err == -EPROTO) {
 		if (cmdinfo->state & (COMMAND_INFLIGHT | DATA_IN_URB_INFLIGHT |
 				DATA_OUT_URB_INFLIGHT))
 			goto out;
