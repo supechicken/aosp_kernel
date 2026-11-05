@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aee7a92b_5bf0f909",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1137063
+      },
+      "writtenOn": "2026-11-05T20:22:00Z",
+      "side": 1,
+      "message": "3877158a5a1 (\"block: add a bdev_rw_virt helper\") cherry picks cleanly.  Maybe just take that first?",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 60
+      },
+      "revId": "7fd3ea7697aba13295cc6dfe7bef3e9c8a4f77cd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b304028_5464621c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1137063
+      },
+      "writtenOn": "2026-11-05T20:22:00Z",
+      "side": 1,
+      "message": "This should have the same Change-Id as the android17-6.18 change, so that Gerrit shows them as cherry-picks.",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 52
+      },
+      "revId": "7fd3ea7697aba13295cc6dfe7bef3e9c8a4f77cd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
