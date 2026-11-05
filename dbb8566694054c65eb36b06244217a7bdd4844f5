@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1922e338_bb355114",
+        "filename": "drivers/block/zram/zram_drv.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 1182,
+      "author": {
+        "id": 3489357
+      },
+      "writtenOn": "2026-11-05T06:00:48Z",
+      "side": 1,
+      "message": "Hmm this looks familiar. For writeback ctl we use kfree_rcu and take RCU-read side lock around dec/wakeup.",
+      "parentUuid": "0ed62e02_b76c346c",
+      "revId": "dbb8566694054c65eb36b06244217a7bdd4844f5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "18248d4b_5313a4bd",
         "filename": "include/uapi/linux/zram_ioctl.h",
         "patchSetId": 3
