@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bedad5b5_39834f1d",
+        "filename": "drivers/iommu/intel/pkvm/domain.c",
+        "patchSetId": 17
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-05T17:50:43Z",
+      "side": 1,
+      "message": "Ok, and what about that updated calculate_psi_aligned_address() in newest kernel - will it actually eliminate the need for this check? (I haven\u0027t analyzed that myself.)\n\nIf so, maybe let\u0027s also add a comment like `With newer kernels this check is not needed anymore, since commit 9785df3fd670 (\"iommu/vt-d: Simplify calculate_psi_aligned_address()\")` so we don\u0027t forget that and don\u0027t get puzzled what this check is for in the future?",
+      "parentUuid": "2a2330a4_569d8eca",
+      "revId": "6e0f8741d0c244353f6ce86568c21b1ea37ac3bf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8be7e779_e0ce0a66",
         "filename": "drivers/iommu/intel/pkvm/domain.c",
         "patchSetId": 17
