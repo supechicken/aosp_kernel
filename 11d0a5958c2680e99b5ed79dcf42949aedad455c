@@ -22,6 +22,30 @@
       },
       "revId": "11d0a5958c2680e99b5ed79dcf42949aedad455c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c3a6879_a61e8cbc",
+        "filename": "drivers/block/zram/zram_drv.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 1322,
+      "author": {
+        "id": 1894539
+      },
+      "writtenOn": "2026-11-05T08:25:48Z",
+      "side": 1,
+      "message": "Good point, thanks Sergey. You\u0027re right that this is functionally redundant. schedule() should flush current-\u003eplug automatically. I kept the explicit unplug to flush synchronously in the writeback thread instead of the scheduler path. I re-run the benchmark, it seems the difference is negligible. I\u0027m fine to drop it for simplicity.",
+      "parentUuid": "4acd59dc_d166dfcc",
+      "range": {
+        "startLine": 1319,
+        "startChar": 0,
+        "endLine": 1322,
+        "endChar": 25
+      },
+      "revId": "11d0a5958c2680e99b5ed79dcf42949aedad455c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
