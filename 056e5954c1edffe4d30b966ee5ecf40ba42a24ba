@@ -16,6 +16,23 @@
       "message": "Hold on comment similar to android16-6.12",
       "revId": "056e5954c1edffe4d30b966ee5ecf40ba42a24ba",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fe267ba_2965580e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1945845
+      },
+      "writtenOn": "2026-11-05T01:34:49Z",
+      "side": 1,
+      "message": "This seems to help with my patches! Thank you!",
+      "revId": "056e5954c1edffe4d30b966ee5ecf40ba42a24ba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
