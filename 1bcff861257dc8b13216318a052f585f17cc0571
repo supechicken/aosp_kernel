@@ -49,6 +49,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f90a3367_104c040d",
+        "filename": "drivers/usb/host/xhci-sideband.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1981633
+      },
+      "writtenOn": "2026-11-05T06:08:36Z",
+      "side": 1,
+      "message": "Per your above comment, this seems risky to be doing. Can\u0027t you ensure unregister can\u0027t be called while the endpoint is configured or reference count this in some way?",
+      "range": {
+        "startLine": 506,
+        "startChar": 4,
+        "endLine": 507,
+        "endChar": 29
+      },
+      "revId": "1bcff861257dc8b13216318a052f585f17cc0571",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5a4ed3d3_12c6ad5f",
         "filename": "drivers/usb/host/xhci.h",
         "patchSetId": 1
