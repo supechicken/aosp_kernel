@@ -44,6 +44,24 @@
       ],
       "revId": "b5c674410787283f5f165028e328b7e0c327ac69",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06ae10cd_ac4da396",
+        "filename": "drivers/iommu/intel/pkvm/domain.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 3494485
+      },
+      "writtenOn": "2026-11-05T02:21:28Z",
+      "side": 1,
+      "message": "Original PS did increase/decrease the refcount. I must have messed this up during the rebase, thank you for catching.",
+      "parentUuid": "d1d7301b_3d36b381",
+      "revId": "b5c674410787283f5f165028e328b7e0c327ac69",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
