@@ -142,6 +142,24 @@
       "parentUuid": "d1707822_716799f3",
       "revId": "b434937b3e245a1115eb4672340ba25f266054b0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4a9fb5c_51088b9f",
+        "filename": "arch/x86/kvm/pkvm/pgtable.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 3702829
+      },
+      "writtenOn": "2026-11-05T14:16:10Z",
+      "side": 1,
+      "message": "\u003e Theoretically it can, e.g. a simple example: when creating hyp mappings, we map a 2MB-aligned 1MB virtual range to a physical 1MB range (creating 256 4K mappings), and then map the 1MB range next to it, correspondingly, to the physical 1MB range next to it (creating 256 4K mappings), so we have 512 contiguous mappings and thus we can immediately coalesce them into a 2MB mapping? A previous unmap is not required for that, right?\n\nYeah, theoretically that\u0027s possible—a prior unmap isn\u0027t required if two adjacent ranges are mapped sequentially with matching protections.\n\nIn practice for hyp_mmu, it likely won\u0027t happen across the three cases we map:\n\n1. pkvm_memory memblocks are already merged by memblock, so separate regions aren\u0027t adjacent (and during create_hyp_mmu(), hyp_mmu uses pkvm_early_alloc_mm_ops where page_count() returns INT_MAX).\n2. pvmfw / .pkvm.text / .data have different protection bits or VA space, preventing them from coalescing with surrounding RAM.\n3. Runtime IOMMU MMIO mappings (pkvm_host_donate_hyp_mmio()) are only ~4K per DMAR unit (capped at PKVM_MAX_IOMMU_NUM \u003d 16, whereas coalescing would need 512 contiguous 4K pages).\n\nBut I agree that in theory it\u0027s possible, so it\u0027s better to not support coalesce for hyp_mmu",
+      "parentUuid": "a834b38c_4d998248",
+      "revId": "b434937b3e245a1115eb4672340ba25f266054b0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
