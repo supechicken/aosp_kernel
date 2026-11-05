@@ -437,6 +437,25 @@ static void binder_alloc_test_mmap(struct kunit *test)
 	KUNIT_EXPECT_TRUE(test, list_is_last(&buf->entry, &alloc->buffers));
 }
 
+static void binder_alloc_test_partial_tail_exact_fit(struct kunit *test)
+{
+	struct binder_alloc_test *priv = test->priv;
+	struct binder_alloc *alloc = &priv->alloc;
+	struct binder_buffer *buffer;
+	size_t size = BINDER_MMAP_SIZE - SZ_8K;
+
+	/* Model a 4KB VMA ending halfway through its final native page. */
+	alloc->buffer_size = size;
+	buffer = binder_alloc_new_buf(alloc, size, 0, 0, 0);
+	KUNIT_ASSERT_FALSE(test, IS_ERR(buffer));
+	KUNIT_ASSERT_NOT_NULL(test, buffer);
+	KUNIT_EXPECT_EQ(test, list_lru_count(alloc->freelist), 0UL);
+
+	binder_alloc_free_buf(alloc, buffer);
+	KUNIT_EXPECT_EQ(test, list_lru_count(alloc->freelist),
+			DIV_ROUND_UP(size, PAGE_SIZE));
+}
+
 /**
  * binder_alloc_exhaustive_test() - Exhaustively test alloc and free of buffer pages.
  * @test: The test context object.
@@ -554,6 +573,7 @@ static void binder_alloc_test_exit(struct kunit *test)
 static struct kunit_case binder_alloc_test_cases[] = {
 	KUNIT_CASE(binder_alloc_test_init_freelist),
 	KUNIT_CASE(binder_alloc_test_mmap),
+	KUNIT_CASE(binder_alloc_test_partial_tail_exact_fit),
 	KUNIT_CASE(binder_alloc_exhaustive_test),
 	{}
 };
