@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aec73398_31ff5fff",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1965265
+      },
+      "writtenOn": "2026-11-05T20:38:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aee7a92b_5bf0f909",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 60
+      },
+      "revId": "7fd3ea7697aba13295cc6dfe7bef3e9c8a4f77cd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7b304028_5464621c",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-11-05T20:22:00Z",
       "side": 1,
       "message": "This should have the same Change-Id as the android17-6.18 change, so that Gerrit shows them as cherry-picks.",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 52
+      },
+      "revId": "7fd3ea7697aba13295cc6dfe7bef3e9c8a4f77cd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5eaacb4_c92694cd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1965265
+      },
+      "writtenOn": "2026-11-05T20:38:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b304028_5464621c",
       "range": {
         "startLine": 28,
         "startChar": 0,
