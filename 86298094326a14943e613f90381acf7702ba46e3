@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "96bfc6b4_2958dc0e",
+        "filename": "drivers/iommu/intel/debugfs.c",
+        "patchSetId": 21
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-05T19:09:27Z",
+      "side": 1,
+      "message": "Question: why is it ok to use the above `agaw` (from line 432) in other cases but not in this case?",
+      "revId": "86298094326a14943e613f90381acf7702ba46e3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4773ca1e_cc9b6778",
         "filename": "drivers/iommu/intel/iommu.c",
         "patchSetId": 21
