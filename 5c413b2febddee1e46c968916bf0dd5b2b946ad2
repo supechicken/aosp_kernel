@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1cd4d063_d4dad846",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1945845
+      },
+      "writtenOn": "2026-11-05T22:32:21Z",
+      "side": 1,
+      "message": "need the full sha here not the 12char version.",
+      "revId": "5c413b2febddee1e46c968916bf0dd5b2b946ad2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "87c4c6a8_fa5c9161",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
