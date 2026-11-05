@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2323d4ae_5df589c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1069543
+      },
+      "writtenOn": "2026-11-05T21:32:58Z",
+      "side": 1,
+      "message": "There are serious issues with this backport. See the bug (b/581521990#comment9)",
+      "revId": "ffa92a89196fe92e648b7d5335f389041d0d0630",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
