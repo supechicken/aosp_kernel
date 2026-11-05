@@ -16,6 +16,24 @@
       "message": "Adding Giuliano to confirm this is ok.",
       "revId": "a5dbf4c908b0397a3f89cd72ddf60a59863aeadb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cfadb9b_7863ad9f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1499410
+      },
+      "writtenOn": "2026-11-05T01:22:30Z",
+      "side": 1,
+      "message": "Hi @gprocida@google.com,\n\nFYI, regenerated these after rebasing on the kminext merge. The fields now replace ANDROID_BACKPORT_RESERVE slots only.",
+      "parentUuid": "fce4e00f_5b2ff4b9",
+      "revId": "a5dbf4c908b0397a3f89cd72ddf60a59863aeadb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
