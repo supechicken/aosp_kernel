@@ -517,6 +517,15 @@ static bool debug_low_async_space_locked(struct binder_alloc *alloc)
 	return false;
 }
 
+static unsigned long binder_freelist_end_page(struct binder_alloc *alloc,
+					       unsigned long end)
+{
+	/* The mapping's partial last page has no following in-use buffer. */
+	if (end == alloc->vm_start + alloc->buffer_size)
+		return PAGE_ALIGN(end);
+	return end & PAGE_MASK;
+}
+
 /* Callers preallocate @new_buffer, it is freed by this function if unused */
 static struct binder_buffer *binder_alloc_new_buf_locked(
 				struct binder_alloc *alloc,
@@ -598,12 +607,8 @@ static struct binder_buffer *binder_alloc_new_buf_locked(
 	 * adjacent in-use buffer. In such case, the page has been already
 	 * removed from the freelist so we trim our range short.
 	 */
-	/* The mapping's partial last page has no following in-use buffer. */
-	next_used_page = buffer->user_data + buffer_size;
-	if (next_used_page == alloc->vm_start + alloc->buffer_size)
-		next_used_page = PAGE_ALIGN(next_used_page);
-	else
-		next_used_page &= PAGE_MASK;
+	next_used_page = binder_freelist_end_page(alloc,
+						 buffer->user_data + buffer_size);
 	curr_last_page = PAGE_ALIGN(buffer->user_data + size);
 	binder_lru_freelist_del(alloc, PAGE_ALIGN(buffer->user_data),
 				min(next_used_page, curr_last_page));
@@ -787,7 +792,8 @@ static void binder_free_buf_locked(struct binder_alloc *alloc,
 	}
 
 	binder_lru_freelist_add(alloc, PAGE_ALIGN(buffer->user_data),
-				(buffer->user_data + buffer_size) & PAGE_MASK);
+				binder_freelist_end_page(alloc,
+							 buffer->user_data + buffer_size));
 
 	rb_erase(&buffer->rb_node, &alloc->allocated_buffers);
 	buffer->free = 1;
