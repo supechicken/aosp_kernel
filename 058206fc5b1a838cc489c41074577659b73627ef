@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "929c22cb_9c654574",
+        "filename": "include/linux/mm_types.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1871,
+      "author": {
+        "id": 1157738
+      },
+      "writtenOn": "2026-11-05T20:56:29Z",
+      "side": 1,
+      "message": "It\u0027s unusual to add a value without any users. Can we move it to the first patch that uses it?",
+      "range": {
+        "startLine": 1871,
+        "startChar": 8,
+        "endLine": 1871,
+        "endChar": 27
+      },
+      "revId": "058206fc5b1a838cc489c41074577659b73627ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
