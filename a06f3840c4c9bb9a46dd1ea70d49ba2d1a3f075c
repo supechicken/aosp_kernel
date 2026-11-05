@@ -16,6 +16,24 @@
       "message": "Hold on comment while we see the resulting size and CRS\u0027s diff if any.",
       "revId": "a06f3840c4c9bb9a46dd1ea70d49ba2d1a3f075c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20c70336_453c45c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2026-11-05T10:43:15Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "5d0342bb_7d83dc10",
+      "revId": "a06f3840c4c9bb9a46dd1ea70d49ba2d1a3f075c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
