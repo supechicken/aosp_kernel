@@ -2175,10 +2175,19 @@ cc_binary_with_abi(
 cc_binary_with_abi(
     name = "kselftest_mm_mlock2_tests",
     srcs = [
+        "tools/testing/selftests/android/include/mman-compat.h",
         "tools/testing/selftests/mm/mlock2.h",
         "tools/testing/selftests/mm/mlock2-tests.c",
     ],
-    copts = _KSELFTEST_COPTS,
+    # TODO(b/557760113): Drop once Kleaf uses an NDK with v6.11+ headers.
+    copts = _KSELFTEST_COPTS + [
+        "-include",
+        paths.join(
+            package_relative_label(":x").workspace_root,
+            package_relative_label(":x").package,
+            "tools/testing/selftests/android/include/mman-compat.h",
+        ),
+    ],
     includes = [
         "tools/testing/selftests",
         "tools/testing/selftests/mm",
