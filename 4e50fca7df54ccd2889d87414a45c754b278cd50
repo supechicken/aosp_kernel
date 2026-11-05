@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db8a9252_8319f48f",
+        "filename": "drivers/iommu/intel/cache.c",
+        "patchSetId": 17
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 3484945
+      },
+      "writtenOn": "2026-11-05T09:45:03Z",
+      "side": 1,
+      "message": "Nit: unnecessary indentation changes?",
+      "range": {
+        "startLine": 476,
+        "startChar": 0,
+        "endLine": 477,
+        "endChar": 42
+      },
+      "revId": "4e50fca7df54ccd2889d87414a45c754b278cd50",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
