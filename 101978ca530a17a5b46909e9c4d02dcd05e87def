@@ -16,6 +16,24 @@
       "message": "Commit message is very different from on android17-6.18.",
       "revId": "101978ca530a17a5b46909e9c4d02dcd05e87def",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03bbe24b_64297e5d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1965265
+      },
+      "writtenOn": "2026-11-05T21:16:53Z",
+      "side": 1,
+      "message": "sorry copypasta issues originally.  Thank you.",
+      "parentUuid": "5fa26bad_f691b176",
+      "revId": "101978ca530a17a5b46909e9c4d02dcd05e87def",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
