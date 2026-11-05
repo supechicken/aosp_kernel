@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc755900_8c8ff6c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1561651
+      },
+      "writtenOn": "2026-11-05T06:48:19Z",
+      "side": 1,
+      "message": "fyi, the cherry-pick onto android18-7.3 is at aosp/4418084. These are identical.",
+      "revId": "d30e62c62d4af2252ab7ab28c2b4d5928ba43ff9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
