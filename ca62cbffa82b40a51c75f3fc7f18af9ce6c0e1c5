@@ -74,6 +74,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0248dc2e_8a83c276",
+        "filename": "drivers/android/bpf/bpf_fd_loader.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1981633
+      },
+      "writtenOn": "2026-11-05T19:44:47Z",
+      "side": 1,
+      "message": "Unfortunately, I don\u0027t think the logic I proposed in https://android-review.git.corp.google.com/c/kernel/common/+/4305476/comments/dd54e602_787b1113 does completely solve the problem. The FDs could still be swapped prior to the bpf_map_get.",
+      "parentUuid": "eb9de3c2_f0e3f1ae",
+      "revId": "ca62cbffa82b40a51c75f3fc7f18af9ce6c0e1c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "475446f9_3da77001",
         "filename": "drivers/android/bpf/bpf_fd_loader.rs",
         "patchSetId": 1

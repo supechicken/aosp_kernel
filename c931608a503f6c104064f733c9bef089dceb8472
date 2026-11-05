@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f75df72_dd10cd3f",
+        "filename": "drivers/android/bpf/bpf_fd_loader.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1981633
+      },
+      "writtenOn": "2026-11-05T19:44:47Z",
+      "side": 1,
+      "message": "If the caller has to have CAP_BPF and CAP_SYS_ADMIN, what\u0027s stopping them from just calling bpf_load?",
+      "range": {
+        "startLine": 361,
+        "startChar": 8,
+        "endLine": 361,
+        "endChar": 19
+      },
+      "revId": "c931608a503f6c104064f733c9bef089dceb8472",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}

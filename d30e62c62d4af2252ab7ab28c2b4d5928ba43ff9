@@ -55,6 +55,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f7883db9_0d0c0e4f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1981633
+      },
+      "writtenOn": "2026-11-05T19:44:47Z",
+      "side": 1,
+      "message": "Due to the nature of this feature, I think we need a thorough security audit of the driver before merging. That\u0027s going to take more than my personal review. Please have security team members sign off.",
+      "revId": "d30e62c62d4af2252ab7ab28c2b4d5928ba43ff9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1f377887_392e05b0",
         "filename": "drivers/android/bpf/bpf_fd_loader.rs",
         "patchSetId": 6
@@ -94,6 +111,202 @@
         "startChar": 12,
         "endLine": 96,
         "endChar": 44
+      },
+      "revId": "d30e62c62d4af2252ab7ab28c2b4d5928ba43ff9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43723c16_6471bdf9",
+        "filename": "drivers/android/bpf/bpf_fd_loader.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1981633
+      },
+      "writtenOn": "2026-11-05T19:44:47Z",
+      "side": 1,
+      "message": "before freezing/updating, we should be checking `map_type \u003d\u003d ARRAY \u0026\u0026 key_size \u003d\u003d 4 \u0026\u0026 value_size \u003d\u003d data_sz \u0026\u0026 max_entries \u003d\u003d 1 \u0026\u0026 map_flags \u003d\u003d 0`",
+      "revId": "d30e62c62d4af2252ab7ab28c2b4d5928ba43ff9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74062131_8175931e",
+        "filename": "drivers/android/bpf/bpf_fd_loader.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1981633
+      },
+      "writtenOn": "2026-11-05T19:44:47Z",
+      "side": 1,
+      "message": "why not use kernel_read_file_from_fd? \n\nWe should probably be checking for FMODE_READ, and that FMODE_WRITE is not set. We should probably also be checking the refcount of current-\u003efiles to ensure it is 1, and not shared, preventing a duped case.",
+      "range": {
+        "startLine": 620,
+        "startChar": 17,
+        "endLine": 620,
+        "endChar": 33
+      },
+      "revId": "d30e62c62d4af2252ab7ab28c2b4d5928ba43ff9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ea18342_a7a88b42",
+        "filename": "include/uapi/linux/android/bpf_fd_loader.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1981633
+      },
+      "writtenOn": "2026-11-05T19:44:47Z",
+      "side": 1,
+      "message": "This appears to conflict with 3 other ioctl magic, I\u0027d pick a larger number to avoid collision.\n\nI have a feeling we should also add it to Documentation/userspace-api/ioctl/ioctl-number.rst as also add documentation on how to use the new UAPI.",
+      "range": {
+        "startLine": 12,
+        "startChar": 36,
+        "endLine": 12,
+        "endChar": 39
+      },
+      "revId": "d30e62c62d4af2252ab7ab28c2b4d5928ba43ff9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1774d31d_fa4b6aae",
+        "filename": "include/uapi/linux/android/bpf_fd_loader.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1981633
+      },
+      "writtenOn": "2026-11-05T19:44:47Z",
+      "side": 1,
+      "message": "__s32 for FDs?",
+      "range": {
+        "startLine": 15,
+        "startChar": 1,
+        "endLine": 15,
+        "endChar": 6
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "419a9d82_66c8cd6d",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "include/uapi/linux/android/bpf_fd_loader.h",
+              "range": {
+                "startLine": 15,
+                "startChar": 0,
+                "endLine": 16,
+                "endChar": 0
+              },
+              "replacement": "\t__s32\t\tloader_fd;\n"
+            }
+          ]
+        }
+      ],
+      "revId": "d30e62c62d4af2252ab7ab28c2b4d5928ba43ff9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc23207d_79d631b2",
+        "filename": "include/uapi/linux/android/bpf_fd_loader.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1981633
+      },
+      "writtenOn": "2026-11-05T19:44:47Z",
+      "side": 1,
+      "message": "I think we\u0027re going to want a __u32 flags field, as well as fields for log_level, log_size, log_buf so verification/load failures can be debugged, and probably some __u64 reserved fields for future extensibility. Also perhaps a prog_retval for the return value of the loader.",
+      "range": {
+        "startLine": 15,
+        "startChar": 1,
+        "endLine": 18,
+        "endChar": 2
+      },
+      "revId": "d30e62c62d4af2252ab7ab28c2b4d5928ba43ff9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11698a49_f375c45f",
+        "filename": "rust/helpers/bpf.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1981633
+      },
+      "writtenOn": "2026-11-05T19:44:47Z",
+      "side": 1,
+      "message": "I have a feeling any andoid specific files/helpers should be prefixed with android_ to prevent conflict with upstream changes.\n\nSo rust/helpers/android_bpf.c and android_rust_helper_bpf_prog_run_pin_on_cpu?",
+      "range": {
+        "startLine": 6,
+        "startChar": 18,
+        "endLine": 6,
+        "endChar": 54
+      },
+      "revId": "d30e62c62d4af2252ab7ab28c2b4d5928ba43ff9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "313f33ef_e66075e0",
+        "filename": "rust/helpers/rcu.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1981633
+      },
+      "writtenOn": "2026-11-05T19:44:47Z",
+      "side": 1,
+      "message": "To clean up the linter warning, why not make these helpers in rust/helpers/bpf.c?",
+      "range": {
+        "startLine": 18,
+        "startChar": 1,
+        "endLine": 18,
+        "endChar": 20
+      },
+      "revId": "d30e62c62d4af2252ab7ab28c2b4d5928ba43ff9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1404c1e1_92d40d95",
+        "filename": "rust/helpers/rcu.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1981633
+      },
+      "writtenOn": "2026-11-05T19:44:47Z",
+      "side": 1,
+      "message": "Please fix this WARNING reported by KernelCheckPatch: WARNING:RCU_TASKS_TRACE: use of RCU tasks trace is incorrect outside BPF or core...\n\nWARNING:RCU_TASKS_TRACE: use of RCU tasks trace is incorrect outside BPF or core RCU code",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 0
       },
       "revId": "d30e62c62d4af2252ab7ab28c2b4d5928ba43ff9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
