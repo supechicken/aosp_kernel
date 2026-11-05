@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "14163293_769babec",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1981633
+      },
+      "writtenOn": "2026-11-05T06:00:22Z",
+      "side": 1,
+      "message": "I don\u0027t see this function in this patchset",
+      "range": {
+        "startLine": 37,
+        "startChar": 3,
+        "endLine": 37,
+        "endChar": 33
+      },
+      "revId": "1bcff861257dc8b13216318a052f585f17cc0571",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9ac91c39_14a3b28c",
         "filename": "drivers/usb/host/xhci-sideband.c",
         "patchSetId": 1
