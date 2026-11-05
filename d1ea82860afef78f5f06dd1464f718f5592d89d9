@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36e1861c_db9f6fa2",
+        "filename": "kernel/futex/ping.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1945845
+      },
+      "writtenOn": "2026-11-05T05:20:36Z",
+      "side": 1,
+      "message": "Just noticed this... we probably shouldn\u0027t be calling __clear_task_blocked_on() here, since the donor would potentially be able to instantly run on this RQ (which would be bad). We later call set_task_blocked_on_waking() which should let the task return-migrate, so I don\u0027t think there\u0027s a reason to clear it here.",
+      "revId": "d1ea82860afef78f5f06dd1464f718f5592d89d9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "193a5a34_13c33499",
+        "filename": "kernel/futex/ping.c",
+        "patchSetId": 14
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1945845
+      },
+      "writtenOn": "2026-11-05T05:20:36Z",
+      "side": 1,
+      "message": "Same as above: we probably shouldn\u0027t be calling __clear_task_blocked_on() here, since the donor would potentially be able to instantly run on this RQ (which would be bad). We later call set_task_blocked_on_waking() which should let the task return-migrate, so I don\u0027t think there\u0027s a reason to clear it here.",
+      "revId": "d1ea82860afef78f5f06dd1464f718f5592d89d9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
