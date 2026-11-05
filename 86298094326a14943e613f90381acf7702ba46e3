@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2d6f2406_4f3a4567",
+        "filename": "drivers/iommu/intel/debugfs.c",
+        "patchSetId": 21
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-05T22:17:50Z",
+      "side": 1,
+      "message": "I see, thanks for the details.\n\n\u003e For FL_ONLY, debugfs walks the S1 table in val[2] (FLPTPTR), so strictly speaking it should read FLPM too - line 432 only works for FL DMA domains by coincidence because pasid_pte_config_first_level() writes iommu-\u003eagaw into AW, which happens to match domain-\u003eagaw (for SVA it can actually mismatch, e.g. 4-level CPU paging on a 5-level IOMMU).\n\nI see. This is actually what I was wondering about: why is the PASID_ENTRY_PGTT_FL_ONLY case using agaw if it is for SL only. (And why does pasid_pte_config_first_level() set agaw if it is for SL only?)\n\nSo, we have an actual upstream bug here (at least due to the SVA case)?",
+      "parentUuid": "97d42f2f_1e6a52cb",
+      "revId": "86298094326a14943e613f90381acf7702ba46e3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4773ca1e_cc9b6778",
         "filename": "drivers/iommu/intel/iommu.c",
         "patchSetId": 21
