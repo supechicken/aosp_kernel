@@ -1,0 +1,22 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db884c36_0753eb64",
+        "filename": "arch/arm64/mm/fault.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1557540
+      },
+      "writtenOn": "2026-11-05T23:05:49Z",
+      "side": 1,
+      "message": "Below on line 190, `pte_offset_map(pmdp, addr)` calls `___pte_offset_map()` -\u003e `__mm_pte_offset_map(p3s_current_mm(), ...)`, which indexes the PTE table using `p3s_current_mm()` rather than `mm`:\n\n1. For a kernel fault (`is_ttbr1_addr(addr)`, `mm \u003d \u0026init_mm`) while a 4KB task is `current`, `p3s_current_mm()` is `current-\u003emm` (4KB), so `pte_offset_map(pmdp, addr)` indexes `init_mm`\u0027s 16KB PTE table with the 4KB PTE index.\n2. For a user address fault (`is_ttbr0_addr(addr)`, `mm \u003d current-\u003eactive_mm`) while a kthread (`current-\u003emm \u003d\u003d NULL`) has borrowed a 4KB `active_mm`, `p3s_current_mm()` is `NULL`, so `pte_offset_map(pmdp, addr)` falls back to `__pte_map(\u0026pmdval, addr)` (16KB `pte_index`) and can index up to 4x past the end of the 512-entry 4KB PTE table.\n\nScoping `show_pte()` with `P3S_CONTEXT_REMOTE_MM(mm);` once `mm` is determined (or adding an `mm`-explicit `pte_offset_map` helper) will ensure `pte_offset_map()` uses `mm`\u0027s geometry.\n\n(Minor: `pr_alert()` on line 156 also logs `PAGE_SIZE / SZ_1K` and `vabits_actual` rather than `mm`\u0027s page size and VA bits when dumping a 4KB user `mm`.)",
+      "isAi": true,
+      "revId": "32bfefc5a621a67419a1d3196b5f63a3786776c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
