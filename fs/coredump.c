@@ -39,6 +39,7 @@
 #include <linux/oom.h>
 #include <linux/compat.h>
 #include <linux/fs.h>
+#include <linux/wait_bit.h>
 #include <linux/path.h>
 #include <linux/timekeeping.h>
 #include <linux/sysctl.h>
@@ -459,7 +460,7 @@ static bool coredump_parse(struct core_name *cn, struct coredump_params *cprm,
 				 * leader we know that the thread-group leader
 				 * cannot be reaped until @current has exited.
 				 */
-				cprm->pid = task_tgid(current);
+				task_pids(cprm->pid, current);
 				err = cn_printf(cn, "%d", COREDUMP_PIDFD_NUMBER);
 				break;
 			}
@@ -521,10 +522,26 @@ static int zap_threads(struct task_struct *tsk,
 		nr = zap_process(signal, exit_code);
 		clear_tsk_thread_flag(tsk, TIF_SIGPENDING);
 		tsk->flags |= PF_DUMPCORE;
-		atomic_set(&core_state->nr_threads, nr);
+		atomic_set(&core_state->threads_remaining, nr);
 	}
 	spin_unlock_irq(&tsk->sighand->siglock);
 	return nr;
+}
+
+static void coredump_wait_inactive(struct core_state *core_state)
+{
+	struct core_thread *ptr;
+
+	wait_var_event_state(&core_state->threads_remaining,
+			     !atomic_read_acquire(&core_state->threads_remaining),
+			     TASK_UNINTERRUPTIBLE | TASK_FREEZABLE);
+	/*
+	 * Wait for all the threads to become inactive, so that
+	 * all the thread context (extended register state, like
+	 * fpu etc) gets copied to the memory.
+	 */
+	for (ptr = core_state->tasks; ptr; ptr = ptr->next)
+		wait_task_inactive(ptr->task, TASK_ANY);
 }
 
 static int coredump_wait(int exit_code, struct core_state *core_state)
@@ -532,27 +549,11 @@ static int coredump_wait(int exit_code, struct core_state *core_state)
 	struct task_struct *tsk = current;
 	int core_waiters = -EBUSY;
 
-	init_completion(&core_state->startup);
-	core_state->dumper.task = tsk;
-	core_state->dumper.next = NULL;
+	core_state->tasks = NULL;
 
 	core_waiters = zap_threads(tsk, core_state, exit_code);
-	if (core_waiters > 0) {
-		struct core_thread *ptr;
-
-		wait_for_completion_state(&core_state->startup,
-					  TASK_UNINTERRUPTIBLE|TASK_FREEZABLE);
-		/*
-		 * Wait for all the threads to become inactive, so that
-		 * all the thread context (extended register state, like
-		 * fpu etc) gets copied to the memory.
-		 */
-		ptr = core_state->dumper.next;
-		while (ptr != NULL) {
-			wait_task_inactive(ptr->task, TASK_ANY);
-			ptr = ptr->next;
-		}
-	}
+	if (core_waiters > 0)
+		coredump_wait_inactive(core_state);
 
 	return core_waiters;
 }
@@ -565,7 +566,7 @@ static void coredump_finish(enum coredump_state state)
 	spin_lock_irq(&current->sighand->siglock);
 	if ((state & COREDUMP_STATE_STARTED) && !__fatal_signal_pending(current))
 		current->signal->group_exit_code |= 0x80;
-	next = current->signal->core_state->dumper.next;
+	next = current->signal->core_state->tasks;
 	current->signal->core_state = NULL;
 	spin_unlock_irq(&current->sighand->siglock);
 
@@ -631,12 +632,16 @@ static int umh_coredump_setup(struct subprocess_info *info, struct cred *new)
 	struct coredump_params *cp = (struct coredump_params *)info->data;
 	int err;
 
-	if (cp->pid) {
+	if (cp->pid[PIDTYPE_TGID]) {
 		struct file *pidfs_file __free(fput) = NULL;
 
-		pidfs_file = pidfs_alloc_file(cp->pid, 0);
+		pidfs_file = pidfs_alloc_file(cp->pid[PIDTYPE_TGID], 0);
 		if (IS_ERR(pidfs_file))
 			return PTR_ERR(pidfs_file);
+
+		err = pidfs_register_pids(cp->pid);
+		if (err)
+			return err;
 
 		pidfs_coredump(cp);
 
@@ -709,12 +714,12 @@ static bool coredump_sock_connect(struct core_name *cn, struct coredump_params *
 		return false;
 
 	/*
-	 * Set the thread-group leader pid which is used for the peer
-	 * credentials during connect() below. Then immediately register
-	 * it in pidfs...
+	 * Set the pids of the dumping thread and its thread-group leader
+	 * which are used for the peer credentials during connect() below.
+	 * Then immediately register them in pidfs...
 	 */
-	cprm->pid = task_tgid(current);
-	retval = pidfs_register_pid(cprm->pid);
+	task_pids(cprm->pid, current);
+	retval = pidfs_register_pids(cprm->pid);
 	if (retval)
 		return false;
 
@@ -736,7 +741,7 @@ static bool coredump_sock_connect(struct core_name *cn, struct coredump_params *
 	}
 
 	/* ... and validate that @sk_peer_pid matches @cprm.pid. */
-	if (WARN_ON_ONCE(unix_peer(socket->sk)->sk_peer_pid != cprm->pid))
+	if (WARN_ON_ONCE(!pids_equal(unix_peer(socket->sk)->sk_peer_pid, cprm->pid)))
 		return false;
 
 	cprm->limit = RLIM_INFINITY;
@@ -1225,11 +1230,6 @@ static void do_coredump(struct core_name *cn, struct coredump_params *cprm,
 
 	/* Don't even generate the coredump. */
 	if (cprm->mask & COREDUMP_REJECT)
-		return;
-
-	/* get us an unshared descriptor table; almost always a no-op */
-	/* The cell spufs coredump code reads the file descriptor tables */
-	if (unshare_files())
 		return;
 
 	if ((cprm->mask & COREDUMP_KERNEL) && !coredump_write(cprm, binfmt))
