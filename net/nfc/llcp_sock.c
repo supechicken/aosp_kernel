@@ -384,12 +384,11 @@ void nfc_llcp_accept_unlink(struct sock *sk)
 
 	pr_debug("state %d\n", sk->sk_state);
 
-	if (llcp_sock->parent) {
-		list_del_init(&llcp_sock->accept_queue);
-		sk_acceptq_removed(llcp_sock->parent);
-		llcp_sock->parent = NULL;
-		sock_put(sk);
-	}
+	list_del_init(&llcp_sock->accept_queue);
+	sk_acceptq_removed(llcp_sock->parent);
+	llcp_sock->parent = NULL;
+
+	sock_put(sk);
 }
 
 void nfc_llcp_accept_enqueue(struct sock *parent, struct sock *sk)
@@ -416,20 +415,12 @@ struct sock *nfc_llcp_accept_dequeue(struct sock *parent,
 
 	list_for_each_entry_safe(lsk, n, &llcp_parent->accept_queue,
 				 accept_queue) {
-		struct nfc_llcp_local *local;
-
 		sk = &lsk->sk;
-		lock_sock_nested(sk, SINGLE_DEPTH_NESTING);
+		lock_sock(sk);
 
 		if (sk->sk_state == LLCP_CLOSED) {
-			local = nfc_llcp_sock(sk)->local;
-
-			nfc_llcp_accept_unlink(sk);
-			if (local)
-				nfc_llcp_sock_unlink(&local->sockets, sk);
-			sock_orphan(sk);
 			release_sock(sk);
-			sock_put(sk);
+			nfc_llcp_accept_unlink(sk);
 			continue;
 		}
 
@@ -465,7 +456,7 @@ static int llcp_sock_accept(struct socket *sock, struct socket *newsock,
 
 	pr_debug("parent %p\n", sk);
 
-	lock_sock(sk);
+	lock_sock_nested(sk, SINGLE_DEPTH_NESTING);
 
 	if (sk->sk_state != LLCP_LISTEN) {
 		ret = -EBADFD;
@@ -491,12 +482,7 @@ static int llcp_sock_accept(struct socket *sock, struct socket *newsock,
 
 		release_sock(sk);
 		timeo = schedule_timeout(timeo);
-		lock_sock(sk);
-
-		if (sk->sk_state != LLCP_LISTEN) {
-			ret = -EBADFD;
-			break;
-		}
+		lock_sock_nested(sk, SINGLE_DEPTH_NESTING);
 	}
 	__set_current_state(TASK_RUNNING);
 	remove_wait_queue(sk_sleep(sk), &wait);
@@ -635,24 +621,13 @@ static int llcp_sock_release(struct socket *sock)
 
 		list_for_each_entry_safe(lsk, n, &llcp_sock->accept_queue,
 					 accept_queue) {
-			bool put_creation = false;
-
 			accept_sk = &lsk->sk;
-			lock_sock_nested(accept_sk, SINGLE_DEPTH_NESTING);
+			lock_sock(accept_sk);
 
-			if (nfc_llcp_sock(accept_sk)->parent == sk) {
-				nfc_llcp_send_disconnect(lsk);
-				nfc_llcp_accept_unlink(accept_sk);
-				nfc_llcp_sock_unlink(&local->sockets, accept_sk);
-
-				accept_sk->sk_state = LLCP_CLOSED;
-				sock_orphan(accept_sk);
-				put_creation = true;
-			}
+			nfc_llcp_send_disconnect(lsk);
+			nfc_llcp_accept_unlink(accept_sk);
 
 			release_sock(accept_sk);
-			if (put_creation)
-				sock_put(accept_sk); /* creation ref */
 		}
 	}
 
