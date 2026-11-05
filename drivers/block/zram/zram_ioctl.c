@@ -31,6 +31,7 @@ struct zram_process_walk_private {
 	unsigned int cmd;
 	u64 nr_remaining_pages;
 	unsigned long next_addr;
+	unsigned long last_addr;
 	swp_entry_t last_entry;
 };
 
@@ -72,12 +73,34 @@ static int zram_process_walker(pmd_t *pmd, unsigned long start,
 	u64 nr_pages = zram->disksize >> PAGE_SHIFT;
 
 	for (addr = start; addr < end; addr += mm_pte_size(walk->mm)) {
+		/* Only 4KB siblings of the last native slot may follow the budget. */
+		if (!private->nr_remaining_pages &&
+		    (!mm_is_p3s_4k(walk->mm) ||
+		     (addr & PAGE_MASK) != (private->last_addr & PAGE_MASK))) {
+			private->next_addr = addr;
+			return 1;
+		}
+
 		ptep = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
-		if (!ptep)
+		if (!ptep) {
+			if (!private->nr_remaining_pages) {
+				private->next_addr = addr;
+				return 1;
+			}
 			break;
+		}
 
 		pte = ptep_get(ptep);
 		pte_unmap_unlock(ptep, ptl);
+
+		/* A sibling must still point at that slot. */
+		if (!private->nr_remaining_pages) {
+			if (is_swap_pte(pte) &&
+			    pte_to_swp_entry(pte).val == private->last_entry.val)
+				continue;
+			private->next_addr = addr;
+			return 1;
+		}
 
 		if (!is_swap_pte(pte))
 			continue;
@@ -126,11 +149,7 @@ static int zram_process_walker(pmd_t *pmd, unsigned long start,
 
 		if (p3s_swap_entry_repeats(&private->last_entry, entry))
 			goto unlock_swap_device;
-		if (private->nr_remaining_pages == 0) {
-			private->next_addr = addr;
-			put_swap_device(sis);
-			return 1;
-		}
+		private->last_addr = addr;
 
 		if (cmd == ZRAM_ANDROID_IOC_PROCESS_RANGE_WRITEBACK) {
 			/* Use PAGE_WRITEBACK for single index */
