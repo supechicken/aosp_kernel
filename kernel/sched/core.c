@@ -205,6 +205,26 @@ static int __init setup_proxy_exec_toggle(void)
 	return 0;
 }
 late_initcall(setup_proxy_exec_toggle);
+
+static inline struct task_struct *__blocked_on_owner(struct blocked_on_lock *bo)
+{
+	if (bo->lock == PROXY_WAKING)
+		return NULL;
+	switch (bo->type) {
+	case BO_T_NONE:
+		return NULL;
+	case BO_T_MUTEX:
+		return __mutex_owner(bo->lock);
+	default:
+		BUG();
+	}
+}
+
+static inline struct task_struct *task_blocked_on_owner(struct task_struct *p)
+{
+	return __blocked_on_owner(&p->blocked_on_l);
+}
+
 #else
 static int __init setup_proxy_exec(char *str)
 {
@@ -213,6 +233,16 @@ static int __init setup_proxy_exec(char *str)
 }
 #endif
 __setup("sched_proxy_exec=", setup_proxy_exec);
+
+bool task_is_blocked(struct task_struct *p)
+{
+	if (!sched_proxy_exec())
+		return false;
+
+	return !!p->blocked_on_l.lock;
+}
+EXPORT_SYMBOL_GPL(task_is_blocked);
+
 
 #ifdef CONFIG_SCHED_DEBUG
 /*
@@ -3506,6 +3536,19 @@ void relax_compatible_cpus_allowed_ptr(struct task_struct *p)
 	WARN_ON_ONCE(ret);
 }
 
+static void __do_migrate_task_rq(struct task_struct *p, unsigned int new_cpu)
+{
+	if (task_cpu(p) != new_cpu) {
+		if (p->sched_class->migrate_task_rq)
+			p->sched_class->migrate_task_rq(p, new_cpu);
+		p->se.nr_migrations++;
+		rseq_migrate(p);
+		sched_mm_cid_migrate_from(p);
+		perf_event_task_migrate(p);
+		trace_android_rvh_set_task_cpu(p, new_cpu);
+	}
+}
+
 void set_task_cpu(struct task_struct *p, unsigned int new_cpu)
 {
 #ifdef CONFIG_SCHED_DEBUG
@@ -3550,16 +3593,7 @@ void set_task_cpu(struct task_struct *p, unsigned int new_cpu)
 
 	trace_sched_migrate_task(p, new_cpu);
 
-	if (task_cpu(p) != new_cpu) {
-		if (p->sched_class->migrate_task_rq)
-			p->sched_class->migrate_task_rq(p, new_cpu);
-		p->se.nr_migrations++;
-		rseq_migrate(p);
-		sched_mm_cid_migrate_from(p);
-		perf_event_task_migrate(p);
-		trace_android_rvh_set_task_cpu(p, new_cpu);
-	}
-
+	__do_migrate_task_rq(p, new_cpu);
 	__set_task_cpu(p, new_cpu);
 }
 EXPORT_SYMBOL_GPL(set_task_cpu);
@@ -3950,6 +3984,7 @@ static inline void proxy_set_task_cpu(struct task_struct *p, int cpu)
 	 * was previously runnable.
 	 */
 	wake_cpu = p->wake_cpu;
+	__do_migrate_task_rq(p, cpu);
 	__set_task_cpu(p, cpu);
 	p->wake_cpu = wake_cpu;
 }
@@ -3992,6 +4027,18 @@ static void do_activate_blocked_waiter(struct rq *target_rq, struct task_struct 
 			 */
 			return;
 		}
+
+		scoped_guard (raw_spinlock, &p->blocked_lock) {
+			/*
+			 * Again, if activation is delayed, it's possible the
+			 * task has been woken and is no longer blocked_on,
+			 * but went back to sleep, so double check blocked_on
+			 * before activating onto the owner's rq
+			 */
+			if (!task_is_blocked(p))
+				return;
+		}
+
 		/*
 		 * Have to make sure we handle nr_iowait adjustment before
 		 * we call proxy_set_task_cpu() to ensure we are adjusting
@@ -4035,9 +4082,6 @@ static void activate_blocked_waiters(struct rq *target_rq,
 		return;
 
 	INIT_LIST_HEAD(&bal_head);
-
-	if (wake_flags & WF_MIGRATED)
-		en_flags |= ENQUEUE_MIGRATED;
 
 	/*
 	 * A whole bunch of waiting donor tasks back this blocked
@@ -4139,7 +4183,7 @@ struct task_struct *find_exec_ctx(struct rq *rq, struct task_struct *p)
 	for (exec_ctx = p; task_is_blocked(exec_ctx) && !task_on_cpu(rq, exec_ctx);
 							exec_ctx = owner) {
 		guard(raw_spinlock)(&exec_ctx->blocked_lock);
-		owner = __mutex_owner(__get_task_blocked_on(exec_ctx));
+		owner = task_blocked_on_owner(exec_ctx);
 		if (!owner || owner == exec_ctx)
 			break;
 
@@ -4170,9 +4214,15 @@ void move_queued_task_locked(struct rq *src_rq, struct rq *dst_rq, struct task_s
 
 		if (!task_queued_on_rq(src_rq, task) || task_current_donor(src_rq, task))
 			break;
+		/*
+		 * Never move a task that is running on src_rq (e.g. rq->curr
+		 * acting as the execution context for a different donor).
+		 */
+		if (task_on_cpu(src_rq, task))
+			break;
 
 		if (task_is_blocked(task))
-			owner = __mutex_owner(get_task_blocked_on(task));
+			owner = task_blocked_on_owner(task);
 
 		__move_queued_task_locked(src_rq, dst_rq, task);
 		if (task == owner)
@@ -7438,6 +7488,28 @@ static void proxy_enqueue_on_owner(struct rq *rq, struct task_struct *owner,
 	block_task(rq, p, READ_ONCE(p->__state));
 }
 
+static void
+lock_blocked_on_lock(struct blocked_on_lock *bo)
+{
+	if (bo->type == BO_T_MUTEX)
+		raw_spin_lock(&((struct mutex *)bo->lock)->wait_lock);
+	else
+		BUG();
+}
+
+static void
+unlock_blocked_on_lock(struct blocked_on_lock *bo)
+{
+	if (bo->type == BO_T_MUTEX)
+		raw_spin_unlock(&((struct mutex *)bo->lock)->wait_lock);
+	else
+		BUG();
+}
+
+DEFINE_LOCK_GUARD_1(blocked_on_lock, struct blocked_on_lock,
+		    lock_blocked_on_lock(_T->lock),
+		    unlock_blocked_on_lock(_T->lock))
+
 /*
  * Find runnable lock owner to proxy for mutex blocked donor
  *
@@ -7467,22 +7539,27 @@ static void proxy_enqueue_on_owner(struct rq *rq, struct task_struct *owner,
 static struct task_struct *
 find_proxy_task(struct rq *rq, struct task_struct *donor, struct rq_flags *rf)
 {
+	struct blocked_on_lock bo, *blocked_on;
 	struct task_struct *owner = NULL;
 	bool curr_in_chain = false;
 	int this_cpu = cpu_of(rq);
 	struct task_struct *p;
-	struct mutex *mutex;
 	int owner_cpu;
 
 	/* Follow blocked_on chain. */
 	for (p = donor; task_is_blocked(p); p = owner) {
-		mutex = p->blocked_on;
+		/* copy the entire blocked_on structure */
+		raw_spin_lock(&p->blocked_lock);
+		bo = p->blocked_on_l;
+		raw_spin_unlock(&p->blocked_lock);
+		blocked_on = &bo;
+
 		/* Something changed in the chain, so pick again */
-		if (!mutex)
+		if (!blocked_on->lock)
 			return NULL;
 
 		/* if its PROXY_WAKING, do return migration or run if current */
-		if (mutex == PROXY_WAKING) {
+		if (blocked_on->lock == PROXY_WAKING) {
 			if (task_current(rq, p)) {
 				clear_task_blocked_on(p, PROXY_WAKING);
 				return p;
@@ -7494,11 +7571,11 @@ find_proxy_task(struct rq *rq, struct task_struct *donor, struct rq_flags *rf)
 		 * By taking mutex->wait_lock we hold off concurrent mutex_unlock()
 		 * and ensure @owner sticks around.
 		 */
-		guard(raw_spinlock)(&mutex->wait_lock);
+		guard(blocked_on_lock)(blocked_on);
 		guard(raw_spinlock)(&p->blocked_lock);
 
 		/* Check again that p is blocked with blocked_lock held */
-		if (mutex != __get_task_blocked_on(p)) {
+		if (blocked_on->lock != __get_task_blocked_on(p)) {
 			/*
 			 * Something changed in the blocked_on chain and
 			 * we don't know if only at this level. So, let's
@@ -7511,7 +7588,7 @@ find_proxy_task(struct rq *rq, struct task_struct *donor, struct rq_flags *rf)
 		if (task_current(rq, p))
 			curr_in_chain = true;
 
-		owner = __mutex_owner(mutex);
+		owner = __blocked_on_owner(blocked_on);
 		if (!owner) {
 			/*
 			 * If there is no owner, either clear blocked_on
@@ -7772,7 +7849,7 @@ static void __sched notrace __schedule(int sched_mode)
 		block = try_to_block_task(rq, prev, &prev_state,
 					  !task_is_blocked(prev));
 		switch_count = &prev->nvcsw;
-	} else if (preempt && prev->blocked_on) {
+	} else if (preempt && prev->blocked_on_l.lock) {
 		/*
 		 * If we are SM_PREEMPT, we may have interrupted
 		 * after blocked_on was set, before schedule()
@@ -7793,12 +7870,12 @@ pick_again:
 	if (sched_proxy_exec()) {
 		struct task_struct *prev_donor = rq->donor;
 
-		if (!prev_state && prev->blocked_on)
+		if (!prev_state && prev->blocked_on_l.lock)
 			clear_task_blocked_on(prev, NULL);
 
 		rq_set_donor(rq, next);
 		next->blocked_donor = NULL;
-		if (unlikely(next->blocked_on)) {
+		if (unlikely(next->blocked_on_l.lock)) {
 			next = find_proxy_task(rq, next, &rf);
 			if (!next) {
 				/* zap the balance_callbacks before picking again */
