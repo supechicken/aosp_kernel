@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20f569fa_c6169daa",
+        "filename": "drivers/iommu/intel/iommu.c",
+        "patchSetId": 19
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-05T16:38:07Z",
+      "side": 1,
+      "message": "Just a note: nested is not workable in this commit yet, it is only implemented by the next 3 patches.\nBut looks like it should be ok to enable `intel_iommu_pkvm_use_nested` in this patch already, i.e. it shouldn\u0027t cause temporary regressions.",
+      "revId": "e59f305ee5edaa42081e111045856b71ddc6b968",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
