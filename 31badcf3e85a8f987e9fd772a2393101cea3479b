@@ -72,6 +72,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b91b030_97efebb7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 3494485
+      },
+      "writtenOn": "2026-11-05T02:20:44Z",
+      "side": 1,
+      "message": "Ah yes, this doesn\u0027t sound correct. I have modified the message now.",
+      "parentUuid": "5fa49679_4defeec0",
+      "range": {
+        "startLine": 13,
+        "startChar": 24,
+        "endLine": 15,
+        "endChar": 42
+      },
+      "revId": "31badcf3e85a8f987e9fd772a2393101cea3479b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a482953e_d732c629",
@@ -107,6 +131,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "de71157e_a95726aa",
+        "filename": "arch/x86/include/asm/kvm_pkvm.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 3494485
+      },
+      "writtenOn": "2026-11-05T02:20:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a482953e_d732c629",
+      "revId": "31badcf3e85a8f987e9fd772a2393101cea3479b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c5cc6cc3_76f6b104",
@@ -124,6 +166,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e374e126_3984e6ab",
+        "filename": "drivers/iommu/intel/iommu.c",
+        "patchSetId": 16
+      },
+      "lineNbr": 1723,
+      "author": {
+        "id": 3494485
+      },
+      "writtenOn": "2026-11-05T02:20:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c5cc6cc3_76f6b104",
+      "revId": "31badcf3e85a8f987e9fd772a2393101cea3479b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "29341e38_844f4644",
@@ -137,6 +197,24 @@
       "writtenOn": "2026-11-04T19:00:55Z",
       "side": 1,
       "message": "Maybe rather e.g. -EINVAL? (Likewise elsewhere.)",
+      "revId": "31badcf3e85a8f987e9fd772a2393101cea3479b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a8459ae_cf74dd2e",
+        "filename": "drivers/iommu/intel/iommu.c",
+        "patchSetId": 16
+      },
+      "lineNbr": 1726,
+      "author": {
+        "id": 3494485
+      },
+      "writtenOn": "2026-11-05T02:20:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "29341e38_844f4644",
       "revId": "31badcf3e85a8f987e9fd772a2393101cea3479b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
@@ -172,6 +250,24 @@
           ]
         }
       ],
+      "revId": "31badcf3e85a8f987e9fd772a2393101cea3479b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d38e2e42_92d9b57e",
+        "filename": "drivers/iommu/intel/pkvm/iommu_hc.c",
+        "patchSetId": 16
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 3494485
+      },
+      "writtenOn": "2026-11-05T02:20:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5946e0a3_16adcee5",
       "revId": "31badcf3e85a8f987e9fd772a2393101cea3479b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
@@ -223,6 +319,30 @@
           ]
         }
       ],
+      "revId": "31badcf3e85a8f987e9fd772a2393101cea3479b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d20e96d_47a6b52f",
+        "filename": "drivers/iommu/intel/pkvm/iommu_hc.c",
+        "patchSetId": 16
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 3494485
+      },
+      "writtenOn": "2026-11-05T02:20:44Z",
+      "side": 1,
+      "message": "Good catch! Guarded `domain_flush_cache()` with `if (!data-\u003epkvm_nested)` here (and added `domain_flush_cache()` on the host in `paging_domain_alloc()` for nested domains). Also added a `!PAGE_ALIGNED(data-\u003epgd_gpa)` check in `__validate_domain_params()`.",
+      "parentUuid": "4207de68_b35ed734",
+      "range": {
+        "startLine": 483,
+        "startChar": 1,
+        "endLine": 483,
+        "endChar": 48
+      },
       "revId": "31badcf3e85a8f987e9fd772a2393101cea3479b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
