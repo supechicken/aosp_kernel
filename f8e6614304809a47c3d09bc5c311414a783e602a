@@ -36,6 +36,42 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "248c9dc2_52fd824a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1157738
+      },
+      "writtenOn": "2026-11-05T17:03:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5d1b952e_3328f8bc",
+      "revId": "f8e6614304809a47c3d09bc5c311414a783e602a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf54c6d4_a1347423",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1157738
+      },
+      "writtenOn": "2026-11-05T17:03:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5d1b952e_3328f8bc",
+      "revId": "f8e6614304809a47c3d09bc5c311414a783e602a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6c695ec1_a140f695",
@@ -71,6 +107,42 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f10c35f_90078eec",
+        "filename": "drivers/android/wrapfd.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 1621,
+      "author": {
+        "id": 1157738
+      },
+      "writtenOn": "2026-11-05T17:03:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "12b8107b_8dcfb023",
+      "revId": "f8e6614304809a47c3d09bc5c311414a783e602a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf05483f_10027f74",
+        "filename": "drivers/android/wrapfd.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 1621,
+      "author": {
+        "id": 1157738
+      },
+      "writtenOn": "2026-11-05T17:03:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "12b8107b_8dcfb023",
+      "revId": "f8e6614304809a47c3d09bc5c311414a783e602a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e397e804_50a4e48b",
@@ -102,6 +174,24 @@
       "side": 1,
       "message": "I\u0027ll try refactoring this code.",
       "parentUuid": "e397e804_50a4e48b",
+      "revId": "f8e6614304809a47c3d09bc5c311414a783e602a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0395a342_3e33f9c8",
+        "filename": "drivers/android/wrapfd.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 1636,
+      "author": {
+        "id": 1157738
+      },
+      "writtenOn": "2026-11-05T17:03:32Z",
+      "side": 1,
+      "message": "I had to change the ioctl to be performed on /dev/wrapfd and wrapfd file descriptor to be passed as a parameter to the ioctl to be able to call `set_close_on_exec()`.\nAlso I checked the overlap with publish_wrap() and they are different enough that I gave up attempting to refactor the common parts (which is not much really).",
+      "parentUuid": "9accd91b_29602d11",
       "revId": "f8e6614304809a47c3d09bc5c311414a783e602a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
