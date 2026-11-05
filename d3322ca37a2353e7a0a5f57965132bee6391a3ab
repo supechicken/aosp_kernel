@@ -16,6 +16,24 @@
       "message": "If this is FROMGIT, then it will merge into android-mainline naturally after it is merged upstream. We don\u0027t normally take FROM* patches into android-mainline - why is it needed so urgently?",
       "revId": "d3322ca37a2353e7a0a5f57965132bee6391a3ab",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "237048fa_ef62d1eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1865564
+      },
+      "writtenOn": "2026-11-05T01:37:59Z",
+      "side": 1,
+      "message": "Ah.. I didn\u0027t notice about the target branch.\n\n@cyueh@google.com we\u0027d need to pick this to branches like android16-6.12 and/or android17-6.18.",
+      "parentUuid": "b18e89e6_8b2ba8bc",
+      "revId": "d3322ca37a2353e7a0a5f57965132bee6391a3ab",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
