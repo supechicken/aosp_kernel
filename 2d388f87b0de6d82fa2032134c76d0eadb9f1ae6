@@ -16,6 +16,24 @@
       "message": "oops, I did it again.",
       "revId": "2d388f87b0de6d82fa2032134c76d0eadb9f1ae6",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d179c64_0dc12768",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1934715
+      },
+      "writtenOn": "2026-11-05T17:37:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f71156b4_cc11323a",
+      "revId": "2d388f87b0de6d82fa2032134c76d0eadb9f1ae6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
