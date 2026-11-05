@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71cee9bd_86d70b60",
+        "filename": "tools/testing/selftests/mm/p3s/pci_mmap_p3s.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1499410
+      },
+      "writtenOn": "2026-11-05T05:14:16Z",
+      "side": 1,
+      "message": "I think this last check can\u0027t pass in a 4KB process: remap_pfn_range() refuses a 4KB VMA that starts at a nonzero slice of a kernel page (p3s_remap_pfn_range_size() in mm/p3s/memory.h), so this mmap() at a 4KB offset fails with EINVAL.\n\nI ran these steps on a VM with QEMU\u0027s EDU device. On the current branch the whole-BAR mapping above fails as well, because pci_mmap_fits() counts the 4KB VMA in 4KB pages; aosp/4417637 fixes that, and with it the first two checks pass and only this one fails.\n\nWould it be OK to expect the refusal here instead, as for the other remap_pfn_range() users? Something like:\n\n\tksft_test_result(slice_mapping \u003d\u003d MAP_FAILED \u0026\u0026 errno \u003d\u003d EINVAL,\n\t\t\t \"refuse a mapping at a sub-page PCI BAR offset\\n\");",
+      "revId": "06c4c563feaa12681001483774650bb0ace8996c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
