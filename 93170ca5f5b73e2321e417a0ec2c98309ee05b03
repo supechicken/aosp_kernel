@@ -16,6 +16,24 @@
       "message": "@samitolvanen@google.com, do we need this on 6.12 too?",
       "revId": "93170ca5f5b73e2321e417a0ec2c98309ee05b03",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a1bc264_3df990f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1058860
+      },
+      "writtenOn": "2026-11-05T05:12:19Z",
+      "side": 1,
+      "message": "Most likely not, but aliceryhl would know best.\n\nThat said, 6.12 uses a different toolchain, so this particular topic won\u0027t fix 6.12.",
+      "parentUuid": "5cb3f4cc_71541c8c",
+      "revId": "93170ca5f5b73e2321e417a0ec2c98309ee05b03",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
