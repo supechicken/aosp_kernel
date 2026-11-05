@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39ba09cf_35f38997",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1869395
+      },
+      "writtenOn": "2026-11-05T03:29:50Z",
+      "side": 1,
+      "message": "what is this for again? To avoid touching the upstream file?",
+      "revId": "7298c44e2bf5c4465d95b1c6fa55ab7257179d1b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "576c0eeb_133f9073",
+        "filename": "BUILD.bazel",
+        "patchSetId": 1
+      },
+      "lineNbr": 2184,
+      "author": {
+        "id": 1869395
+      },
+      "writtenOn": "2026-11-05T03:29:50Z",
+      "side": 1,
+      "message": "so you are implicitly forcing the inclusion of the compat header?",
+      "range": {
+        "startLine": 2184,
+        "startChar": 9,
+        "endLine": 2184,
+        "endChar": 17
+      },
+      "revId": "7298c44e2bf5c4465d95b1c6fa55ab7257179d1b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
