@@ -34,6 +34,24 @@
       "parentUuid": "5cb3f4cc_71541c8c",
       "revId": "93170ca5f5b73e2321e417a0ec2c98309ee05b03",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92c8ab6e_bd75b493",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1892347
+      },
+      "writtenOn": "2026-11-05T09:10:37Z",
+      "side": 1,
+      "message": "Not needed on 6.12 right now because we\u0027re not planning to put any Rust symbols on the KMI on the 6.12 branch.\n\nIf we end up needing to do so in the future, then we would need to backport the same changes to the rustc toolchain used by the 6.12 branch.",
+      "parentUuid": "9a1bc264_3df990f8",
+      "revId": "93170ca5f5b73e2321e417a0ec2c98309ee05b03",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
