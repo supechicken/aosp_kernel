@@ -201,8 +201,8 @@ int main(int argc, char **argv)
 
 	if (mode && argc == 3 && (fixture = find_fixture(argv[2]))) {
 		if (!strcmp(mode, "--native"))
-			return getpagesize() == (int)NATIVE_PAGE_SIZE ?
-			       run_case(fixture) : KSFT_SKIP;
+			return p3s_is_compat_process() ? KSFT_SKIP :
+							 run_case(fixture);
 		if (!strcmp(mode, "--compat"))
 			return p3s_is_compat_process() ? run_case(fixture) :
 							  KSFT_SKIP;

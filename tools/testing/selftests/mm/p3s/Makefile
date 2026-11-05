@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: GPL-2.0
-# P3S (per-process page size) selftests for native 16K arm64 kernels.
+# Page-size contract tests plus mixed-geometry P3S selftests for arm64.
 
 ifeq ($(ARCH),)
 ifeq ($(CROSS_COMPILE),)
@@ -46,7 +46,7 @@ P3S_TESTS := \
 	mremap_pgoff_p3s mremap_rlimit_p3s msync_offset_p3s munmap_p3s \
 	mthp_native_anon_p3s \
 	oom_anon_score_p3s oom_score_p3s oom_trace_p3s packed_anon_p3s \
-	packed_swap_p3s page_range_p3s pagemap_ioctl_p3s pagemap_scan_p3s pagewalk_p3s pci_mmap_p3s \
+	packed_swap_p3s page_range_p3s page_size_contract_p3s pagemap_ioctl_p3s pagemap_scan_p3s pagewalk_p3s pci_mmap_p3s \
 	perf_mmap_offset_p3s perf_phys_addr_p3s \
 	print_vma_addr_p3s proc_pagewalk_p3s process_madvise_p3s \
 	process_mrelease_p3s process_vm_access_p3s remap_file_pages_p3s \
@@ -106,7 +106,8 @@ P3S_MM_TARGETS := $(addprefix $(OUTPUT)/,$(P3S_TESTS) $(P3S_TESTS_arm64) \
 	bpf_remote_access_p3s drm_gem_slice_p3s futex_uffd_p3s \
 	iov_range_retry_p3s pagemap_exclusive_p3s perf_page_size_p3s \
 	smaps_pss_p3s uprobe_p3s)
-$(filter-out $(OUTPUT)/taskstats_p3s,$(P3S_MM_TARGETS)): ../vm_util.c ../thp_settings.c
+$(filter-out $(OUTPUT)/taskstats_p3s $(OUTPUT)/bpf_stack_build_id_p3s,\
+	     $(P3S_MM_TARGETS)): ../vm_util.c ../thp_settings.c
 $(OUTPUT)/pagemap_ioctl: ../pagemap_ioctl.c ../vm_util.c ../thp_settings.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $^ $(LDLIBS) -o $@
 $(OUTPUT)/anon_vma_name_p3s $(OUTPUT)/iov_iter_p3s \

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-2.0
-/* TCP mmap refusal must leave read() fallback usable in 4KB processes. */
+/* P3S TCP mmap refusal must leave read() fallback usable in compat mode. */
 #define _GNU_SOURCE
 
 #include <arpa/inet.h>
@@ -52,7 +52,7 @@ static int zc_probe(int fd, unsigned long address)
 {
 	struct zc_receive zc = {
 		.address = address,
-		.length = NATIVE_PAGE_SIZE,
+		.length = getpagesize(),
 	};
 	socklen_t len = sizeof(zc);
 
@@ -72,7 +72,7 @@ static int run_case(bool compat)
 
 	fd = connected_loopback_fd(&peer);
 	errno = 0;
-	map = mmap(NULL, NATIVE_PAGE_SIZE, PROT_READ, MAP_SHARED, fd, 0);
+	map = mmap(NULL, getpagesize(), PROT_READ, MAP_SHARED, fd, 0);
 	saved_errno = errno;
 	if (compat) {
 		if (map != MAP_FAILED || saved_errno != EOPNOTSUPP) {
@@ -85,12 +85,12 @@ static int run_case(bool compat)
 		ksft_print_msg("native TCP mmap failed: %s\n", strerror(saved_errno));
 		ret = KSFT_FAIL;
 	} else if (zc_probe(fd, (unsigned long)map) != 0 ||
-		   zc_probe(fd, (unsigned long)map + PROCESS_PAGE_SIZE) != -EINVAL) {
+		   zc_probe(fd, (unsigned long)map + getpagesize() / 4) != -EINVAL) {
 		ksft_print_msg("native TCP zero-copy alignment control failed\n");
 		ret = KSFT_FAIL;
 	}
 	if (map != MAP_FAILED)
-		munmap(map, NATIVE_PAGE_SIZE);
+		munmap(map, getpagesize());
 
 	/* A refused mmap is recoverable: normal socket data must still arrive. */
 	if (send(peer, payload, sizeof(payload), MSG_NOSIGNAL) != sizeof(payload)) {
@@ -147,7 +147,7 @@ int main(int argc, char **argv)
 	const char *mode = p3s_run_mode(argc, argv, NULL);
 
 	if (mode && !strcmp(mode, "--native"))
-		return getpagesize() == (int)NATIVE_PAGE_SIZE ? run_case(false) : KSFT_SKIP;
+		return p3s_is_compat_process() ? KSFT_SKIP : run_case(false);
 	if (mode && !strcmp(mode, "--compat"))
 		return p3s_is_compat_process() ? run_case(true) : KSFT_SKIP;
 

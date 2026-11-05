@@ -3,8 +3,9 @@
  * dma_mmap_attrs() / dma_mmap_pages() map exactly the 4K slices a compat
  * process asks for: a one-slice mapping of the fixture's DMA buffer must not
  * populate the other three slices of the native page.  A mapping at DMA
- * offset 4K must be rejected by remap_pfn_range().  The fixture is selected
- * on the command line: "attrs" or "pages".
+ * offset 4K must be rejected on native 16K backing, but must select the
+ * second page on a native 4K kernel.  The fixture is selected on the command
+ * line: "attrs" or "pages".
  */
 #define _GNU_SOURCE
 
@@ -111,8 +112,14 @@ static int run_test(const struct dma_mmap_case *test)
 				   strerror(errno));
 	mapping = mmap(reservation, PROCESS_PAGE_SIZE, PROT_READ,
 		       MAP_SHARED | MAP_FIXED, fd, PROCESS_PAGE_SIZE);
-	ksft_test_result(mapping == MAP_FAILED && errno == EINVAL,
-			 "reject a non-native-aligned DMA buffer offset\n");
+	if (p3s_is_compat_process())
+		ksft_test_result(mapping == MAP_FAILED && errno == EINVAL,
+				 "reject a non-native-aligned DMA buffer offset\n");
+	else
+		ksft_test_result(mapping == reservation &&
+				 read_byte(mapping, &value) &&
+				 value == test->first_marker + 1,
+				 "native 4K process maps the second DMA page\n");
 	if (mapping != MAP_FAILED)
 		munmap(mapping, PROCESS_PAGE_SIZE);
 
@@ -146,9 +153,11 @@ int main(int argc, char **argv)
 		fprintf(stderr, "usage: %s attrs|pages\n", argv[0]);
 		return EXIT_FAILURE;
 	}
+	if (getpagesize() == NATIVE_PAGE_SIZE) {
+		p3s_require_native_compat();
+		exec_compat(argv[0], P3S_RUN_FLAG, test->name, NULL);
+	}
 	if (mode)
 		p3s_require_compat();
-	else if (!p3s_is_compat_process())
-		exec_compat(argv[0], P3S_RUN_FLAG, test->name, NULL);
 	return run_test(test);
 }

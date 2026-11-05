@@ -171,14 +171,14 @@ int main(int argc, char **argv)
 	const char *mode = p3s_run_mode(argc, argv, NULL);
 
 	if (mode && !strcmp(mode, "--native"))
-		return getpagesize() == (int)NATIVE_PAGE_SIZE ? run_case(false) : KSFT_SKIP;
+		return p3s_is_compat_process() ? KSFT_SKIP : run_case(false);
 	if (mode && !strcmp(mode, "--compat"))
 		return p3s_is_compat_process() ? run_case(true) : KSFT_SKIP;
 
 	ksft_print_header();
 	ksft_set_plan(2);
 	fflush(stdout);
-	report(run_child(false), "native 16K mmap of BTF matches read()");
+	report(run_child(false), "native mmap of BTF matches read()");
 	report(run_child(true), "4K compat read of BTF works but mmap is unsupported");
 	ksft_finished();
 }

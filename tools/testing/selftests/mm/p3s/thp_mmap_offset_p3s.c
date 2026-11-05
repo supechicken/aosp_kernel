@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-2.0
-/* 4KB mappings retain file bytes even when huge-page placement is bypassed. */
+/* Process-page-offset mappings retain file bytes across huge-page placement. */
 #define _GNU_SOURCE
 
 #include <linux/magic.h>
@@ -45,7 +45,7 @@ static unsigned long read_thp_size(void)
 static int run_test(int fd)
 {
 	unsigned long thp_size = read_thp_size();
-	const off_t offset = PROCESS_PAGE_SIZE;
+	const off_t offset = getpagesize();
 	struct statfs fs;
 	size_t length;
 	void *mapping;
@@ -58,19 +58,20 @@ static int run_test(int fd)
 	if (fstatfs(fd, &fs) || !supports_thp_unmapped_area(fs.f_type))
 		ksft_exit_skip("test file lacks THP mmap alignment\n");
 	length = 2 * thp_size;
-	p3s_require_compat();
 	ksft_print_header();
 	ksft_set_plan(3);
 	mapping = mmap(NULL, length, PROT_READ, MAP_PRIVATE, fd, offset);
 	ksft_test_result(mapping != MAP_FAILED,
-			 "map a file from a 4K offset\n");
+			 "map a file from one process-page offset\n");
 	ksft_test_result(mapping != MAP_FAILED &&
-			 !((uintptr_t)mapping & (NATIVE_PAGE_SIZE - 1)),
-			 "default file placement remains native-folio aligned\n");
+			 !((uintptr_t)mapping &
+			   ((p3s_is_compat_process() ? NATIVE_PAGE_SIZE :
+			     (unsigned long)getpagesize()) - 1)),
+			 "default file placement obeys the active page geometry\n");
 	bytes = pread(fd, expected, sizeof(expected), offset);
 	if (mapping != MAP_FAILED && bytes == sizeof(expected))
 		matches = !memcmp(mapping, expected, sizeof(expected));
-	ksft_test_result(matches, "mapping reads bytes at the requested 4KB offset\n");
+	ksft_test_result(matches, "mapping reads bytes at the requested page offset\n");
 	if (mapping != MAP_FAILED)
 		munmap(mapping, length);
 	close(fd);
@@ -121,7 +122,15 @@ static void __noreturn exec_compat_run(const char *argv0, const char *path)
 			ksft_exit_skip("no THP-aligned file on /system\n");
 	}
 	snprintf(fd_string, sizeof(fd_string), "%d", fd);
-	exec_compat(argv0, P3S_RUN_FLAG, fd_string, NULL);
+	if (getpagesize() == NATIVE_PAGE_SIZE)
+		exec_compat(argv0, P3S_RUN_FLAG, fd_string, NULL);
+	else {
+		char *const args[] = { (char *)argv0, P3S_RUN_FLAG, fd_string,
+				       NULL };
+
+		execv("/proc/self/exe", args);
+		ksft_exit_fail_msg("re-exec failed: %s\n", strerror(errno));
+	}
 }
 
 int main(int argc, char **argv)

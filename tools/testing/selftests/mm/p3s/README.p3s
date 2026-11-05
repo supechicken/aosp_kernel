@@ -1,9 +1,11 @@
 P3S selftests
 =============
 
-Run on an AArch64 16KB kernel with CONFIG_ARM64_PER_PROCESS_PAGE_SIZE.
-Compatibility-only tests re-exec into real 4KB mode. Mixed-geometry tests first
-check native 16KB pages and probe a 4KB child. Unsupported kernels report SKIP.
+Run on AArch64 4KB or 16KB kernels, with or without
+CONFIG_ARM64_PER_PROCESS_PAGE_SIZE. page_size_contract_p3s exercises the
+getpagesize() contract in native mode on every kernel and in 4KB compat mode
+when available. Mixed-geometry tests first check native 16KB backing and
+probe a 4KB child; unavailable P3S-specific coverage reports SKIP, not FAIL.
 Generate matching UAPI headers with `make headers` in the kernel tree before
 building. Build only this collection with:
 

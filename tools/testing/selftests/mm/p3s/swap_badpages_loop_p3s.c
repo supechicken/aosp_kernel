@@ -11,7 +11,7 @@ int main(int argc, char **argv)
 	unsigned char header[NATIVE_PAGE_SIZE] = {};
 	char path[] = "/data/local/tmp/p3s-badpages-XXXXXX", dev[64];
 	const unsigned int bytes = 32 * 1024 * 1024;
-	unsigned int size = NATIVE_PAGE_SIZE, nr = 3, i;
+	unsigned int size = getpagesize(), nr = 3, i;
 	bool swapped = false;
 	int ctl, loop, fd, index, ret, error;
 	struct loop_info64 info = { .lo_flags = LO_FLAGS_AUTOCLEAR };
@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 			value = i == 0 ? 1 : i == 1 ? bytes / size - 1 : nr;
 		} else {
 			offset = 1536 + 4 * (i - 3);
-			value = (i - 2) * (NATIVE_PAGE_SIZE / size);
+			value = (i - 2) * (getpagesize() / size);
 		}
 		if (swapped)
 			value = __builtin_bswap32(value);

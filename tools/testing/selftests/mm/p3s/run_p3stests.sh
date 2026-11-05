@@ -82,6 +82,8 @@ if ! $list_only; then
 fi
 
 run_test ./mglru_folded_p3s
+run_test ./page_size_contract_p3s
+run_test ./page_size_contract_p3s --compat
 run_test ./elf_4k_align_p3s
 run_test ./elf_core_p3s
 run_test ./taskstats_p3s

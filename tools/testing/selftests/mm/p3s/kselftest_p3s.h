@@ -57,12 +57,37 @@ static const char *p3s_argv0 __maybe_unused = "/proc/self/exe";
 
 #define P3S_MAX_EXEC_ARGS 15
 
+/*
+ * A native 4K kernel can retain ADDR_PAGE_SIZE_4KB after exec too.  The
+ * personality bit and getpagesize() alone therefore do not prove that the
+ * process has 4K PTEs backed by native 16K pages.  KernelPageSize in smaps
+ * reports that backing geometry, independently of the process page size.
+ */
+static inline bool p3s_has_native_16k_pages(void)
+{
+	char line[256];
+	unsigned long kilobytes;
+	FILE *smaps = fopen("/proc/self/smaps", "re");
+
+	if (!smaps)
+		return false;
+	while (fgets(line, sizeof(line), smaps)) {
+		if (sscanf(line, "KernelPageSize: %lu kB", &kilobytes) == 1) {
+			fclose(smaps);
+			return kilobytes * 1024 == NATIVE_PAGE_SIZE;
+		}
+	}
+	fclose(smaps);
+	return false;
+}
+
 static inline bool p3s_is_compat_process(void)
 {
 	int persona = personality(0xffffffffUL);
 
 	return getpagesize() == PROCESS_PAGE_SIZE && persona >= 0 &&
-	       (persona & ADDR_PAGE_SIZE_4KB);
+	       (persona & ADDR_PAGE_SIZE_4KB) &&
+	       p3s_has_native_16k_pages();
 }
 
 /* Hard precondition of every compat-side test body. */

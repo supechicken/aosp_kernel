@@ -174,10 +174,9 @@ static int run_parent(void)
 	int status;
 	pid_t child;
 
+	p3s_require_native_compat();
 	ksft_print_header();
 	ksft_set_plan(4);
-	if (getpagesize() != NATIVE_PAGE_SIZE)
-		ksft_exit_skip("requires a native 16K process\n");
 	if (pipe(pipefd))
 		ksft_exit_fail_msg("pipe failed: %s\n", strerror(errno));
 	child = fork();
