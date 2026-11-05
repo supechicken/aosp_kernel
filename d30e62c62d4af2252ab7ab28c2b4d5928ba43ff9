@@ -16,6 +16,69 @@
       "message": "fyi, the cherry-pick onto android18-7.3 is at aosp/4418084. These are identical.",
       "revId": "d30e62c62d4af2252ab7ab28c2b4d5928ba43ff9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f93f2e6_82d6dc69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1981633
+      },
+      "writtenOn": "2026-11-05T17:17:14Z",
+      "side": 1,
+      "message": "We need to have the patch for the permissions in this topic, because currently, all userspace apps which use this would still need to CAP_BPF, and therefor could just call bpf_load natively, right?\n\nAlso, per our discussion, this patchset should be targeting android 18-7.3",
+      "revId": "d30e62c62d4af2252ab7ab28c2b4d5928ba43ff9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f377887_392e05b0",
+        "filename": "drivers/android/bpf/bpf_fd_loader.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1981633
+      },
+      "writtenOn": "2026-11-05T17:17:14Z",
+      "side": 1,
+      "message": "We are going to want a flags/version field in the arguments for future proofing this.",
+      "range": {
+        "startLine": 27,
+        "startChar": 7,
+        "endLine": 27,
+        "endChar": 28
+      },
+      "revId": "d30e62c62d4af2252ab7ab28c2b4d5928ba43ff9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0217a5fe_bfe96599",
+        "filename": "drivers/android/bpf/bpf_fd_loader.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1981633
+      },
+      "writtenOn": "2026-11-05T17:17:14Z",
+      "side": 1,
+      "message": "Do we really need this?",
+      "range": {
+        "startLine": 96,
+        "startChar": 12,
+        "endLine": 96,
+        "endChar": 44
+      },
+      "revId": "d30e62c62d4af2252ab7ab28c2b4d5928ba43ff9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
