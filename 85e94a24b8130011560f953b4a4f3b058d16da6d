@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ded7834_a0bb7607",
+        "filename": "drivers/usb/host/xhci-mem.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1981633
+      },
+      "writtenOn": "2026-11-05T05:43:44Z",
+      "side": 1,
+      "message": "The wrapper function you\u0027ve added in 4327668 passes a NULL pool in, and therefore will cause a NULL pointer dereference when this is used for any users of the existing API.",
+      "range": {
+        "startLine": 381,
+        "startChar": 1,
+        "endLine": 381,
+        "endChar": 27
+      },
+      "revId": "85e94a24b8130011560f953b4a4f3b058d16da6d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
