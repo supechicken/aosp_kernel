@@ -18,6 +18,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "66974f3e_ecf8d641",
+        "filename": "drivers/iommu/intel/pkvm/domain.c",
+        "patchSetId": 17
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 3494485
+      },
+      "writtenOn": "2026-11-05T17:37:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70a69fa9_199c0af6",
+      "revId": "6e0f8741d0c244353f6ce86568c21b1ea37ac3bf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "48f520fa_d1f85446",
@@ -37,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2a2330a4_569d8eca",
+        "filename": "drivers/iommu/intel/pkvm/domain.c",
+        "patchSetId": 17
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 3494485
+      },
+      "writtenOn": "2026-11-05T17:37:15Z",
+      "side": 1,
+      "message": "Done, switched to returning -EINVAL.\n\nIn 6.18 we still need this check because calculate_psi_aligned_address() and qi_desc_piotlb() can overflow / hit shift-by-64 UB if the host passes huge ranges (e.g. [1, ULONG_MAX] wraps pages to 0 in aligned_nrpages(), hitting 1UL \u003c\u003c 64 in __roundup_pow_of_two(0); and [0, BIT_ULL(63)] gives mask \u003d 52, hitting 1ULL \u003c\u003c (12 + 52) in qi_desc_piotlb()).",
+      "parentUuid": "48f520fa_d1f85446",
+      "revId": "6e0f8741d0c244353f6ce86568c21b1ea37ac3bf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8be7e779_e0ce0a66",
         "filename": "drivers/iommu/intel/pkvm/domain.c",
         "patchSetId": 17
@@ -48,6 +84,24 @@
       "writtenOn": "2026-11-05T15:59:53Z",
       "side": 1,
       "message": "Not sure why need to force `ih` to false here? It\u0027s the host\u0027s business?",
+      "revId": "6e0f8741d0c244353f6ce86568c21b1ea37ac3bf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3df9a4f6_c492e014",
+        "filename": "drivers/iommu/intel/pkvm/domain.c",
+        "patchSetId": 17
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 3494485
+      },
+      "writtenOn": "2026-11-05T17:37:15Z",
+      "side": 1,
+      "message": "Agreed, removed. Full-domain [0, ULONG_MAX] flushes ignore ih anyway, and S1 invalidation hints are up to the host.",
+      "parentUuid": "8be7e779_e0ce0a66",
       "revId": "6e0f8741d0c244353f6ce86568c21b1ea37ac3bf",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
