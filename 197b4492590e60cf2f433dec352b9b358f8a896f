@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c81d645a_6269ad56",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1869395
+      },
+      "writtenOn": "2026-11-05T17:42:35Z",
+      "side": 1,
+      "message": "I would have use a different language here. e.g. taking a reserved field. This makes it seems like it was actually broken.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 22
+      },
+      "revId": "197b4492590e60cf2f433dec352b9b358f8a896f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
