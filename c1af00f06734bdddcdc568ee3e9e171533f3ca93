@@ -16,6 +16,24 @@
       "message": "This cherry-pick is not clean. Please either make it clean or relabel the patch as BACKPORT and add an annotation explaining the conflict resolution.",
       "revId": "c1af00f06734bdddcdc568ee3e9e171533f3ca93",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "265967ad_694af459",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2010822
+      },
+      "writtenOn": "2026-11-05T02:12:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14550426_7ef08046",
+      "revId": "c1af00f06734bdddcdc568ee3e9e171533f3ca93",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
