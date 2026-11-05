@@ -586,7 +586,6 @@ struct task_struct *ping_current_proxy_donor(struct futex_pi_state *ping_state)
 					     SINGLE_DEPTH_NESTING);
 			if (__get_task_blocked_on(donor) == ping_lock) {
 				ret = get_task_struct(donor);
-				__clear_task_blocked_on(donor, ping_lock);
 				current->blocked_donor = NULL;
 			}
 			raw_spin_unlock(&donor->blocked_lock);
@@ -673,7 +672,6 @@ retry:
 	/* Leave it queued, it gets unqueued on the lock side */
 	if (next == NULL) {
 		next = get_task_struct(top_waiter->task);
-		clear_task_blocked_on(next, &ping_state->ping_mutex);
 	}
 	set_task_blocked_on_waking(next, &ping_state->ping_mutex);
 
