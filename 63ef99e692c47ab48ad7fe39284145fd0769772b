@@ -16,6 +16,24 @@
       "message": "If we agree to make nested enabled by default, we shall make this param _disable_ nested instead of enabling it, and correspondingly rename it e.g. to `pkvm_nested_off`?",
       "revId": "63ef99e692c47ab48ad7fe39284145fd0769772b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b25f93a9_c89a6e17",
+        "filename": "drivers/iommu/intel/iommu.c",
+        "patchSetId": 15
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 3494485
+      },
+      "writtenOn": "2026-11-05T02:21:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67ef5dd8_1c70cac6",
+      "revId": "63ef99e692c47ab48ad7fe39284145fd0769772b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
