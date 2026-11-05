@@ -22,6 +22,29 @@
       },
       "revId": "85e94a24b8130011560f953b4a4f3b058d16da6d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a8f31ca_998a304a",
+        "filename": "drivers/usb/host/xhci-sideband.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1981633
+      },
+      "writtenOn": "2026-11-05T05:51:00Z",
+      "side": 1,
+      "message": "This won\u0027t compile. You\u0027re calling the new signature, but this CL maintained the old 4 arg one.\n\naosp/4327668 changes this, but that makes bisection problematic.",
+      "range": {
+        "startLine": 317,
+        "startChar": 0,
+        "endLine": 319,
+        "endChar": 34
+      },
+      "revId": "85e94a24b8130011560f953b4a4f3b058d16da6d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
