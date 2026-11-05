@@ -5,8 +5,8 @@
  */
 #include "iwl-trans.h"
 #include "iwl-prph.h"
-#include "iwl-context-info.h"
-#include "iwl-context-info-v2.h"
+#include "pcie/iwl-context-info.h"
+#include "pcie/iwl-context-info-v2.h"
 #include "internal.h"
 #include "fw/dbg.h"
 
@@ -546,10 +546,8 @@ again:
 	}
 
 	if (WARN_ON(trans->do_top_reset &&
-		    trans->mac_cfg->device_family < IWL_DEVICE_FAMILY_SC)) {
-		ret = -EINVAL;
-		goto out;
-	}
+		    trans->mac_cfg->device_family < IWL_DEVICE_FAMILY_SC))
+		return -EINVAL;
 
 	/* we need to wait later - set state */
 	if (trans->do_top_reset)
@@ -612,6 +610,11 @@ again:
 		msleep(10);
 		IWL_INFO(trans, "TOP reset successful, reinit now\n");
 		/* now load the firmware again properly */
+		ret = _iwl_trans_pcie_start_hw(trans);
+		if (ret) {
+			IWL_ERR(trans, "failed to start HW after TOP reset\n");
+			goto out;
+		}
 		trans_pcie->prph_scratch->ctrl_cfg.control.control_flags &=
 			~cpu_to_le32(IWL_PRPH_SCRATCH_TOP_RESET);
 		top_reset_done = true;
