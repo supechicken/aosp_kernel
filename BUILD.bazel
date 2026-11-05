@@ -168,6 +168,7 @@ filegroup(
 
             # ABI and symbol list files
             "gki/**",
+            "microdroid/**",
         ],
     ),
     visibility = ["//visibility:public"],
@@ -408,6 +409,7 @@ kernel_build(
         "vmlinux.symvers",
     ],
     arch = "arm64",
+    collect_unstripped_modules = True,
     defconfig = "arch/arm64/configs/microdroid_defconfig",
     make_goals = [
         "Image",
