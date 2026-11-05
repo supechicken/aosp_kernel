@@ -65,7 +65,7 @@ config ANDROID_BINDER_ALLOC_KUNIT_TEST
 
 config ANDROID_FUTEX
 	bool "Android futex ioctl device"
-	depends on FUTEX
+	depends on FUTEX && RUST
 	help
 	  Creates /dev/android_futex, which provides an ioctl interface
 	  taking sys_futex() style arguments to access the
