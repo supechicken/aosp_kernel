@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfe21f3b_0d38a1d0",
+        "filename": "tools/testing/selftests/android/config_x86_64.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1869395
+      },
+      "writtenOn": "2026-11-05T00:32:56Z",
+      "side": 1,
+      "message": "I don\u0027t really follow what is being done here. Or the pipefail? Maybe you need a run.sh script?",
+      "range": {
+        "startLine": 30,
+        "startChar": 137,
+        "endLine": 30,
+        "endChar": 161
+      },
+      "revId": "5b6575547d60d48d3d7b76f9f461c8f0c1637fe4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
