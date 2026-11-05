@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6f116ac_7c604bea",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 3494485
+      },
+      "writtenOn": "2026-11-05T02:24:58Z",
+      "side": 1,
+      "message": "Thanks, removed this.",
+      "parentUuid": "b0a75391_2e2264c4",
+      "range": {
+        "startLine": 13,
+        "startChar": 41,
+        "endLine": 15,
+        "endChar": 46
+      },
+      "revId": "66532637e57361796d2d67c323437b1d1159634b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "efe80f5b_9650f274",
@@ -55,6 +79,24 @@
           ]
         }
       ],
+      "revId": "66532637e57361796d2d67c323437b1d1159634b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b462107_f6933638",
+        "filename": "drivers/iommu/intel/iommu.c",
+        "patchSetId": 16
+      },
+      "lineNbr": 3767,
+      "author": {
+        "id": 3494485
+      },
+      "writtenOn": "2026-11-05T02:24:58Z",
+      "side": 1,
+      "message": "Added `pkvm_enabled()` here and dropped it in `intel_iommu_iotlb_sync_map()`.\n\n`intel_iommu_map()` and `intel_iommu_unmap()` still need `pkvm_enabled()` since they check `!domain_pkvm_nested()`, and `intel_iommu_tlb_sync()` already uses `if (!pkvm_enabled()) ... else if (domain_pkvm_nested(...))`.",
+      "parentUuid": "efe80f5b_9650f274",
       "revId": "66532637e57361796d2d67c323437b1d1159634b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
@@ -94,6 +136,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da4c55ac_c3da288f",
+        "filename": "drivers/iommu/intel/iommu.c",
+        "patchSetId": 16
+      },
+      "lineNbr": 4589,
+      "author": {
+        "id": 3494485
+      },
+      "writtenOn": "2026-11-05T02:24:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "30245407_d905ee07",
+      "revId": "66532637e57361796d2d67c323437b1d1159634b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "21dfed04_346a52ad",
@@ -111,6 +171,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "144b3b71_e099e413",
+        "filename": "drivers/iommu/intel/pkvm/iommu_hc.c",
+        "patchSetId": 16
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 3494485
+      },
+      "writtenOn": "2026-11-05T02:24:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "21dfed04_346a52ad",
+      "revId": "66532637e57361796d2d67c323437b1d1159634b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a7d9058d_04799d0c",
@@ -124,6 +202,24 @@
       "writtenOn": "2026-11-04T19:21:07Z",
       "side": 1,
       "message": "Rather `domain-\u003eagaw`?",
+      "revId": "66532637e57361796d2d67c323437b1d1159634b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf39f6ad_8cd8e6ca",
+        "filename": "drivers/iommu/intel/pkvm/iommu_hc.c",
+        "patchSetId": 16
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 3494485
+      },
+      "writtenOn": "2026-11-05T02:24:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a7d9058d_04799d0c",
       "revId": "66532637e57361796d2d67c323437b1d1159634b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
