@@ -22,6 +22,30 @@
       },
       "revId": "5b6575547d60d48d3d7b76f9f461c8f0c1637fe4",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d8f0145_d16bb5c4",
+        "filename": "tools/testing/selftests/android/config_x86_64.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1954115
+      },
+      "writtenOn": "2026-11-05T21:02:14Z",
+      "side": 1,
+      "message": "Thanks, you\u0027re right. The pipe was a stopgap to get the KTAP subtest lines into kernel.log: Tradefed drops stdout on passing runs, and parse-ktap trips EXPECTED_TESTS_MISMATCH (b/581939175). It can also fail a passing run (devkmsg rejects writes over 1024 bytes and pipefail propagates that), and this change also dropped INDIVIDUAL_LEAVES for the whole suite.\n\nBoth are reverted in aosp/4420419 (6.18: aosp/4420423). The rest of your review is addressed in the follow-ups in topics fuse-bpf-kselftest-review-6.12 / -6.18 and in the new patch sets of the 7.3 series (topic fuse-bpf-kselftest-7.3).",
+      "parentUuid": "cfe21f3b_0d38a1d0",
+      "range": {
+        "startLine": 30,
+        "startChar": 137,
+        "endLine": 30,
+        "endChar": 161
+      },
+      "revId": "5b6575547d60d48d3d7b76f9f461c8f0c1637fe4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ],
   "submitRequirementResults": [
