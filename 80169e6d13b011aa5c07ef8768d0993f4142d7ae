@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25ed8986_52681473",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1014088
+      },
+      "writtenOn": "2026-11-05T17:13:33Z",
+      "side": 1,
+      "message": "Do you recall why the \"Copy\" trait was necessary on this branch when it wasn\u0027t originally?",
+      "range": {
+        "startLine": 15,
+        "startChar": 16,
+        "endLine": 15,
+        "endChar": 25
+      },
+      "revId": "80169e6d13b011aa5c07ef8768d0993f4142d7ae",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
