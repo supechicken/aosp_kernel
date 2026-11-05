@@ -16,6 +16,24 @@
       "message": "I know I am responsible for this, but is there a problem with two change-ids on a commit?",
       "revId": "f16e3a8a7b7de94aaab2202970717203b8a2cc64",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5326ba43_97e641f6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1934715
+      },
+      "writtenOn": "2026-11-05T17:35:32Z",
+      "side": 1,
+      "message": "good catch; fixed.",
+      "parentUuid": "9cee4bfd_feb62ecc",
+      "revId": "f16e3a8a7b7de94aaab2202970717203b8a2cc64",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
