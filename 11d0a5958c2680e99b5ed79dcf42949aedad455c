@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4acd59dc_d166dfcc",
+        "filename": "drivers/block/zram/zram_drv.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 1322,
+      "author": {
+        "id": 3489357
+      },
+      "writtenOn": "2026-11-05T03:03:30Z",
+      "side": 1,
+      "message": "Do we really need to do these?",
+      "range": {
+        "startLine": 1319,
+        "startChar": 0,
+        "endLine": 1322,
+        "endChar": 25
+      },
+      "revId": "11d0a5958c2680e99b5ed79dcf42949aedad455c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
