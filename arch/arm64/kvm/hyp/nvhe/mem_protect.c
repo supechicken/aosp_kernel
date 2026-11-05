@@ -2441,8 +2441,18 @@ int __pkvm_guest_share_host(u64 gfn, struct pkvm_hyp_vcpu *vcpu, u64 nr_pages, u
 	 */
 	prot = pkvm_mkstate(PKVM_HOST_MEM_PROT, PKVM_PAGE_SHARED_BORROWED);
 	ret = host_stage2_idmap_locked(phys, size, prot, true);
-	if (ret)
+	if (ret) {
+		/*
+		 * The map may have stopped part-way, leaving the start of the
+		 * range mapped for the host while the guest is told that the
+		 * share failed. Put the guest's ownership annotation back. If
+		 * this runs out of memory too, it does so where the map did,
+		 * after restoring every entry the map had changed.
+		 */
+		__host_stage2_set_owner_locked(phys, size, PKVM_ID_GUEST, 0,
+					       HOST_SET_NO_IOMMU_UPDATE);
 		goto unlock;
+	}
 
 	WARN_ON(kvm_iommu_host_stage2_idmap(phys, phys + size, PKVM_HOST_MEM_PROT));
 	kvm_iommu_host_stage2_idmap_complete(true);
