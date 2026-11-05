@@ -92,6 +92,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "25d14397_5cd0f182",
+        "filename": "drivers/android/bpf/bpf_fd_loader.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1981633
+      },
+      "writtenOn": "2026-11-05T19:48:18Z",
+      "side": 1,
+      "message": "What if we require gen_hash to be set? It might be a bit of a non-prescribed use of it, ( i think its intended use is signed bpf), so you may need to get alignment with upstream that that is stable enough to use.",
+      "parentUuid": "0248dc2e_8a83c276",
+      "revId": "ca62cbffa82b40a51c75f3fc7f18af9ce6c0e1c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "475446f9_3da77001",
         "filename": "drivers/android/bpf/bpf_fd_loader.rs",
         "patchSetId": 1

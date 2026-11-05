@@ -158,6 +158,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f8962fd3_4e8c3bca",
+        "filename": "drivers/android/bpf/bpf_fd_loader.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 646,
+      "author": {
+        "id": 1981633
+      },
+      "writtenOn": "2026-11-05T19:48:18Z",
+      "side": 1,
+      "message": "This looks like you really trust userspace to provide valid context.",
+      "range": {
+        "startLine": 641,
+        "startChar": 0,
+        "endLine": 646,
+        "endChar": 45
+      },
+      "revId": "d30e62c62d4af2252ab7ab28c2b4d5928ba43ff9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4ea18342_a7a88b42",
         "filename": "include/uapi/linux/android/bpf_fd_loader.h",
         "patchSetId": 6
