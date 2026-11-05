@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4238e950_28e3519c",
+        "filename": "arch/x86/include/asm/kvm_pkvm.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-05T18:17:00Z",
+      "side": 1,
+      "message": "These `iommu_coherency` and `use_first_level` changes are not related to nested support. Maybe do them in a separate patch, to squash it into a62cc27b7e0b (\"ANDROID: iommu/vt-d: pKVM: Hypercalls for iommu domain management\") during 7.x rebase? (And maybe add `Fixes: a62cc27b7e0b (\"ANDROID: iommu/vt-d: pKVM: Hypercalls for iommu domain management\")` to that patch, to not forget to squash it?)",
+      "revId": "f8f577f55f94e2cf2f3745e4189f0fc336e7b31d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf67f7f1_acb54667",
+        "filename": "drivers/iommu/intel/pkvm/iommu_hc.c",
+        "patchSetId": 20
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-05T18:17:00Z",
+      "side": 1,
+      "message": "This may only be true if `domain-\u003euse_first_level`, which is already checked above, so this check is not necessary? Likewise in `iommu_pasid_setup_sl()`.",
+      "revId": "f8f577f55f94e2cf2f3745e4189f0fc336e7b31d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44965429_8e1a8bcb",
+        "filename": "drivers/iommu/intel/pkvm/iommu_hc.c",
+        "patchSetId": 20
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-05T18:17:00Z",
+      "side": 1,
+      "message": "nit: move this check above line 302, together with other sanity checks?",
+      "revId": "f8f577f55f94e2cf2f3745e4189f0fc336e7b31d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}

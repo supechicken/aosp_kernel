@@ -1,0 +1,39 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "205e64b7_200e0e2a",
+        "filename": "drivers/iommu/intel/pkvm/iommu_hc.c",
+        "patchSetId": 21
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-05T18:17:00Z",
+      "side": 1,
+      "message": "In the following patch aosp/4017996 we remove this error and do use nested domain in this config, so this error message seems a bit misleading? Maybe e.g. just \"not implemented yet\"?",
+      "fixSuggestions": [
+        {
+          "fixId": "13973cae_bd8c2b22",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "drivers/iommu/intel/pkvm/iommu_hc.c",
+              "range": {
+                "startLine": 127,
+                "startChar": 0,
+                "endLine": 128,
+                "endChar": 0
+              },
+              "replacement": "\t\tpkvm_err(\"%s: nested domain(%p) not implemented yet!\\n\",\n"
+            }
+          ]
+        }
+      ],
+      "revId": "7e67ee8dc4bd2cd83928e623a6e8b0b8a30c1ff7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
