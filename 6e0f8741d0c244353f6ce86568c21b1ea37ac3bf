@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70a69fa9_199c0af6",
+        "filename": "drivers/iommu/intel/pkvm/domain.c",
+        "patchSetId": 17
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-05T15:59:53Z",
+      "side": 1,
+      "message": "We can check this before getting the domain? (Unless we want to merge this with the `last \u003e domain-\u003emax_addr` check below, with my below suggestion to return -EINVAL there too.)",
+      "revId": "6e0f8741d0c244353f6ce86568c21b1ea37ac3bf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48f520fa_d1f85446",
+        "filename": "drivers/iommu/intel/pkvm/domain.c",
+        "patchSetId": 17
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-05T15:59:53Z",
+      "side": 1,
+      "message": "I guess this is to force triggering the `start \u003d\u003d 0 \u0026\u0026 end \u003d\u003d ULONG_MAX` case in `cache_tag_flush_range()`?\n\nMaybe instead just return -EINVAL if `last \u003e domain-\u003emax_addr \u0026\u0026 !(start \u003d\u003d 0 \u0026\u0026 last \u003d\u003d ULONG_MAX)`?\n\nBTW I see in the newest kernel `cache_tag_flush_range()` doesn\u0027t explicitly handle this case (https://lore.kernel.org/all/0-v2-895748900b39+5303-iommupt_inv_vtd_jgg@nvidia.com/), even though `cache_tag_flush_all()` still calls it with 0 and ULONG_MAX. Does that mean that with the newest kernel we won\u0027t need to check this here either? Or perhaps we don\u0027t need to check it here even now with 6.18?",
+      "revId": "6e0f8741d0c244353f6ce86568c21b1ea37ac3bf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8be7e779_e0ce0a66",
+        "filename": "drivers/iommu/intel/pkvm/domain.c",
+        "patchSetId": 17
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-05T15:59:53Z",
+      "side": 1,
+      "message": "Not sure why need to force `ih` to false here? It\u0027s the host\u0027s business?",
+      "revId": "6e0f8741d0c244353f6ce86568c21b1ea37ac3bf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
