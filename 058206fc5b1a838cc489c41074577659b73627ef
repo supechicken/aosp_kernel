@@ -22,6 +22,30 @@
       },
       "revId": "058206fc5b1a838cc489c41074577659b73627ef",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f62c322f_c49f0525",
+        "filename": "include/linux/mm_types.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1871,
+      "author": {
+        "id": 1157738
+      },
+      "writtenOn": "2026-11-05T21:00:05Z",
+      "side": 1,
+      "message": "Actually you do the same thing with VM_PT_SHARED later on and then introduce helpers which manipulate them. I guess that\u0027s ok.",
+      "parentUuid": "929c22cb_9c654574",
+      "range": {
+        "startLine": 1871,
+        "startChar": 8,
+        "endLine": 1871,
+        "endChar": 27
+      },
+      "revId": "058206fc5b1a838cc489c41074577659b73627ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
