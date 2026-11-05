@@ -89,6 +89,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5fb1e2f_9523028f",
+        "filename": "drivers/iommu/intel/pkvm/domain.c",
+        "patchSetId": 17
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 3494485
+      },
+      "writtenOn": "2026-11-05T20:43:11Z",
+      "side": 1,
+      "message": "yes, in 7.1, it does eliminate the need for this check: `9785df3fd670 (\"iommu/vt-d: Simplify calculate_psi_aligned_address()\")` replaces `aligned_nrpages()/__roundup_pow_of_two()` with `fls_long(start ^ last)` and `clamps sz_lg2 \u003e\u003d BITS_PER_LONG to MAX_AGAW_PFN_WIDTH (52)`, and the preceding commit `e36ee89679f4 (\"iommu/vt-d: Pass size_order to qi_desc_piotlb() not npages\")` drops the `1ULL \u003c\u003c (12 + mask)` shift in `qi_desc_piotlb()` (with `mask \u003e\u003d MAX_AGAW_PFN_WIDTH` routed to `qi_desc_piotlb_all()`).\n\nAdded a comment noting this for future kernel rebases.",
+      "parentUuid": "bedad5b5_39834f1d",
+      "revId": "6e0f8741d0c244353f6ce86568c21b1ea37ac3bf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8be7e779_e0ce0a66",
