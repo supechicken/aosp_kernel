@@ -22,6 +22,29 @@
       },
       "revId": "1bcff861257dc8b13216318a052f585f17cc0571",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a4ed3d3_12c6ad5f",
+        "filename": "drivers/usb/host/xhci.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1981633
+      },
+      "writtenOn": "2026-11-05T05:53:42Z",
+      "side": 1,
+      "message": "You\u0027re including this twice",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 36
+      },
+      "revId": "1bcff861257dc8b13216318a052f585f17cc0571",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
