@@ -180,6 +180,24 @@
       "parentUuid": "deb6acdc_f10132b4",
       "revId": "dbb8566694054c65eb36b06244217a7bdd4844f5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "871c1196_b47d9139",
+        "filename": "include/uapi/linux/zram_ioctl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1894539
+      },
+      "writtenOn": "2026-11-05T09:05:26Z",
+      "side": 1,
+      "message": "Updated. Please help review the new version. Thanks.",
+      "parentUuid": "f6df4b75_003f4dbc",
+      "revId": "dbb8566694054c65eb36b06244217a7bdd4844f5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
