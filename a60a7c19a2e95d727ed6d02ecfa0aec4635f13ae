@@ -1,0 +1,131 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b40d8b3_1b36aa87",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1275554
+      },
+      "writtenOn": "2026-11-05T22:07:31Z",
+      "side": 1,
+      "message": "Please drop \"and bump ZRAM_ANDROID_IOC_VERSION to 2\" here (and the bump\nitself); the version needs to stay at 1, see my comment on\nzram_ioctl.h L9. Maybe something like:\n  \n  struct zram_prefetch_ctl. Redefine the cmd as _IOWR.\n  \n  ZRAM_ANDROID_IOC_VERSION is intentionally kept at 1: the legacy _IOW\n  cmd is unchanged, and existing userspace (MMD) requires version \u003d\u003d 1.",
+      "range": {
+        "startLine": 28,
+        "startChar": 56,
+        "endLine": 29,
+        "endChar": 30
+      },
+      "revId": "a60a7c19a2e95d727ed6d02ecfa0aec4635f13ae",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "545174eb_1b9d73c0",
+        "filename": "drivers/block/zram/zram_ioctl.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1275554
+      },
+      "writtenOn": "2026-11-05T22:07:31Z",
+      "side": 1,
+      "message": "nit: consider checking each version boundary with offsetofend() instead, like copy_clone_args_from_user() does for CLONE_ARGS_SIZE_VER*, so the check stays valid when new fields are appended:\n\nBUILD_BUG_ON(offsetofend(struct zram_android_ioc_process_prefetch, pidfd) !\u003d\n\t     ZRAM_ANDROID_IOC_PROCESS_PREFETCH_SIZE_VER0);\nBUILD_BUG_ON(offsetofend(struct zram_android_ioc_process_prefetch, read_bytes) !\u003d\n\t     ZRAM_ANDROID_IOC_PROCESS_PREFETCH_SIZE_VER1);",
+      "range": {
+        "startLine": 320,
+        "startChar": 0,
+        "endLine": 321,
+        "endChar": 52
+      },
+      "revId": "a60a7c19a2e95d727ed6d02ecfa0aec4635f13ae",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a568aa6_cf23dbc3",
+        "filename": "drivers/block/zram/zram_ioctl.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1275554
+      },
+      "writtenOn": "2026-11-05T22:07:31Z",
+      "side": 1,
+      "message": "ENOTTY ?",
+      "range": {
+        "startLine": 324,
+        "startChar": 10,
+        "endLine": 324,
+        "endChar": 16
+      },
+      "revId": "a60a7c19a2e95d727ed6d02ecfa0aec4635f13ae",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ade8458_eb911d67",
+        "filename": "include/uapi/linux/zram_ioctl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1275554
+      },
+      "writtenOn": "2026-11-05T22:07:31Z",
+      "side": 1,
+      "message": "Please keep this at 1. Shipped MMD (part of the system image) enables per-process ioctls only when version \u003d\u003d 1, and android16-6.12 can be updated without the system image, so bumping it would disable both per-process writeback and prefetch on existing devices.\n\nThe legacy _IOW cmd is unchanged, and new userspace can probe the _IOWR cmd (ENOTTY fallback) instead.",
+      "fixSuggestions": [
+        {
+          "fixId": "12a2a5ec_8d0e4541",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "include/uapi/linux/zram_ioctl.h",
+              "range": {
+                "startLine": 9,
+                "startChar": 0,
+                "endLine": 10,
+                "endChar": 0
+              },
+              "replacement": "#define ZRAM_ANDROID_IOC_VERSION 1\n"
+            }
+          ]
+        }
+      ],
+      "revId": "a60a7c19a2e95d727ed6d02ecfa0aec4635f13ae",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e35337d4_a9130c9a",
+        "filename": "include/uapi/linux/zram_ioctl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1275554
+      },
+      "writtenOn": "2026-11-05T22:07:31Z",
+      "side": 1,
+      "message": "You already added flags for \"in\". Do we need another reserved field for \"in\"? New fields can simply be appended thanks to copy_struct_from_user(). \n\nI think we can drop reserved. @senozhatsky@google.com WDYT?",
+      "range": {
+        "startLine": 74,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 20
+      },
+      "revId": "a60a7c19a2e95d727ed6d02ecfa0aec4635f13ae",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
