@@ -95,6 +95,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d6da5e0_b6f277ef",
+        "filename": "fs/f2fs/file.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 5338,
+      "author": {
+        "id": 1651802
+      },
+      "writtenOn": "2026-11-06T03:38:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0900b685_6733fc69",
+      "range": {
+        "startLine": 5336,
+        "startChar": 53,
+        "endLine": 5338,
+        "endChar": 17
+      },
+      "revId": "0aca328104fd189ff78028672892ee8f63bcab30",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d9322c07_83b9ee20",
@@ -132,6 +156,30 @@
       "side": 1,
       "message": "Yes. The first version only accepted block aligned requests, and the callers had to fall back to preadv2() otherwise. The AICore/LiteRT team asked for unaligned support: their offsets and lengths are almost never block aligned, and they don\u0027t want to fix every load path in the applications. wrapfd handles this with bounce buffers for the same reason, so this follows it.",
       "parentUuid": "d9322c07_83b9ee20",
+      "range": {
+        "startLine": 5340,
+        "startChar": 3,
+        "endLine": 5345,
+        "endChar": 37
+      },
+      "revId": "0aca328104fd189ff78028672892ee8f63bcab30",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0858cf9f_6ef1d67f",
+        "filename": "fs/f2fs/file.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 5345,
+      "author": {
+        "id": 1651802
+      },
+      "writtenOn": "2026-11-06T03:38:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c44d2d1_a3f9e571",
       "range": {
         "startLine": 5340,
         "startChar": 3,
@@ -189,6 +237,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5872b89_e8e5891e",
+        "filename": "fs/f2fs/file.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 5380,
+      "author": {
+        "id": 1651802
+      },
+      "writtenOn": "2026-11-06T03:38:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "296df385_6533b027",
+      "range": {
+        "startLine": 5380,
+        "startChar": 10,
+        "endLine": 5380,
+        "endChar": 37
+      },
+      "revId": "0aca328104fd189ff78028672892ee8f63bcab30",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d08da94_61feb27c",
@@ -226,6 +298,30 @@
       "side": 1,
       "message": "I\u0027ll add MODULE_IMPORT_NS(\"DMA_BUF\") and handle CONFIG_DMA_SHARED_BUFFER.",
       "parentUuid": "2d08da94_61feb27c",
+      "range": {
+        "startLine": 5422,
+        "startChar": 7,
+        "endLine": 5422,
+        "endChar": 31
+      },
+      "revId": "0aca328104fd189ff78028672892ee8f63bcab30",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b253697_f5c7ce00",
+        "filename": "fs/f2fs/file.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 5422,
+      "author": {
+        "id": 1651802
+      },
+      "writtenOn": "2026-11-06T03:38:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f82a183_3816a619",
       "range": {
         "startLine": 5422,
         "startChar": 7,
@@ -283,6 +379,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6927f3e4_db1f39a1",
+        "filename": "fs/f2fs/file.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 5429,
+      "author": {
+        "id": 1651802
+      },
+      "writtenOn": "2026-11-06T03:38:36Z",
+      "side": 1,
+      "message": "I kept the kvec instead of a bvec, since with a bvec the CPU writes (hole zeroing, buffered fallback) would go through the cacheable linear map, which breaks uncached dma_bufs. Before issuing each chunk, every page of the part read into the dma_buf is now checked with vmalloc_to_page()/virt_to_page() + pfn_valid(), the same lookup the block layer uses, and the ioctl returns -EOPNOTSUPP if any page fails.",
+      "parentUuid": "6c9d4d62_cd02c0ff",
+      "range": {
+        "startLine": 5429,
+        "startChar": 5,
+        "endLine": 5429,
+        "endChar": 17
+      },
+      "revId": "0aca328104fd189ff78028672892ee8f63bcab30",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f344a48c_5a74cfb4",
@@ -320,6 +440,30 @@
       "side": 1,
       "message": "Agreed. I\u0027ll check fatal_signal_pending() before issuing each chunk, stop issuing and drain the in-flight chunks (at most depth x 4MB) before unmapping, and return -EINTR.",
       "parentUuid": "f344a48c_5a74cfb4",
+      "range": {
+        "startLine": 5466,
+        "startChar": 2,
+        "endLine": 5466,
+        "endChar": 21
+      },
+      "revId": "0aca328104fd189ff78028672892ee8f63bcab30",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b943434a_ed9dc148",
+        "filename": "fs/f2fs/file.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 5466,
+      "author": {
+        "id": 1651802
+      },
+      "writtenOn": "2026-11-06T03:38:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf86ad70_33056a5c",
       "range": {
         "startLine": 5466,
         "startChar": 2,
