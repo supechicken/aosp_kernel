@@ -34,6 +34,24 @@
       "parentUuid": "091c77a0_df98403d",
       "revId": "2eea64b6d5b5ca138d0e0a3edcdb71c1168f769a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6203a5ae_c7f0bb24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1892347
+      },
+      "writtenOn": "2026-11-06T11:40:14Z",
+      "side": 1,
+      "message": "Given the discussion on https://lore.kernel.org/rust-for-linux/CANiq72kSG61mTC3_0pPokoLbbE87oFrKHcNUZhxhbxpg24USYw@mail.gmail.com/ it\u0027s not clear to me that upstream actually prefers flag detection based on other measures than compiler version, even if it\u0027s wrong for patched rustc.",
+      "parentUuid": "82fd704a_733d2d9d",
+      "revId": "2eea64b6d5b5ca138d0e0a3edcdb71c1168f769a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ],
   "submitRequirementResults": [
