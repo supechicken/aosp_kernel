@@ -1,0 +1,39 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6017f59d_6e830492",
+        "filename": "drivers/iommu/intel/pkvm/iommu_hc.c",
+        "patchSetId": 22
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-06T16:58:22Z",
+      "side": 1,
+      "message": "Are these page alignment and is_memory_range checks needed? In non-nested case that is already validated by `pkvm_host_donate_hyp_share_ro()`, and in nested case that is the host\u0027s business?",
+      "fixSuggestions": [
+        {
+          "fixId": "4d5c9da0_818bd8f2",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "drivers/iommu/intel/pkvm/iommu_hc.c",
+              "range": {
+                "startLine": 445,
+                "startChar": 0,
+                "endLine": 452,
+                "endChar": 0
+              },
+              "replacement": ""
+            }
+          ]
+        }
+      ],
+      "revId": "80801154ce011046a587ad8da708d08faaeb9ea2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
