@@ -6,38 +6,31 @@ use crate::{content::DmaBufContent, wrap::Wrap};
 
 use kernel::{bindings, device, prelude::*, types::ARef, uaccess::UserSlice, uapi};
 
-pub(crate) struct WrapFdDevice;
-
 #[pin_data]
-pub(crate) struct WrapfdDevFile {
+pub(crate) struct WrapFdDevice {
     wrapping_dev: ARef<device::Device>,
     wrap: Option<Pin<KBox<Wrap>>>,
 }
 
 #[vtable]
 impl kernel::miscdevice::MiscDevice for WrapFdDevice {
-    type File = Pin<KBox<WrapfdDevFile>>;
+    type Ptr = Pin<KBox<Self>>;
 
     fn open(
         _file: &kernel::fs::File,
         misc: &kernel::miscdevice::MiscDeviceRegistration<Self>,
-    ) -> Result<Self::File> {
+    ) -> Result<Pin<KBox<Self>>> {
         let wrapping_dev = kernel::types::ARef::from(misc.device());
 
         KBox::try_pin_init(
             try_pin_init! {
-                WrapfdDevFile { wrapping_dev, wrap: None }
+                WrapFdDevice { wrapping_dev, wrap: None }
             },
             GFP_KERNEL,
         )
     }
 
-    fn ioctl(
-        _me: Pin<&WrapfdDevFile>,
-        _file: &kernel::fs::File,
-        cmd: u32,
-        arg: usize,
-    ) -> Result<isize> {
+    fn ioctl(_me: Pin<&Self>, _file: &kernel::fs::File, cmd: u32, arg: usize) -> Result<isize> {
         match cmd {
             uapi::WRAPFD_DEV_IOC_WRAP => {
                 use kernel::ioctl::_IOC_SIZE;
