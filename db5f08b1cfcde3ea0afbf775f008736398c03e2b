@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d221797_8dea2a23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1934715
+      },
+      "writtenOn": "2026-11-06T15:27:47Z",
+      "side": 1,
+      "message": "LGTM, but lets wait until your comment in aosp/4377192 is resolved so that we\u0027re aligned on the naming.",
+      "revId": "db5f08b1cfcde3ea0afbf775f008736398c03e2b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
