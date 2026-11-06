@@ -2664,7 +2664,6 @@
   setattr_prepare
   set_capacity
   set_default_d_op
-  set_disk_ro
   set_freezable
   set_memory_decrypted
   set_memory_encrypted
@@ -3723,9 +3722,9 @@
   woken_wake_function
   writeback_iter
   wrmsr_on_cpu
-  wrmsrq_on_cpu
   wrmsr_safe_on_cpu
   wrmsr_safe_regs_on_cpu
+  wrmsrq_on_cpu
   wwan_create_port
   wwan_port_get_drvdata
   wwan_port_rx
