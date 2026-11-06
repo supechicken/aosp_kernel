@@ -69,6 +69,24 @@
       "parentUuid": "ded982e3_3528664b",
       "revId": "942fac560744c21bebf60c0fa7eafc957d7aedf5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f09f9da_f890ea78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1947858
+      },
+      "writtenOn": "2026-11-06T03:54:19Z",
+      "side": 1,
+      "message": "Hi Will,\n\nThanks for the clarification.\n\nI checked the missing `.fop_flags \u003d FOP_DONTCACHE` context. It comes from the following separate patch:\n\nhttps://android-review.googlesource.com/c/kernel/common/+/4166135\n\nAs far as I understand, that patch enables IOCB_DONTCACHE support, while this patch only forwards `vfs_fadvise()` to the backing file in FUSE passthrough mode. These two changes appear to support different functionality, and this patch should not require IOCB_DONTCACHE as a functional dependency.\n\nI also found that the same cherry-pick has already been merged into the `android16-6.12-2025-12` branch:\n\nhttps://android-review.googlesource.com/c/kernel/common/+/4399647\n\nBased on this, could we also merge this patch into the current target branch without adding the IOCB_DONTCACHE dependency?\n\nPlease let me know if there is another required dependency that I missed.\n\nThanks.",
+      "parentUuid": "08ee0b41_c3c6f1e7",
+      "revId": "942fac560744c21bebf60c0fa7eafc957d7aedf5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
