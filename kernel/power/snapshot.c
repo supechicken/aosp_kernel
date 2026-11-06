@@ -2184,6 +2184,22 @@ unsigned long snapshot_get_image_size(void)
 }
 EXPORT_SYMBOL_GPL(snapshot_get_image_size);
 
+#ifdef CONFIG_HIBERNATION_RAWDEV
+/*
+ * Number of pages that were entirely filled with zeros.  They have no
+ * payload in the image data stream -- the writer materialises them as
+ * zeros instead -- but they DO appear in the packed pfn array (flagged
+ * with ENCODED_PFN_ZERO_FLAG).  snapshot_get_image_size() does not
+ * account for them, so a consumer that has to walk every pfn of the
+ * image must add this.
+ */
+unsigned long snapshot_get_zero_pages(void)
+{
+	return nr_zero_pages;
+}
+EXPORT_SYMBOL_GPL(snapshot_get_zero_pages);
+#endif /* CONFIG_HIBERNATION_RAWDEV */
+
 static int init_header(struct swsusp_info *info)
 {
 	memset(info, 0, sizeof(struct swsusp_info));

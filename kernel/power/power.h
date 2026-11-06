@@ -159,6 +159,9 @@ struct snapshot_handle {
 
 extern unsigned int snapshot_additional_pages(struct zone *zone);
 extern unsigned long snapshot_get_image_size(void);
+#ifdef CONFIG_HIBERNATION_RAWDEV
+unsigned long snapshot_get_zero_pages(void);
+#endif /* CONFIG_HIBERNATION_RAWDEV */
 extern int snapshot_read_next(struct snapshot_handle *handle);
 extern int snapshot_write_next(struct snapshot_handle *handle);
 int snapshot_write_finalize(struct snapshot_handle *handle);
@@ -199,6 +202,9 @@ int swsusp_check(bool exclusive);
 extern void swsusp_free(void);
 extern int swsusp_read(unsigned int *flags_p);
 extern int swsusp_write(unsigned int flags);
+#ifdef CONFIG_HIBERNATION_RAWDEV
+int rawdev_snapshot_write(unsigned int flags);
+#endif /* CONFIG_HIBERNATION_RAWDEV */
 void swsusp_close(void);
 #ifdef CONFIG_SUSPEND
 extern int swsusp_unmark(void);

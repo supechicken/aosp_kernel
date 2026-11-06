@@ -80,6 +80,26 @@ config HIBERNATION
 
 	  For more information take a look at <file:Documentation/power/swsusp.rst>.
 
+config HIBERNATION_RAWDEV
+	bool "Hibernation image on a raw block device"
+	depends on HIBERNATION
+	default n
+	help
+	  Write the hibernation image directly to the raw block device named
+	  by resume=, starting at LBA 0, instead of going through the swap
+	  map based writer.
+
+	  The on disk layout is one header page followed by the compressed
+	  image pages and a page frame number table, so a bootloader side
+	  snapshot resume path can restore the image without having to parse
+	  a swap map.
+
+	  All of the writer code lives in kernel/power/rawdev_snapshot_io.c.
+	  With this option disabled the kernel is byte for byte equivalent
+	  to a vanilla build and swap.o performs the save as usual.
+
+	  If unsure, say N.
+
 config HIBERNATION_SNAPSHOT_DEV
 	bool "Userspace snapshot device"
 	depends on HIBERNATION

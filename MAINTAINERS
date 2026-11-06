@@ -1203,6 +1203,14 @@ F:	Documentation/devicetree/bindings/perf/amlogic,g12-ddr-pmu.yaml
 F:	drivers/perf/amlogic/
 F:	include/soc/amlogic/
 
+AMLOGIC HIBERNATION RAW DEVICE WRITER
+M:	Changpeng Jiang <changpeng.jiang@amlogic.com>
+L:	linux-amlogic@lists.infradead.org
+L:	linux-pm@vger.kernel.org
+S:	Supported
+W:	http://www.amlogic.com
+F:	kernel/power/rawdev_snapshot_io.c
+
 AMPHENOL CHIPCAP 2 HUMIDITY-TEMPERATURE IIO DRIVER
 M:	Javier Carrasco <javier.carrasco.cruz@gmail.com>
 L:	linux-hwmon@vger.kernel.org

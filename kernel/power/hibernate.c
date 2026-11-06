@@ -749,6 +749,21 @@ int hibernate(void)
 	unsigned int sleep_flags;
 	int error;
 
+#ifdef CONFIG_HIBERNATION_RAWDEV
+	/*
+	 * Resolve the raw/resume device so rawdev_snapshot_write() can open
+	 * it.  lookup_bdev() is non-__init while early_lookup_bdev() lives in
+	 * .init.text and must not be called from this non-init function
+	 * (modpost section mismatch).  lookup_bdev() takes a /dev path only,
+	 * not PARTUUID=... or 8:3.
+	 */
+	if (!swsusp_resume_device) {
+		error = lookup_bdev(resume_file, &swsusp_resume_device);
+		if (error)
+			return error;
+	}
+#endif /* CONFIG_HIBERNATION_RAWDEV */
+
 	if (!hibernation_available()) {
 		pm_pr_dbg("Hibernation not available.\n");
 		return -EPERM;
@@ -820,7 +835,11 @@ int hibernate(void)
 		}
 
 		pm_pr_dbg("Writing hibernation image.\n");
+#ifdef CONFIG_HIBERNATION_RAWDEV
+		error = rawdev_snapshot_write(flags);
+#else
 		error = swsusp_write(flags);
+#endif /* CONFIG_HIBERNATION_RAWDEV */
 		swsusp_free();
 		if (!error) {
 			if (hibernation_mode == HIBERNATION_TEST_RESUME)
