@@ -16,6 +16,24 @@
       "message": "LGTM, but lets wait until your comment in aosp/4377192 is resolved so that we\u0027re aligned on the naming.",
       "revId": "db5f08b1cfcde3ea0afbf775f008736398c03e2b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9d3c6fa_70c2a6b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1014088
+      },
+      "writtenOn": "2026-11-06T15:56:07Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "0d221797_8dea2a23",
+      "revId": "db5f08b1cfcde3ea0afbf775f008736398c03e2b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
