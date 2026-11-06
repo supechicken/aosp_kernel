@@ -36,6 +36,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "732a0b32_da845f21",
+        "filename": "drivers/android/Kconfig",
+        "patchSetId": 10
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1157738
+      },
+      "writtenOn": "2026-11-06T17:52:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a62c893a_2052b30a",
+      "revId": "6ae1a482e792cb74d5105b954e2d2be4d91f3052",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c21dbf39_f2ce8c59",
@@ -49,6 +67,24 @@
       "writtenOn": "2026-11-04T23:54:53Z",
       "side": 1,
       "message": "If we want to use this to test the Rust driver too, we can make this `depends on ANDROID_WRAPFD || ANDROID_WRAPFD_LEGACY` and then move it to the end of the commit stack so that it can be used to test the Rust driver API.",
+      "revId": "6ae1a482e792cb74d5105b954e2d2be4d91f3052",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34199616_9efd9f45",
+        "filename": "drivers/android/Kconfig",
+        "patchSetId": 10
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1157738
+      },
+      "writtenOn": "2026-11-06T17:52:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c21dbf39_f2ce8c59",
       "revId": "6ae1a482e792cb74d5105b954e2d2be4d91f3052",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
@@ -76,6 +112,54 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "86568eaf_8268302d",
+        "filename": "drivers/android/tests/wrapfd_kunit.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1157738
+      },
+      "writtenOn": "2026-11-06T17:52:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d68e534_e3cee20a",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 87,
+        "endChar": 43
+      },
+      "revId": "6ae1a482e792cb74d5105b954e2d2be4d91f3052",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c71da846_435edae9",
+        "filename": "drivers/android/tests/wrapfd_kunit.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1157738
+      },
+      "writtenOn": "2026-11-06T17:52:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d68e534_e3cee20a",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 87,
+        "endChar": 43
+      },
+      "revId": "6ae1a482e792cb74d5105b954e2d2be4d91f3052",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c89234dc_b70e2903",
@@ -89,6 +173,30 @@
       "writtenOn": "2026-11-04T23:54:53Z",
       "side": 1,
       "message": "These fds end up being unused except for the purpose of getting a `file` structure for a wrap. What I did instead was that I implemented a function that is only exposed to this test and it takes in a dmabuf, and allocates the associated structures (i.e. context, content). It supports a NULL argument which creates an empty wrap. The return type is a `struct file *` that you can then use with the wrapfd kernel API.\n\nI\u0027ve implemented it here: https://android-review.git.corp.google.com/c/kernel/common/+/4412986/2/drivers/android/wrapfd/wrap.rs",
+      "range": {
+        "startLine": 132,
+        "startChar": 0,
+        "endLine": 157,
+        "endChar": 2
+      },
+      "revId": "6ae1a482e792cb74d5105b954e2d2be4d91f3052",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f038d3c2_a4d5172a",
+        "filename": "drivers/android/tests/wrapfd_kunit.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1157738
+      },
+      "writtenOn": "2026-11-06T17:52:05Z",
+      "side": 1,
+      "message": "Yeah, it\u0027s not trivial to create an empty wrap in the C driver. I\u0027ll look into it later, after we merge the APIs/",
+      "parentUuid": "c89234dc_b70e2903",
       "range": {
         "startLine": 132,
         "startChar": 0,
