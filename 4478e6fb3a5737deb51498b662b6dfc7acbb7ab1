@@ -88,6 +88,24 @@
       "parentUuid": "e048e5a7_ced076c7",
       "revId": "4478e6fb3a5737deb51498b662b6dfc7acbb7ab1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8df1d8a5_6ddb612d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3484945
+      },
+      "writtenOn": "2026-11-06T09:28:30Z",
+      "side": 1,
+      "message": "\u003e I still think pKVM should use its own separate log buffer, as other hypervisors do.\n\nI think it will not be so easy as it creates several dependencies across the platform:\n- Kernel and fw modifications: It would require reserving a separate persistent RAM region in firmware across warm resets, plus either modifying ramoops/pstore to support a non-standard record type (e.g., hyp-ramoops) or writing a new host kernel driver to decode and expose it to userspace.\n- Bugreporting infrastructure: Android\u0027s entire crash collection pipeline—bootstat (for sys.boot.reason), SYSTEM_LAST_KMSG(or whatever else is used), and downstream server-side triage tools - is already built to consume /sys/fs/pstore/console-ramoops-0 AFICT.\n\nIf we used an isolated buffer, that entire infrastructure would miss it, causing hyp panics to be classified as unexplained reboots. Appending hyp panics directly to console-ramoops allowed end-to-end crash reporting to work out of the box.\n\nHowever, again, I agree that it isn\u0027t perfect and not suitable for upstream (in this current form), and handling features like ECC adds complexity/troubles. But within our downstream constraints, it is the most pragmatic approach, I thikn.\n\nBTW, even if we moved to a separate log buffer, we would still face the exact same ECC challenge: the hypervisor would still need to generate the parity bytes at panic time, requiring that functionality to be duplicated anyway.",
+      "parentUuid": "14c83bc7_54491c1b",
+      "revId": "4478e6fb3a5737deb51498b662b6dfc7acbb7ab1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
