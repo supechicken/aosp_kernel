@@ -106,6 +106,24 @@
       "parentUuid": "14c83bc7_54491c1b",
       "revId": "4478e6fb3a5737deb51498b662b6dfc7acbb7ab1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9122c377_ce753aeb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-06T15:20:16Z",
+      "side": 1,
+      "message": "Tomasz:\n\n\u003e That\u0027s basically saying: Other things are already bad, so it\u0027s fine to add more new bad things.\n\nTight coupling of the hypervisor with the kernel, in our opinion, is not a bad thing, it is one of the more attractive properties of pKVM\u0027s design.\n\nThe fact that the hypervisor code is downstream is orthogonal to the fact that it runs at a different privilege level with its own address space etc and thus cannot reuse _arbitrary_ kernel code as is. pKVM-ARM hypervisor code, including those parts of it that are already upstream, similarly reuses various bits of host kernel code. Some of them (the more non-trivial ones) need to be consciously implemented with that reuse in mind (example: arch/arm64/kvm/hyp/pgtable.c). Many simpler ones (e.g. various macros and static inline functions defined in various kernel headers, or things like memset and memcpy) are reused almost implicitly, and that is not causing problems in practice.\n\nThat said, that is a bit of digression here. And I basically don\u0027t disagree with you in this particular pstore ECC case.\n\nFor the record, I\u0027m not a fan of adding this ECC logic to the hypervisor. (But if we have no other choice short-term...)\n\nGreg:\n\n\u003e BTW, even if we moved to a separate log buffer, we would still face the exact same ECC challenge: the hypervisor would still need to generate the parity bytes at panic time, requiring that functionality to be duplicated anyway.\n\nUnless we are more optimistic and don\u0027t use ECC for the hypervisor\u0027s log buffer?\n\nConsidering e.g. the data from b/442278090#comment18 + b/442278090#comment22 plus the fact that hypervisor crashes are less likely than kernel crashes.",
+      "parentUuid": "8df1d8a5_6ddb612d",
+      "revId": "4478e6fb3a5737deb51498b662b6dfc7acbb7ab1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }

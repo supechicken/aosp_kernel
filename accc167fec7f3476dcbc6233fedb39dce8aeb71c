@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "edef41b1_3c006163",
+        "filename": "arch/x86/kvm/pkvm.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-06T15:20:16Z",
+      "side": 1,
+      "message": "\u003e in DT?\n\nOn x86?",
+      "parentUuid": "e9439839_bedb5ddf",
+      "revId": "accc167fec7f3476dcbc6233fedb39dce8aeb71c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bc2f4387_29650dde",
         "filename": "arch/x86/kvm/pkvm.c",
         "patchSetId": 5
@@ -60,6 +78,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a2a63dc4_379545d6",
+        "filename": "fs/pstore/ram_core.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-06T15:20:16Z",
+      "side": 1,
+      "message": "`__PKVM_HYP__` is a x86-specific macro, while this is generic code. (FWIW, ARM\u0027s counterpart is `__KVM_NVHE_HYPERVISOR__`, though it is used to a much lesser extent than we currently use `__PKVM_HYP__` on x86.)\n\nSo this could be e.g. `#if defined(CONFIG_PKVM_X86) \u0026\u0026 defined(__PKVM_HYP__)` (even uglier, but explicit)?\n\n...Besides, since this is generic kernel code, not x86 KVM or IOMMU specific, we shouldn\u0027t merge this without an approval from Android kernel team. (_If_ we really have no choice but merge this at all...)",
+      "revId": "accc167fec7f3476dcbc6233fedb39dce8aeb71c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3fa552c1_c55b0722",
         "filename": "fs/pstore/ram_core.c",
         "patchSetId": 5
@@ -88,6 +123,24 @@
       "writtenOn": "2026-11-06T03:50:43Z",
       "side": 1,
       "message": "Would it make sense to separate code that restores pstore from last boot, from code that is used for working with the current pstore into separate files? We wouldn\u0027t have to sprinkle all those ifndefs then.",
+      "revId": "accc167fec7f3476dcbc6233fedb39dce8aeb71c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2a53db1_6d6755dc",
+        "filename": "fs/pstore/ram_core.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-06T15:20:16Z",
+      "side": 1,
+      "message": "If you are considering upstreaming such a refactoring right away, I\u0027m wondering what would be the justification for it, if it is only needed downstream.\n\nIf you are considering keeping such a refactoring out of tree, that would make it difficult to resolve conflicts when rebasing onto newer upstream kernels and when applying bugfixes from upstream? (For these reasons, we deliberately prefer to keep this ugly sprinkling of ifdefs throughout arch/x86/kvm/ and drivers/iommu/intel/ instead of heavy reshuffling of upstream code, so long as our changes remain out of tree.)",
+      "parentUuid": "c1ca3670_4fb65281",
       "revId": "accc167fec7f3476dcbc6233fedb39dce8aeb71c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
