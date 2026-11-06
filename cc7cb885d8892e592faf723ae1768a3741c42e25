@@ -18,6 +18,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a6f6308_6d1bce23",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1945845
+      },
+      "writtenOn": "2026-11-06T00:30:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb4b276c_6d510211",
+      "revId": "cc7cb885d8892e592faf723ae1768a3741c42e25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd91f6e1_59e09880",
@@ -49,6 +67,24 @@
       "side": 1,
       "message": "It looks like the maintainer sent email that it has been queued but hasn\u0027t pushed the branch to their public git tree. I suspect that will happen later today.",
       "parentUuid": "dd91f6e1_59e09880",
+      "revId": "cc7cb885d8892e592faf723ae1768a3741c42e25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "944c03b4_684b89ad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1945845
+      },
+      "writtenOn": "2026-11-06T00:30:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c45ae61_1f687fe9",
       "revId": "cc7cb885d8892e592faf723ae1768a3741c42e25",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
