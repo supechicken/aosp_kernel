@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79798dc3_5f2f7c19",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1869395
+      },
+      "writtenOn": "2026-11-06T17:11:54Z",
+      "side": 1,
+      "message": "Might be nice to wait for an Acked-by or for this to become FROMGIT at least, if this is not urgent.",
+      "revId": "598eb59d3e69201c2855da145a2003bd1e9839c3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
