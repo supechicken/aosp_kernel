@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fe1c68f1_ef784067",
+        "filename": "drivers/android/wrapfd.c",
+        "patchSetId": 9
+      },
+      "lineNbr": 2097,
+      "author": {
+        "id": 1934715
+      },
+      "writtenOn": "2026-11-06T17:25:30Z",
+      "side": 1,
+      "message": "We should validate that `fd` is not a value greater than `INT_MAX`, since `fdget()` doesn\u0027t do any bounds checking.",
+      "revId": "0ef08baf95f2697a5838efb4cbe0cfc474745b2b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "00fe7592_3bd07359",
         "filename": "include/uapi/linux/wrapfd.h",
         "patchSetId": 9
