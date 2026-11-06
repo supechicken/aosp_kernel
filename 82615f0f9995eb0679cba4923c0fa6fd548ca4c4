@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf93acc1_86015971",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1934715
+      },
+      "writtenOn": "2026-11-06T15:38:11Z",
+      "side": 1,
+      "message": "Can you please add a description as to why this is needed?",
+      "revId": "82615f0f9995eb0679cba4923c0fa6fd548ca4c4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
