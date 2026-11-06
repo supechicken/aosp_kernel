@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bf583b6_8a0ad937",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1069543
+      },
+      "writtenOn": "2026-11-06T16:46:13Z",
+      "side": 1,
+      "message": "This needs to land in a maintainer tree upstream so it can be submitted as FROMGIT. So far, there are no discussion comments on the patch. Is it even safe to take this patch without the 7 other related patches in the series?",
+      "revId": "97e6a7ee72bdd4a935df8f972c0a31f382d80582",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
