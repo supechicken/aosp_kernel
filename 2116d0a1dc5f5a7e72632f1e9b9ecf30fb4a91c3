@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f05a72aa_b678c32e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-06T17:22:33Z",
+      "side": 1,
+      "message": "We should probably cherry-pick these patches to android18-7.3 as well?",
+      "revId": "2116d0a1dc5f5a7e72632f1e9b9ecf30fb4a91c3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
