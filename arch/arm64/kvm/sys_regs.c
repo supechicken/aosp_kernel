@@ -5587,24 +5587,24 @@ out:
 }
 
 /*
- * Do system register finalization that is shared by the whole guest. This
- * includes last adjustments to the ID registers that are implied by the
+ * Perform last adjustments to the ID registers that are implied by the
  * configuration outside of the ID regs themselves, as well as any
  * initialisation that directly depend on these ID registers (such as
  * RES0/RES1 behaviours). This is not the place to configure traps though.
+ *
+ * Because this can be called once per CPU, changes must be idempotent.
  */
-static int kvm_vm_finalize_sys_regs(struct kvm *kvm)
+int kvm_finalize_sys_regs(struct kvm_vcpu *vcpu)
 {
-	lockdep_assert_held(&kvm->arch.config_lock);
+	struct kvm *kvm = vcpu->kvm;
 
-	if (kvm_vm_has_ran_once(kvm))
-		return 0;
+	guard(mutex)(&kvm->arch.config_lock);
 
 	/*
 	 * This hacks into the ID registers, so only perform it when the
 	 * first vcpu runs, or the kvm_set_vm_id_reg() helper will scream.
 	 */
-	if (!irqchip_in_kernel(kvm)) {
+	if (!irqchip_in_kernel(kvm) && !kvm_vm_has_ran_once(kvm)) {
 		u64 val;
 
 		val = kvm_read_vm_id_reg(kvm, SYS_ID_AA64PFR0_EL1) & ~ID_AA64PFR0_EL1_GIC;
@@ -5613,25 +5613,8 @@ static int kvm_vm_finalize_sys_regs(struct kvm *kvm)
 		kvm_set_vm_id_reg(kvm, SYS_ID_PFR1_EL1, val);
 	}
 
-	return 0;
-}
-
-/*
- * Because this can be called once per CPU, changes must be idempotent.
- */
-int kvm_vcpu_finalize_sys_regs(struct kvm_vcpu *vcpu)
-{
-	struct kvm *kvm = vcpu->kvm;
-	int ret;
-
-	guard(mutex)(&kvm->arch.config_lock);
-
-	ret = kvm_vm_finalize_sys_regs(kvm);
-	if (ret)
-		return ret;
-
 	if (vcpu_has_nv(vcpu)) {
-		ret = kvm_init_nv_sysregs(vcpu);
+		int ret = kvm_init_nv_sysregs(vcpu);
 		if (ret)
 			return ret;
 	}
