@@ -152,14 +152,13 @@ pub trait MiscDevice: Sized {
     ) -> Result;
 
     /// Seeks this miscdevice.
+    #[optional]
     fn llseek(
         _device: <Self::Ptr as ForeignOwnable>::Borrowed<'_>,
         _file: &LocalFile,
         _offset: Offset,
         _whence: c_int,
-    ) -> Result<Offset> {
-        build_error!(VTABLE_DEFAULT_ERROR)
-    }
+    ) -> Result<Offset>;
 
     /// Read from this miscdevice.
     #[optional]
