@@ -33,6 +33,24 @@
       "message": "should we prefix these with \"WRAPFD_\" to not pollute the global namespace?",
       "revId": "0ef08baf95f2697a5838efb4cbe0cfc474745b2b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3910abd_8bf930a9",
+        "filename": "include/uapi/linux/wrapfd.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1157738
+      },
+      "writtenOn": "2026-11-06T17:52:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00fe7592_3bd07359",
+      "revId": "0ef08baf95f2697a5838efb4cbe0cfc474745b2b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
