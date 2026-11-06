@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe01c047_1d03d5ed",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1782620
+      },
+      "writtenOn": "2026-11-06T11:33:00Z",
+      "side": 1,
+      "message": "nit: what orders the later reads is the branch on cmpxchg\u0027s result followed by the exception return, a context synchronization event while SCTLR_EL2.EOS is set (R_BWCFK). Also, the comment quoted in the first paragraph reads \"so make sure we\u0027re done\", not \"to make sure\".",
+      "revId": "25357d78218058b747d78b6ad235a33e692d35a9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "377db7fb_708cc1fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1782620
+      },
+      "writtenOn": "2026-11-06T11:33:00Z",
+      "side": 1,
+      "message": "Thanks, the claim now pairs with the release in pkvm_put_hyp_vcpu().\n\nandroid16-6.12 and android15-6.6 have the same cmpxchg_relaxed() claim. Could you upload the backports there as well?\n\nhyp_pin_shared_mem() on this branch has the same gap as the upstream code your pin-barrier patch fixes. Could you upload a port here too, with the barrier on the success path after the -ENOMEM unwind? Neither blocks this change.",
+      "revId": "25357d78218058b747d78b6ad235a33e692d35a9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
