@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c702e619_e5581f34",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1990142
+      },
+      "writtenOn": "2026-11-06T01:06:27Z",
+      "side": 1,
+      "message": "Hi John, thanks for the +1. PS5 passed the combined presubmit run. Local kernel build and ABI checks also passed. Could you review this for +2? Thank you so much",
+      "revId": "54edd78419ae5ad21ec656b7e7bc403151d9d22f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
