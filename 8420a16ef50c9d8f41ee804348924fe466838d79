@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe977a77_ab905292",
+        "filename": "drivers/iommu/intel/iommu.c",
+        "patchSetId": 22
+      },
+      "lineNbr": 1854,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-06T17:44:04Z",
+      "side": 1,
+      "message": "Since this is host code, maybe BUG is a bit too harsh, and WARN (or WARN_ONCE) would be better?\n(In particular, if we move this into `cache_tag_flush_range()` and thus have this in all 3 cases, per my other comment.)",
+      "revId": "8420a16ef50c9d8f41ee804348924fe466838d79",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a0ae2f8_10506e4c",
+        "filename": "drivers/iommu/intel/iommu.c",
+        "patchSetId": 22
+      },
+      "lineNbr": 4198,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-06T17:44:04Z",
+      "side": 1,
+      "message": "Why not check this and call `pkvm_domain_flush()` inside `cache_tag_flush_range()` itself, instead of duplicating this in three places?",
+      "revId": "8420a16ef50c9d8f41ee804348924fe466838d79",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}

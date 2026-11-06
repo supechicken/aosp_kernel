@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ffc788ff_5a62a132",
+        "filename": "drivers/iommu/intel/debugfs.c",
+        "patchSetId": 21
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 2022314
+      },
+      "writtenOn": "2026-11-06T17:44:04Z",
+      "side": 1,
+      "message": "Anyway, this LGTM. Please feel free to resolve this comment. An upstream fix can  be prepared separately.",
+      "parentUuid": "2d6f2406_4f3a4567",
+      "revId": "86298094326a14943e613f90381acf7702ba46e3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4773ca1e_cc9b6778",
         "filename": "drivers/iommu/intel/iommu.c",
         "patchSetId": 21
