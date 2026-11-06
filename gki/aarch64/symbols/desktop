@@ -274,7 +274,6 @@
   devm_gpiod_get_optional
   devm_gpiod_put
   devm_hwmon_device_register_with_groups
-  devm_hwmon_device_register_with_info
   devm_iio_device_alloc
   __devm_iio_device_register
   devm_input_allocate_device
@@ -335,7 +334,6 @@
   devm_spi_mem_dirmap_create
   devm_spi_register_controller
   devm_thermal_add_hwmon_sysfs
-  devm_thermal_of_cooling_device_register
   devm_thermal_of_zone_register
   devm_watchdog_register_device
   _dev_notice
