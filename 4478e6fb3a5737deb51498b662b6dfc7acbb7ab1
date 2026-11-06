@@ -70,6 +70,24 @@
       "parentUuid": "aabd34a1_381d8d93",
       "revId": "4478e6fb3a5737deb51498b662b6dfc7acbb7ab1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14c83bc7_54491c1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3484945
+      },
+      "writtenOn": "2026-11-06T08:47:27Z",
+      "side": 1,
+      "message": "Just let me try to explain why some things were made that way with fatal error loging into pstore. We know it is not perfect and didn\u0027t consider going with such approach for upstream, only for android downstream:\n- tried to have it self contained within the pkvm arch/x86/kvm/pkvm and not sprinkle outside of it. That is why e.g. I didn\u0027t moved `struct persistent_ram_buffer` to a common header as this patch is doing right now. I actually had it that way in my initial version but then decided just to duplicate it because of above + likelihood of it change and getting out of sync (especially in GKI 7.3) is really small, as ramoops must recover logs across hardware resets and different kernel version, so layout should be stable and has remained for a decade AFAICS. But still I agree it is not perfect and it is based on an assumption.\n- we added this error reporting quite late and wanted to take advantage of existing infrastructure (both post-crash host kernel one + crash logging services e.g. Android bootstat and pstore parsers) catch those errors and also avoid firmware modification for which it was already too late back then.",
+      "parentUuid": "e048e5a7_ced076c7",
+      "revId": "4478e6fb3a5737deb51498b662b6dfc7acbb7ab1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
