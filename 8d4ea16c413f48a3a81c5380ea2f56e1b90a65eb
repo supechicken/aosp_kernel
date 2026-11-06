@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4c1f5b2_4c2c06bd",
+        "filename": "tools/testing/selftests/drivers/wrapfd/wrapfd.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 1781,
+      "author": {
+        "id": 1934715
+      },
+      "writtenOn": "2026-11-06T18:05:22Z",
+      "side": 1,
+      "message": "nit: can be `*last_ts \u003d max(events[0].timestamp, events[1].timestamp)`?",
+      "range": {
+        "startLine": 1776,
+        "startChar": 0,
+        "endLine": 1781,
+        "endChar": 0
+      },
+      "revId": "8d4ea16c413f48a3a81c5380ea2f56e1b90a65eb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
