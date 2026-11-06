@@ -1,0 +1,39 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e61d38a_807e04c6",
+        "filename": "drivers/android/wrapfd.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 1644,
+      "author": {
+        "id": 1014088
+      },
+      "writtenOn": "2026-11-06T18:08:04Z",
+      "side": 1,
+      "message": "Should this also fail if \"!allow_guests\"?",
+      "fixSuggestions": [
+        {
+          "fixId": "775e8584_ca7d595e",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "drivers/android/wrapfd.c",
+              "range": {
+                "startLine": 1644,
+                "startChar": 0,
+                "endLine": 1645,
+                "endChar": 0
+              },
+              "replacement": "\tif (!ctx-\u003eallow_guests \u0026\u0026 has_owner(ctx) \u0026\u0026\n\t    !is_owner_task(ctx, current)) {\n"
+            }
+          ]
+        }
+      ],
+      "revId": "55319037d6fb584bd153a4d6ed1cf9baf0ddec15",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
