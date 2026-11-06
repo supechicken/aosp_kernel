@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23202b2e_1f44cdb9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1934715
+      },
+      "writtenOn": "2026-11-06T15:42:58Z",
+      "side": 1,
+      "message": "Could you please expand on why this is necessary a bit more for the sake of completeness?",
+      "revId": "fb068273d71604d872882995842f85ea960f4f1f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
