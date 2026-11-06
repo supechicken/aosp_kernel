@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2348555d_294f304a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1981286
+      },
+      "writtenOn": "2026-11-06T08:46:04Z",
+      "side": 1,
+      "message": "Unisoc is adding them all in aosp/4406661",
+      "revId": "d575272067e7a2ab0f047c16601f1c887f3663a4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
