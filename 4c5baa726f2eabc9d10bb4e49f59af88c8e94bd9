@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "559905d0_0256d273",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1967875
+      },
+      "writtenOn": "2026-11-06T03:31:46Z",
+      "side": 1,
+      "message": "Respin Bug: b/582165668",
+      "revId": "4c5baa726f2eabc9d10bb4e49f59af88c8e94bd9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
