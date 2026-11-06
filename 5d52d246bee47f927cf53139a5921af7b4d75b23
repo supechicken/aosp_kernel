@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a96d40e_06255006",
+        "filename": "arch/arm64/configs/microdroid_defconfig",
+        "patchSetId": 2
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1956160
+      },
+      "writtenOn": "2026-11-06T14:54:31Z",
+      "side": 1,
+      "message": "Please fix this WARNING reported by CL Review Agent: [Gerrit Review Agent] Enabling `CONFIG_MODULE_SIG\u003dy` without `CONFIG_MODULE_SIG_...\n\n[Gerrit Review Agent] Enabling `CONFIG_MODULE_SIG\u003dy` without `CONFIG_MODULE_SIG_SHA256\u003dy` causes Kconfig to fall back to the default `CONFIG_MODULE_SIG_SHA512\u003dy` (`kernel/module/Kconfig`), which pulls `CONFIG_CRYPTO_SHA512\u003dy` into the Microdroid kernel and diverges from `gki_defconfig`. Please add `CONFIG_MODULE_SIG_SHA256\u003dy` to maintain parity with GKI module signing and avoid unnecessary image size growth.\n\n[🔗](http://go/tj/cns/gg-d/home/groupagent-aosp-review/review_trajectories/cl4418779_8385f729-9ab1-4045-a938-82c5f28e2dfd.pb)",
+      "range": {
+        "startLine": 183,
+        "startChar": 0,
+        "endLine": 184,
+        "endChar": 0
+      },
+      "revId": "5d52d246bee47f927cf53139a5921af7b4d75b23",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34ec89fd_92aa130a",
+        "filename": "arch/x86/configs/microdroid_defconfig",
+        "patchSetId": 2
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1956160
+      },
+      "writtenOn": "2026-11-06T14:54:31Z",
+      "side": 1,
+      "message": "Please fix this WARNING reported by CL Review Agent: [Gerrit Review Agent] Enabling `CONFIG_MODULE_SIG\u003dy` without `CONFIG_MODULE_SIG_...\n\n[Gerrit Review Agent] Enabling `CONFIG_MODULE_SIG\u003dy` without `CONFIG_MODULE_SIG_SHA256\u003dy` causes Kconfig to fall back to the default `CONFIG_MODULE_SIG_SHA512\u003dy` (`kernel/module/Kconfig`), which pulls `CONFIG_CRYPTO_SHA512\u003dy` into the Microdroid kernel and diverges from `arch/x86/configs/gki_defconfig`. Please add `CONFIG_MODULE_SIG_SHA256\u003dy` to maintain parity with GKI module signing and avoid unnecessary image size growth.\n\n[🔗](http://go/tj/cns/gg-d/home/groupagent-aosp-review/review_trajectories/cl4418779_8385f729-9ab1-4045-a938-82c5f28e2dfd.pb)",
+      "range": {
+        "startLine": 248,
+        "startChar": 0,
+        "endLine": 249,
+        "endChar": 0
+      },
+      "revId": "5d52d246bee47f927cf53139a5921af7b4d75b23",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
