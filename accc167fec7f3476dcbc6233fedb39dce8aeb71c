@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9439839_bedb5ddf",
+        "filename": "arch/x86/kvm/pkvm.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1074825
+      },
+      "writtenOn": "2026-11-06T03:50:43Z",
+      "side": 1,
+      "message": "How about ECC size specified in DT?\n\nWe\u0027re again copying kernel logic here and this is likely to get out of sync at some point. Could we also share the corresponding code with the kernel pstore driver?",
+      "revId": "accc167fec7f3476dcbc6233fedb39dce8aeb71c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc2f4387_29650dde",
+        "filename": "arch/x86/kvm/pkvm.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1074825
+      },
+      "writtenOn": "2026-11-06T03:50:43Z",
+      "side": 1,
+      "message": "Isn\u0027t this duplicated with pstore code again and could get out of sync?",
+      "revId": "accc167fec7f3476dcbc6233fedb39dce8aeb71c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d35f9a4_279311a7",
+        "filename": "arch/x86/kvm/pkvm/panic.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1074825
+      },
+      "writtenOn": "2026-11-06T03:50:43Z",
+      "side": 1,
+      "message": "This is again duplication of kernel logic that is likely to get out of sync at some point.",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 70,
+        "endChar": 41
+      },
+      "revId": "accc167fec7f3476dcbc6233fedb39dce8aeb71c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fa552c1_c55b0722",
+        "filename": "fs/pstore/ram_core.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1074825
+      },
+      "writtenOn": "2026-11-06T03:50:43Z",
+      "side": 1,
+      "message": "I suppose this mitigates the lack of raw_spin_lock_irqsave() in the pKVM namespace? Could we instead provide a replacement or stub for it? Sprinkling #ifndefs everywhere at the very least doesn\u0027t look good, and in practice this is likely to make the life of anyone modifying this code very hard.",
+      "revId": "accc167fec7f3476dcbc6233fedb39dce8aeb71c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1ca3670_4fb65281",
+        "filename": "fs/pstore/ram_core.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1074825
+      },
+      "writtenOn": "2026-11-06T03:50:43Z",
+      "side": 1,
+      "message": "Would it make sense to separate code that restores pstore from last boot, from code that is used for working with the current pstore into separate files? We wouldn\u0027t have to sprinkle all those ifndefs then.",
+      "revId": "accc167fec7f3476dcbc6233fedb39dce8aeb71c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}

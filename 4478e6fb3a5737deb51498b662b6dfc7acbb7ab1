@@ -52,6 +52,24 @@
       "parentUuid": "8feb8877_b9e504ed",
       "revId": "4478e6fb3a5737deb51498b662b6dfc7acbb7ab1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e048e5a7_ced076c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1074825
+      },
+      "writtenOn": "2026-11-06T03:50:43Z",
+      "side": 1,
+      "message": "\u003e pKVM itself is a part of kernel, it relies on lots of other kernel implementation details anyway (i.e. there is no stable ABI between host kernel and pKVM hypervisor).\n\nThat\u0027s basically saying: Other things are already bad, so it\u0027s fine to add more new bad things.\n\nAlso, it\u0027s not really a part of the kernel, it\u0027s just some downstream code that happens to be checked into the same repository. It has a different code namespace (as demonstrated by this CL, it can\u0027t reasonably reuse the existing kernel code as is) and different runtime expectations.\n\nBy adding this dependency, you\u0027re basically adding downstream code that imposes constraints on upstream code and making the lives of anyone who wants to work with upstream code miserable.\n\n\u003e I pushed a refactor that uses the kernel\u0027s own functions. This should hopefully avoid any divergence. Let me know what you think!\n\nThanks, it moves some aspects in a good direction, but now there is even more custom code for this added in pKVM, still a lot of duplicated logic and assumptions, and on top of that, a lot of downstream changes to the pstore code.\n\nUnless we could make pKVM simply call the existing upstream pstore code, e.g.\n\n - one simple call to some pstore_acquire_buffer() at initialization time to get the necessary buffer parameters from the kernel (already precalculated, no need to duplicate any logic or parameters in pKVM),\n - and then persistent_ram_write() (without all the buffer mangling code surrounding it) to write to it,\n\nI still think pKVM should use its own separate log buffer, as other hypervisors do.",
+      "parentUuid": "aabd34a1_381d8d93",
+      "revId": "4478e6fb3a5737deb51498b662b6dfc7acbb7ab1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
