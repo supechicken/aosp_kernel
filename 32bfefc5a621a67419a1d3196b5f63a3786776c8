@@ -17,6 +17,24 @@
       "isAi": true,
       "revId": "32bfefc5a621a67419a1d3196b5f63a3786776c8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "967f83b0_d127004f",
+        "filename": "arch/arm64/mm/fault.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1499410
+      },
+      "writtenOn": "2026-11-06T00:10:04Z",
+      "side": 1,
+      "message": "Thanks Will, good catch!\n\nBoth cases are real. In PS3, show_pte() scopes the P3S context to the mm it walks with P3S_CONTEXT_REMOTE_MM(mm), so pte_offset_map() indexes the PTE table with that mm\u0027s geometry, for init_mm under a 4KB task and for a 4KB active_mm borrowed by a kernel thread.\n\nIt also prints mm_pte_size(mm) and the new mm_va_bits(mm), so the header reads \"4k pages, 39-bit VAs\" for a 4KB mm.\n\nI checked both cases on a VM: show_pte() now prints the same PTE as a direct walk, where PS2 printed 0 or another entry.",
+      "parentUuid": "db884c36_0753eb64",
+      "revId": "32bfefc5a621a67419a1d3196b5f63a3786776c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
