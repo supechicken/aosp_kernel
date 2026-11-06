@@ -160,6 +160,24 @@
       "parentUuid": "a834b38c_4d998248",
       "revId": "b434937b3e245a1115eb4672340ba25f266054b0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9fbe3f1_510c73cc",
+        "filename": "arch/x86/kvm/pkvm/pgtable.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 3484945
+      },
+      "writtenOn": "2026-11-06T15:36:19Z",
+      "side": 1,
+      "message": "\u003e Though we might also add a TODO to remove it in the future, once we implement TLB flush for hyp_mmu (which we want in order to be able to unmap unused mappings as needed - b/541580341), so that we have no particular reason to avoid coalescing for hyp_mmu anymore.\n\n+1 to Dima suggestion: I think it is worth adding TODO into the code as well to not forget about it",
+      "parentUuid": "d4a9fb5c_51088b9f",
+      "revId": "b434937b3e245a1115eb4672340ba25f266054b0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }

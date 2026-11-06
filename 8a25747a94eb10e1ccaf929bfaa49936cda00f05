@@ -1,0 +1,45 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "588b0cf8_d18e0c88",
+        "filename": "arch/x86/kvm/pkvm/pgtable.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 792,
+      "author": {
+        "id": 3484945
+      },
+      "writtenOn": "2026-11-06T15:36:19Z",
+      "side": 1,
+      "message": "Rather nit: what if we append this flag only for `coalesce_on_map` case? It will then skip calling `map_walker` entirely and potentially be a bit more optimal (skip `walker-\u003ecb` during `pgtable_visit` which is no-op anyway due to `coalesce_on_map` check in `map_walker` later on):\n\n```\n            .walk_flags \u003d PKVM_PGTABLE_WALK_LEAF |                                                                                                                 \n                      (pgt-\u003ecap.coalesce_on_map ?                                                                                                                      \n                       PKVM_PGTABLE_WALK_TABLE_POST : 0),    \n```",
+      "range": {
+        "startLine": 792,
+        "startChar": 0,
+        "endLine": 792,
+        "endChar": 70
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "6a5f114a_9f94eac5",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "arch/x86/kvm/pkvm/pgtable.c",
+              "range": {
+                "startLine": 792,
+                "startChar": 0,
+                "endLine": 793,
+                "endChar": 0
+              },
+              "replacement": "\t\t.walk_flags \u003d PKVM_PGTABLE_WALK_LEAF |\n\t\t\t      (pgt-\u003ecap.coalesce_on_map ? PKVM_PGTABLE_WALK_TABLE_POST : 0),\n"
+            }
+          ]
+        }
+      ],
+      "revId": "8a25747a94eb10e1ccaf929bfaa49936cda00f05",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
