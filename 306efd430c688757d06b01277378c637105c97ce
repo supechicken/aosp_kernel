@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf023245_952a4761",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1712765
+      },
+      "writtenOn": "2026-11-06T18:00:15Z",
+      "side": 1,
+      "message": "Thank you @jstultz@google.com for fixing the commit message!",
+      "revId": "306efd430c688757d06b01277378c637105c97ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
