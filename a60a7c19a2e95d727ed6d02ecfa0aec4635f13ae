@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7dd16b60_c9f7d4be",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1894539
+      },
+      "writtenOn": "2026-11-06T10:06:11Z",
+      "side": 1,
+      "message": "DONE.",
+      "parentUuid": "9b40d8b3_1b36aa87",
+      "range": {
+        "startLine": 28,
+        "startChar": 56,
+        "endLine": 29,
+        "endChar": 30
+      },
+      "revId": "a60a7c19a2e95d727ed6d02ecfa0aec4635f13ae",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "545174eb_1b9d73c0",
@@ -47,6 +71,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6093eee7_7a92289f",
+        "filename": "drivers/block/zram/zram_ioctl.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1894539
+      },
+      "writtenOn": "2026-11-06T10:06:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "545174eb_1b9d73c0",
+      "range": {
+        "startLine": 320,
+        "startChar": 0,
+        "endLine": 321,
+        "endChar": 52
+      },
+      "revId": "a60a7c19a2e95d727ed6d02ecfa0aec4635f13ae",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0a568aa6_cf23dbc3",
@@ -60,6 +108,30 @@
       "writtenOn": "2026-11-05T22:07:31Z",
       "side": 1,
       "message": "ENOTTY ?",
+      "range": {
+        "startLine": 324,
+        "startChar": 10,
+        "endLine": 324,
+        "endChar": 16
+      },
+      "revId": "a60a7c19a2e95d727ed6d02ecfa0aec4635f13ae",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce831fcb_6458248d",
+        "filename": "drivers/block/zram/zram_ioctl.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1894539
+      },
+      "writtenOn": "2026-11-06T10:06:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0a568aa6_cf23dbc3",
       "range": {
         "startLine": 324,
         "startChar": 10,
@@ -105,6 +177,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "943d2b6f_71c67a80",
+        "filename": "include/uapi/linux/zram_ioctl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1894539
+      },
+      "writtenOn": "2026-11-06T10:06:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ade8458_eb911d67",
+      "revId": "a60a7c19a2e95d727ed6d02ecfa0aec4635f13ae",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e35337d4_a9130c9a",
@@ -118,6 +208,30 @@
       "writtenOn": "2026-11-05T22:07:31Z",
       "side": 1,
       "message": "You already added flags for \"in\". Do we need another reserved field for \"in\"? New fields can simply be appended thanks to copy_struct_from_user(). \n\nI think we can drop reserved. @senozhatsky@google.com WDYT?",
+      "range": {
+        "startLine": 74,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 20
+      },
+      "revId": "a60a7c19a2e95d727ed6d02ecfa0aec4635f13ae",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e2c2479_b7003f35",
+        "filename": "include/uapi/linux/zram_ioctl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1894539
+      },
+      "writtenOn": "2026-11-06T10:06:11Z",
+      "side": 1,
+      "message": "I removed the reserved field.",
+      "parentUuid": "e35337d4_a9130c9a",
       "range": {
         "startLine": 74,
         "startChar": 0,
