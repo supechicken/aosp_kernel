@@ -33,6 +33,24 @@
       "message": "I see lot of low level VFS symbols being added to ABI, which we have not previously added. I see we allowed them in 6.18 in https://r.android.com/4182615, so adding @tkjos@google.com \n\nTodd, are these ok? I have not come across any need to add these symbols to ABI before.",
       "revId": "54edd78419ae5ad21ec656b7e7bc403151d9d22f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28769493_59947c37",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1069543
+      },
+      "writtenOn": "2026-11-06T17:25:49Z",
+      "side": 1,
+      "message": "There are no new structs/unions etc added to the KMI by this patch. Only exported symbols. That means there are no cases of structs leaking \"low-level\" implementation details (ABI Fidelity Report is empty).",
+      "parentUuid": "de0013c6_1f97959b",
+      "revId": "54edd78419ae5ad21ec656b7e7bc403151d9d22f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
