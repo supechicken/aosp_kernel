@@ -16,6 +16,24 @@
       "message": "Could you please expand on why this is necessary a bit more for the sake of completeness?",
       "revId": "fb068273d71604d872882995842f85ea960f4f1f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "716c6a17_2529b920",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1014088
+      },
+      "writtenOn": "2026-11-06T15:56:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23202b2e_1f44cdb9",
+      "revId": "fb068273d71604d872882995842f85ea960f4f1f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
